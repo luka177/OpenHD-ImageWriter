@@ -71,7 +71,7 @@ ApplicationWindow {
         }
 
         Rectangle {
-            color: "#c31c4a"
+            color: "#2C3E50"
             implicitWidth: window.width
             implicitHeight: window.height/2
 
