@@ -58,6 +58,7 @@ ApplicationWindow {
 
         Rectangle {
             implicitHeight: window.height/2
+            color: "#2C3E50"
 
             Image {
                 id: image
