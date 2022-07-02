@@ -58,7 +58,6 @@ ApplicationWindow {
 
         Rectangle {
             implicitHeight: window.height/2
-            color: "#2C3E50"
 
             Image {
                 id: image
@@ -66,6 +65,7 @@ ApplicationWindow {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 fillMode: Image.PreserveAspectFit
                 source: "icons/logo_stacked_imager.png"
+                color: "#2C3E50"
                 width: window.width
                 height: window.height/2
             }
