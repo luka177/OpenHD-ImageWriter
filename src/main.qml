@@ -110,7 +110,6 @@ ApplicationWindow {
                     ImButton {
                         id: osbutton
                         text: imageWriter.srcFileName() === "" ? qsTr("CHOOSE OS") : imageWriter.srcFileName()
-                        color: "#00aef1"
                         spacing: 0
                         padding: 0
                         bottomPadding: 0
@@ -133,7 +132,6 @@ ApplicationWindow {
 
                     Text {
                         id: text2
-                        color: "#ffffff"
                         text: qsTr("Storage")
                         Layout.fillWidth: true
                         Layout.preferredHeight: 17
@@ -147,7 +145,6 @@ ApplicationWindow {
                     ImButton {
                         id: dstbutton
                         text: qsTr("CHOOSE STORAGE")
-                        color: "#00aef1"
                         Layout.minimumHeight: 40
                         Layout.preferredWidth: 100
                         Layout.fillWidth: true
@@ -174,7 +171,6 @@ ApplicationWindow {
                     ImButton {
                         id: writebutton
                         text: qsTr("WRITE")
-                        color: "#00aef1"
                         Layout.minimumHeight: 40
                         Layout.fillWidth: true
                         Accessible.ignored: ospopup.visible || dstpopup.visible
@@ -620,13 +616,13 @@ ApplicationWindow {
                         font.family: roboto.name
                         text: description
                         wrapMode: Text.WordWrap
-                        color: "#1a1a1a"
+                        color: "#fff"
                     }
 
                     Text {
                         Layout.fillWidth: true
                         elide: Text.ElideRight
-                        color: "#646464"
+                        color: "#fff"
                         font.weight: Font.Light
                         visible: typeof(release_date) == "string" && release_date
                         text: qsTr("Released: %1").arg(release_date)
@@ -634,7 +630,7 @@ ApplicationWindow {
                     Text {
                         Layout.fillWidth: true
                         elide: Text.ElideRight
-                        color: "#646464"
+                        color: "#fff"
                         font.weight: Font.Light
                         visible: typeof(url) == "string" && url != "" && url != "internal://format"
                         text: !url ? "" :
