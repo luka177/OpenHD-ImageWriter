@@ -616,13 +616,13 @@ ApplicationWindow {
                         font.family: roboto.name
                         text: description
                         wrapMode: Text.WordWrap
-                        color: "#fff"
+                        color: "#1a1a1a"
                     }
 
                     Text {
                         Layout.fillWidth: true
                         elide: Text.ElideRight
-                        color: "#fff"
+                        color: "#646464"
                         font.weight: Font.Light
                         visible: typeof(release_date) == "string" && release_date
                         text: qsTr("Released: %1").arg(release_date)
@@ -630,7 +630,7 @@ ApplicationWindow {
                     Text {
                         Layout.fillWidth: true
                         elide: Text.ElideRight
-                        color: "#fff"
+                        color: "#646464"
                         font.weight: Font.Light
                         visible: typeof(url) == "string" && url != "" && url != "internal://format"
                         text: !url ? "" :
