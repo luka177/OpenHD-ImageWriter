@@ -30,7 +30,6 @@ jobs:
           target: 'desktop'
           arch: 'win32_mingw53'
           install-deps: 'true'
-          modules: 'qtbase'
           setup-python: 'false'
       # Runs a set of commands using the runners shell
       - name: Build
