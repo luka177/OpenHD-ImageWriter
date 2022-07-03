@@ -29,7 +29,6 @@ jobs:
           host: 'windows'
           target: 'desktop'
           arch: 'win32_mingw53'
-          install-deps: 'true'
           setup-python: 'false'
       # Runs a set of commands using the runners shell
       - name: Build
