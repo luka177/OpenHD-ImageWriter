@@ -1278,7 +1278,7 @@ ApplicationWindow {
             if (imageWriter.readyToWrite()) {
                 writebutton.enabled = true
             }
-            customizebutton.visible = imageWriter.imageSupportsCustomization()
+            customizebutton.visible = false
         }
     }
 
