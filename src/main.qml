@@ -360,7 +360,7 @@ ApplicationWindow {
 
         // background of title
         Rectangle {
-            color: "#f5f5f5"
+            color: "#34495E"
             anchors.right: parent.right
             anchors.top: parent.top
             height: 35
@@ -368,7 +368,7 @@ ApplicationWindow {
         }
         // line under title
         Rectangle {
-            color: "#afafaf"
+            color: "#34495E"
             width: parent.width
             y: 35
             implicitHeight: 1
