@@ -28,8 +28,8 @@ jobs:
           sudo apt update
           sudo apt upgrade
           sudo apt install -y --no-install-recommends libgnutls28-dev build-essential devscripts debhelper cmake git libarchive-dev libcurl4-openssl-dev qtbase5-dev qtbase5-dev-tools qtdeclarative5-dev libqt5svg5-dev qttools5-dev libssl-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-layouts qml-module-qtquick-templates2 qml-module-qtquick-window2 qml-module-qtgraphicaleffects
-          ls -a
-          cd OpenHD-imager
+          mkdir build
+          cp -r `ls -A | grep -v "build"` build
           debuild -uc -us
           cd ..
       - name: Upload to Github
