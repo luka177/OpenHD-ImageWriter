@@ -85,9 +85,9 @@ int main(int argc, char *argv[])
 #else
     QApplication app(argc, argv);
 #endif
-    app.setOrganizationName("Raspberry Pi");
-    app.setOrganizationDomain("raspberrypi.org");
-    app.setApplicationName("Imager");
+    app.setOrganizationName("OpenHd");
+    app.setOrganizationDomain("openhdfpv.org");
+    app.setApplicationName("Image writer");
     app.setWindowIcon(QIcon(":/icons/rpi-imager.ico"));
     ImageWriter imageWriter;
     NetworkAccessManagerFactory namf;
