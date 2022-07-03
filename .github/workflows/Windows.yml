@@ -28,7 +28,7 @@ jobs:
           version: '5.15.2'
           host: 'windows'
           target: 'desktop'
-          arch: 'win32_mingw73'
+          arch: 'win32_mingw53'
           install-deps: 'true'
           modules: 'qtbase qtquickcontrols2 qtsvg linguist'
           setup-python: 'false'
