@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 10), cmake, libarchive-dev, libcurl4-gnutls-dev | l
  qtbase5-dev, qtbase5-dev-tools, qtdeclarative5-dev, libqt5svg5-dev, qttools5-dev, libgnutls28-dev,
  qml-module-qtquick2, qml-module-qtquick-controls2, qml-module-qtquick-layouts, qml-module-qtquick-templates2, qml-module-qtquick-window2, qml-module-qtgraphicaleffects
 Standards-Version: 4.1.2
-Homepage: https://www.raspberrypi.org/
+Homepage: https://www.openhdfpv.org/
 
 Package: OpenHDImageWriter
 Architecture: any
@@ -14,5 +14,5 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
  qml-module-qtquick2, qml-module-qtquick-controls2, qml-module-qtquick-layouts, qml-module-qtquick-templates2, qml-module-qtquick-window2, qml-module-qtgraphicaleffects,
  dosfstools, fdisk 
 Recommends: udisks2
-Description: Raspberry Pi imaging utility
+Description: OpenHD Image Writer
  Graphical user-interface to write disk images and format SD cards.
