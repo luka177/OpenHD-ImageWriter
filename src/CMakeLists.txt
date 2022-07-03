@@ -299,7 +299,7 @@ else()
         "${CMAKE_CURRENT_BINARY_DIR}/rpi-imager.metainfo.xml"
         @ONLY)
 
-    install(TARGETS rpi-imager DESTINATION bin)
+    install(TARGETS OpenHDImageWriter DESTINATION bin)
     install(FILES icons/rpi-imager.png DESTINATION share/icons/hicolor/128x128/apps)
     install(FILES linux/rpi-imager.desktop DESTINATION share/applications)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/rpi-imager.metainfo.xml" DESTINATION share/metainfo)
