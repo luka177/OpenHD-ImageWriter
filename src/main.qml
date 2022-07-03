@@ -13,6 +13,7 @@ import "qmlcomponents"
 ApplicationWindow {
     id: window
     visible: true
+    color: "#34495E"
 
     width: imageWriter.isEmbeddedMode() ? -1 : 680
     height: imageWriter.isEmbeddedMode() ? -1 : 420
@@ -360,7 +361,7 @@ ApplicationWindow {
 
         // background of title
         Rectangle {
-            color: "#34495E"
+            color: "#f5f5f5"
             anchors.right: parent.right
             anchors.top: parent.top
             height: 35
@@ -368,7 +369,7 @@ ApplicationWindow {
         }
         // line under title
         Rectangle {
-            color: "#34495E"
+            color: "#afafaf"
             width: parent.width
             y: 35
             implicitHeight: 1
