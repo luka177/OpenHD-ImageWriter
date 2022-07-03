@@ -28,6 +28,7 @@ jobs:
           version: '5.15.2'
           host: 'windows'
           target: 'desktop'
+          tools: tools_openssl_x64
       # Runs a set of commands using the runners shell
       - name: Build
         run: |
