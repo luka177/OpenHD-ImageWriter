@@ -28,8 +28,6 @@ jobs:
           version: '5.15.2'
           host: 'windows'
           target: 'desktop'
-          arch: 'win32_mingw53'
-          setup-python: 'false'
       # Runs a set of commands using the runners shell
       - name: Build
         run: |
