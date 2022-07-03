@@ -110,6 +110,7 @@ ApplicationWindow {
                     ImButton {
                         id: osbutton
                         text: imageWriter.srcFileName() === "" ? qsTr("CHOOSE OS") : imageWriter.srcFileName()
+                        color: "#00aef1"
                         spacing: 0
                         padding: 0
                         bottomPadding: 0
@@ -146,6 +147,7 @@ ApplicationWindow {
                     ImButton {
                         id: dstbutton
                         text: qsTr("CHOOSE STORAGE")
+                        color: "#00aef1"
                         Layout.minimumHeight: 40
                         Layout.preferredWidth: 100
                         Layout.fillWidth: true
@@ -172,6 +174,7 @@ ApplicationWindow {
                     ImButton {
                         id: writebutton
                         text: qsTr("WRITE")
+                        color: "#00aef1"
                         Layout.minimumHeight: 40
                         Layout.fillWidth: true
                         Accessible.ignored: ospopup.visible || dstpopup.visible
@@ -211,7 +214,7 @@ ApplicationWindow {
                         id: progressBar
                         Layout.fillWidth: true
                         visible: false
-                        Material.background: "#d15d7d"
+                        Material.background: "#00b3f7"
                     }
 
                     ImButton {
