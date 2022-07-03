@@ -39,5 +39,5 @@ jobs:
         with:
           name: "OpenHD Image Writer"
           path: |
-            ../*.deb
+            *.deb
           if-no-files-found: error
