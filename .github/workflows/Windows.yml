@@ -30,7 +30,7 @@ jobs:
           target: 'desktop'
           arch: 'win32_mingw73'
           install-deps: 'true'
-          modules: 'qtbase qtquickcontrols2 qt5-qtsvg qt5-linguist'
+          modules: 'qtbase qtquickcontrols2 qtsvg linguist'
           setup-python: 'false'
       # Runs a set of commands using the runners shell
       - name: Build
