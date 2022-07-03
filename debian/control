@@ -1,4 +1,4 @@
-Source: OpenHDImageWriter
+Source: rpi-imager
 Section: admin
 Priority: optional
 Maintainer: Floris Bos <bos@je-eigen-domein.nl>
