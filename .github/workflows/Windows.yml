@@ -37,11 +37,13 @@ jobs:
         run: |
           dir
           cmake src
+          cd deploy
           dir
+          cd ..
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
         with:
           name: "OpenHD Image Writer"
           path: |
-            *.exe
+            deploy/*.exe
           if-no-files-found: error
