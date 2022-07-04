@@ -41,6 +41,7 @@ jobs:
         run: |
           pip install pyopenssl
           openssl version
+          ls -a /usr/local/opt/openssl
           dir
           cmake src
       - name: Upload to Github
