@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: msys2/setup-msys2@v2
         with:
-            install: mingw-w32-i686-openssl
+            install: mingw-w64-i686-openssl
             msystem: mingw32
             release: false
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
