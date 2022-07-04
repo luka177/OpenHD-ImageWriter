@@ -18,11 +18,6 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: msys2/setup-msys2@v2
-        with:
-            install: mingw-w64-i686-openssl
-            msystem: mingw32
-            release: false
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
  
@@ -35,12 +30,11 @@ jobs:
           arch: 'win32_mingw73'
           dir: '${{github.workspace}}/qt/'
           install-deps: 'true'
+          tools: 'tools_openssl_src'
           
       # Runs a set of commands using the runners shell
       - name: Build
         run: |
-          pip install pyopenssl
-          openssl version
           dir
           cmake src
       - name: Upload to Github
