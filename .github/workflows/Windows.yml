@@ -41,8 +41,7 @@ jobs:
         run: |
           pip install pyopenssl
           openssl version
-          ls -a /usr/local/opt/openssl
-          dir
+          dir /usr/local/opt/openssl
           cmake src
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
