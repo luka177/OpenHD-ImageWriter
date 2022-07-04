@@ -17,18 +17,25 @@ jobs:
     # The type of runner that the job will run on
     runs-on: windows-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - uses: msys2/setup-msys2@v2
+        with:
+            install: mingw-w32-i686-openssl
+            msystem: mingw32
+            release: false
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
  
       - name: Install Qt
-        uses: jurplel/install-qt-action@v3
-        with: 
-          version: '5.15.2'
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: '5.12.11'
           host: 'windows'
           target: 'desktop'
-          tools: tools_openssl_x64
+          arch: 'win32_mingw73'
+          dir: '${{github.workspace}}/qt/'
+          install-deps: 'true'
+          
       # Runs a set of commands using the runners shell
       - name: Build
         run: |
