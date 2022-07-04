@@ -37,6 +37,7 @@ jobs:
         run: |
           dir
           cmake src
+          dir
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
         with:
