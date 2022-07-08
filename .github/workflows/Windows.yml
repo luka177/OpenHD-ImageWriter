@@ -27,7 +27,6 @@ jobs:
           version: '5.12.11'
           host: 'windows'
           target: 'desktop'
-          arch: 'win32_mingw73'
           dir: '${{github.workspace}}/qt/'
           install-deps: 'true'
           tools: 'tools_openssl_src'
