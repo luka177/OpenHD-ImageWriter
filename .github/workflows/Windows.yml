@@ -37,6 +37,8 @@ jobs:
           dir
           cmake src
           dir
+          make
+          make install
           cd deploy
           dir
           cd ..
