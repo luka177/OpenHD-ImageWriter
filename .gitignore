@@ -1,2 +1,4 @@
 
 server/os_list_imagingutility_v3.json
+*.tlog
+
