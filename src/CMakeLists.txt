@@ -202,7 +202,7 @@ if (WIN32)
         POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
             "${Qt5_DIR}/../../../bin/libssl-1_1.dll" "${Qt5_DIR}/../../../bin/libcrypto-1_1.dll"
-            "${Qt5_DIR}/../../../bin/libssl-1_1.dll" "${Qt5_DIR}/../../../bin/libcrypto-3.dll"
+            "${Qt5_DIR}/../../../bin/libcrypto-3.dll" "${Qt5_DIR}/../../../bin/libcrypto-3.dll"
             "${CMAKE_BINARY_DIR}/deploy")
 
     configure_file(
