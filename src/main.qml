@@ -133,6 +133,7 @@ ApplicationWindow {
                     Text {
                         id: text2
                         text: qsTr("Storage")
+                        color: "#fff"
                         Layout.fillWidth: true
                         Layout.preferredHeight: 17
                         Layout.preferredWidth: 100
@@ -875,7 +876,7 @@ ApplicationWindow {
         onYes: {
             langbar.visible = false
             writebutton.enabled = false
-            customizebutton.visible = false
+            customizebutton.visible = true
             cancelwritebutton.enabled = true
             cancelwritebutton.visible = true
             cancelverifybutton.enabled = true
@@ -1001,7 +1002,7 @@ ApplicationWindow {
     function resetWriteButton() {
         progressText.visible = false
         progressBar.visible = false
-        customizebutton.visible = imageWriter.imageSupportsCustomization()
+        customizebutton.visible = true
         osbutton.enabled = true
         dstbutton.enabled = true
         writebutton.visible = true
@@ -1046,7 +1047,7 @@ ApplicationWindow {
         if (imageWriter.readyToWrite()) {
             writebutton.enabled = true
         }
-        customizebutton.visible = imageWriter.imageSupportsCustomization()
+        customizebutton.visible = true
     }
 
     function onCancelled() {
@@ -1278,7 +1279,7 @@ ApplicationWindow {
             if (imageWriter.readyToWrite()) {
                 writebutton.enabled = true
             }
-            customizebutton.visible = false
+            customizebutton.visible = true
         }
     }
 

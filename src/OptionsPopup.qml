@@ -283,7 +283,7 @@ Popup {
                     popup.close()
                 }
                 Material.foreground: activeFocus ? "#d1dcfb" : "#ffffff"
-                Material.background: "#c51a4a"
+                Material.background: "#2C3E50"
             }
 
             Text { text: " " }
