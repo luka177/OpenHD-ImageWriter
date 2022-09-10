@@ -92,7 +92,24 @@ Popup {
 
           ColumnLayout {
               GroupBox {
-                  title: qsTr("Base settings")
+                  title: qsTr("Save")
+
+                                  label: RowLayout {
+                                      Label {
+                                          text: parent.parent.title
+                                      }
+                                      ComboBox {
+                                          id: comboSaveSettings
+                                          model: {
+                                              [qsTr("for this session only"),
+                                               qsTr("to always use")]
+                                          }
+                                          Layout.minimumWidth: 250
+                                          Layout.maximumHeight: 40
+                                          enabled: !imageWriter.isEmbeddedMode()
+                                      }
+                                  }
+
                   Layout.fillWidth: true
 
                   ColumnLayout {
@@ -125,6 +142,8 @@ Popup {
                               if (checked) {
                                   setAuto.checked = false
                                   setAir.checked = false
+                                  addFirstRun("touch /boot/air.txt");
+
                               }
                           }
                       }
@@ -154,10 +173,6 @@ Popup {
                                   bndKey.checked = false
                               }
                           }
-                      }
-                      Text {
-                          text: qsTr("Bind key").arg(fieldUserName.text)
-                          color: parent.enabled ? "black" : "grey"
                       }
                       TextField {
                           id: custBndKey
@@ -210,7 +225,6 @@ Popup {
                             }
                     }
                     GridLayout {
-                        enabled: chkLocale.checked
                         Layout.leftMargin: 40
                         columns: 2
                         columnSpacing: 10
@@ -247,37 +261,6 @@ Popup {
             ImButton {
                 text: qsTr("SAVE")
                 onClicked: {
-                    if (chkSetUser.checked && fieldUserPassword.text.length == 0)
-                    {
-                        fieldUserPassword.indicateError = true
-                        fieldUserPassword.forceActiveFocus()
-                        return
-                    }
-                    if (chkSetUser.checked && fieldUserName.text.length == 0)
-                    {
-                        fieldUserName.indicateError = true
-                        fieldUserName.forceActiveFocus()
-                        return
-                    }
-
-                    if (chkWifi.checked)
-                    {
-                        if (fieldWifiPassword.text.length < 8 || fieldWifiPassword.text.length > 64)
-                        {
-                            fieldWifiPassword.indicateError = true
-                            fieldWifiPassword.forceActiveFocus()
-                        }
-                        if (fieldWifiSSID.text.length == 0)
-                        {
-                            fieldWifiSSID.indicateError = true
-                            fieldWifiSSID.forceActiveFocus()
-                        }
-                        if (fieldWifiSSID.indicateError || fieldWifiPassword.indicateError)
-                        {
-                            return
-                        }
-                    }
-
                     applySettings()
                     saveSettings()
                     popup.close()
@@ -298,40 +281,8 @@ Popup {
         if (Object.keys(settings).length) {
             comboSaveSettings.currentIndex = 1
             hasSavedSettings = true
-        }
-        if ('hostname' in settings) {
-            fieldHostname.text = settings.hostname
-            chkHostname.checked = true
-        }
-        if ('sshAuthorizedKeys' in settings) {
-            radioPubKeyAuthentication.checked = true
-            chkSSH.checked = true
-        }
-
-        if ('sshUserPassword' in settings) {
-            fieldUserPassword.text = settings.sshUserPassword
-            fieldUserPassword.alreadyCrypted = true
-            chkSetUser.checked = true
-            /* Older imager versions did not have a sshEnabled setting.
-               Assume it is true if it does not exists and sshUserPassword is set */
-            if (!('sshEnabled' in settings) || settings.sshEnabled === "true" || settings.sshEnabled === true) {
-                chkSSH.checked = true
-                radioPasswordAuthentication.checked = true
-            }
-        }
-        if ('sshUserName' in settings) {
-            fieldUserName.text = settings.sshUserName
-            chkSetUser.checked = true
-        }
+        }       
         var tz;
-        if ('timezone' in settings) {
-            chkLocale.checked = true
-            tz = settings.timezone
-        } else {
-            tz = imageWriter.getTimezone()
-        }
-
-
         if (imageWriter.isEmbeddedMode()) {
             /* For some reason there is no password mask character set by default on Embedded edition */
             var bulletCharacter = String.fromCharCode(0x2022);
@@ -387,163 +338,18 @@ Popup {
         cloudinitwrite = ""
         cloudinitnetwork = ""
 
-        if (chkHostname.checked && fieldHostname.length) {
-            addFirstRun("CURRENT_HOSTNAME=`cat /etc/hostname | tr -d \" \\t\\n\\r\"`")
-            addFirstRun("echo "+fieldHostname.text+" >/etc/hostname")
-            addFirstRun("sed -i \"s/127.0.1.1.*$CURRENT_HOSTNAME/127.0.1.1\\t"+fieldHostname.text+"/g\" /etc/hosts")
-
-            addCloudInit("hostname: "+fieldHostname.text)
-            addCloudInit("manage_etc_hosts: true")
-            addCloudInit("packages:")
-            addCloudInit("- avahi-daemon")
-            /* Disable date/time checks in apt as NTP may not have synchronized yet when installing packages */
-            addCloudInit("apt:")
-            addCloudInit("  conf: |")
-            addCloudInit("    Acquire {")
-            addCloudInit("      Check-Date \"false\";")
-            addCloudInit("    };")
-            addCloudInit("")
+        if (setAir.checked) {
+            addFirstRun("touch /boot/air.txt")
         }
-
-        if (chkSSH.checked || chkSetUser.checked) {
-            // First user may not be called 'pi' on all distributions, so look username up
-            addFirstRun("FIRSTUSER=`getent passwd 1000 | cut -d: -f1`");
-            addFirstRun("FIRSTUSERHOME=`getent passwd 1000 | cut -d: -f6`")
-
-            addCloudInit("users:")
-            addCloudInit("- name: "+fieldUserName.text)
-            addCloudInit("  groups: users,adm,dialout,audio,netdev,video,plugdev,cdrom,games,input,gpio,spi,i2c,render,sudo")
-            addCloudInit("  shell: /bin/bash")
-
-            var cryptedPassword;
-            if (chkSetUser.checked) {
-                cryptedPassword = fieldUserPassword.alreadyCrypted ? fieldUserPassword.text : imageWriter.crypt(fieldUserPassword.text)
-                addCloudInit("  lock_passwd: false")
-                addCloudInit("  passwd: "+cryptedPassword)
-            }
-
-            if (chkSSH.checked && radioPubKeyAuthentication.checked) {
-                var pubkeyArr = pubkey.split("\n")
-
-                if (pubkey.length) {
-                    addFirstRun("install -o \"$FIRSTUSER\" -m 700 -d \"$FIRSTUSERHOME/.ssh\"")
-                    addFirstRun("install -o \"$FIRSTUSER\" -m 600 <(printf \""+pubkey.replace(/\n/g, "\\n")+"\") \"$FIRSTUSERHOME/.ssh/authorized_keys\"")
-                }
-                addFirstRun("echo 'PasswordAuthentication no' >>/etc/ssh/sshd_config")
-
-                if (!chkSetUser.checked) {
-                    addCloudInit("  lock_passwd: true")
-                }
-                addCloudInit("  ssh_authorized_keys:")
-                for (var i=0; i<pubkeyArr.length; i++) {
-                    var pk = pubkeyArr[i].trim();
-                    if (pk) {
-                        addCloudInit("    - "+pk)
-                    }
-                }
-                addCloudInit("  sudo: ALL=(ALL) NOPASSWD:ALL")
-            }
-            addCloudInit("")
-
-            if (chkSSH.checked && radioPasswordAuthentication.checked) {
-                addCloudInit("ssh_pwauth: true")
-            }
-
-            if (chkSetUser.checked) {
-                /* Rename first ("pi") user if a different desired username was specified */
-                addFirstRun("if [ -f /usr/lib/userconf-pi/userconf ]; then")
-                addFirstRun("   /usr/lib/userconf-pi/userconf "+escapeshellarg(fieldUserName.text)+" "+escapeshellarg(cryptedPassword))
-                addFirstRun("else")
-                addFirstRun("   echo \"$FIRSTUSER:\""+escapeshellarg(cryptedPassword)+" | chpasswd -e")
-                addFirstRun("   if [ \"$FIRSTUSER\" != \""+fieldUserName.text+"\" ]; then")
-                addFirstRun("      usermod -l \""+fieldUserName.text+"\" \"$FIRSTUSER\"")
-                addFirstRun("      usermod -m -d \"/home/"+fieldUserName.text+"\" \""+fieldUserName.text+"\"")
-                addFirstRun("      groupmod -n \""+fieldUserName.text+"\" \"$FIRSTUSER\"")
-                addFirstRun("      if grep -q \"^autologin-user=\" /etc/lightdm/lightdm.conf ; then")
-                addFirstRun("         sed /etc/lightdm/lightdm.conf -i -e \"s/^autologin-user=.*/autologin-user="+fieldUserName.text+"/\"")
-                addFirstRun("      fi")
-                addFirstRun("      if [ -f /etc/systemd/system/getty@tty1.service.d/autologin.conf ]; then")
-                addFirstRun("         sed /etc/systemd/system/getty@tty1.service.d/autologin.conf -i -e \"s/$FIRSTUSER/"+fieldUserName.text+"/\"")
-                addFirstRun("      fi")
-                addFirstRun("      if [ -f /etc/sudoers.d/010_pi-nopasswd ]; then")
-                addFirstRun("         sed -i \"s/^$FIRSTUSER /"+fieldUserName.text+" /\" /etc/sudoers.d/010_pi-nopasswd")
-                addFirstRun("      fi")
-                addFirstRun("   fi")
-                addFirstRun("fi")
-            }
-
-            if (chkSSH.checked) {
-                addFirstRun("systemctl enable ssh")
-            }
-            addCloudInit("")
-        }
-        if (chkWifi.checked) {
-            var wpaconfig = "country="+fieldWifiCountry.editText+"\n"
-            wpaconfig += "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\n"
-            wpaconfig += "ap_scan=1\n\n"
-            wpaconfig += "update_config=1\n"
-            wpaconfig += "network={\n"
-            if (chkWifiSSIDHidden.checked) {
-                wpaconfig += "\tscan_ssid=1\n"
-            }
-            wpaconfig += "\tssid=\""+fieldWifiSSID.text+"\"\n"
-            var cryptedPsk = fieldWifiPassword.text.length == 64 ? fieldWifiPassword.text : imageWriter.pbkdf2(fieldWifiPassword.text, fieldWifiSSID.text)
-            wpaconfig += "\tpsk="+cryptedPsk+"\n"
-            wpaconfig += "}\n"
-
-            addFirstRun("cat >/etc/wpa_supplicant/wpa_supplicant.conf <<'WPAEOF'")
-            addFirstRun(wpaconfig)
-            addFirstRun("WPAEOF")
-            addFirstRun("chmod 600 /etc/wpa_supplicant/wpa_supplicant.conf")
-            addFirstRun("rfkill unblock wifi")
-            addFirstRun("for filename in /var/lib/systemd/rfkill/*:wlan ; do")
-            addFirstRun("  echo 0 > $filename")
-            addFirstRun("done")
-
-            cloudinitnetwork  = "version: 2\n"
-            cloudinitnetwork += "wifis:\n"
-            cloudinitnetwork += "  renderer: networkd\n"
-            cloudinitnetwork += "  wlan0:\n"
-            cloudinitnetwork += "    dhcp4: true\n"
-            cloudinitnetwork += "    optional: true\n"
-            cloudinitnetwork += "    access-points:\n"
-            cloudinitnetwork += "      \""+fieldWifiSSID.text+"\":\n"
-            cloudinitnetwork += "        password: \""+cryptedPsk+"\"\n"
-            if (chkWifiSSIDHidden.checked) {
-                cloudinitnetwork += "        hidden: true\n"
-            }
-
-            /* FIXME: setting wifi country code broken on Ubuntu
-               For unknown reasons udev does not trigger setregdomain automatically and as a result
-               our setting in /etc/default/crda is being ignored by Ubuntu. */
-            addCloudInitRun("sed -i 's/^\s*REGDOMAIN=\S*/REGDOMAIN="+fieldWifiCountry.editText+"/' /etc/default/crda || true")
-        }
-        if (chkLocale.checked) {
-            var kbdconfig = "XKBMODEL=\"pc105\"\n"
-            kbdconfig += "XKBLAYOUT=\""+fieldKeyboardLayout.editText+"\"\n"
-            kbdconfig += "XKBVARIANT=\"\"\n"
-            kbdconfig += "XKBOPTIONS=\"\"\n"
-
-            addFirstRun("rm -f /etc/localtime")
-            addFirstRun("dpkg-reconfigure -f noninteractive tzdata")
-            addFirstRun("cat >/etc/default/keyboard <<'KBEOF'")
-            addFirstRun(kbdconfig)
-            addFirstRun("KBEOF")
-            addFirstRun("dpkg-reconfigure -f noninteractive keyboard-configuration")
-
-            addCloudInitRun("localectl set-x11-keymap \""+fieldKeyboardLayout.editText+"\" pc105")
-            addCloudInitRun("setupcon -k --force || true")
+        if (setGround.checked) {
+            addFirstRun("touch /boot/ground.txt")
         }
 
         if (firstrun.length) {
             firstrun = "#!/bin/bash\n\n"+"set +e\n\n"+firstrun
             addFirstRun("rm -f /boot/firstrun.sh")
-            addFirstRun("sed -i 's| systemd.run.*||g' /boot/cmdline.txt")
+            addFirstRun("mv /boot/secondrun.sh /boot/firstrun.sh")
             addFirstRun("exit 0")
-            /* using systemd.run_success_action=none does not seem to have desired effect
-               systemd then stays at "reached target kernel command line", so use reboot instead */
-            //addCmdline("systemd.run=/boot/firstrun.sh systemd.run_success_action=reboot systemd.unit=kernel-command-line.target")
-            // cmdline changing moved to DownloadThread::_customizeImage()
         }
 
         if (cloudinitwrite !== "") {
@@ -565,23 +371,6 @@ Popup {
             if (chkHostname.checked && fieldHostname.length) {
                 settings.hostname = fieldHostname.text
             }
-            if (chkSetUser.checked) {
-                settings.sshUserName = fieldUserName.text
-                settings.sshUserPassword = fieldUserPassword.alreadyCrypted ? fieldUserPassword.text : imageWriter.crypt(fieldUserPassword.text)
-            }
-
-            settings.sshEnabled = chkSSH.checked
-            if (chkSSH.checked && radioPubKeyAuthentication.checked) {
-            }
-            if (chkWifi.checked) {
-                settings.wifiSSID = fieldWifiSSID.text
-                if (chkWifiSSIDHidden.checked) {
-                    settings.wifiSSIDHidden = true
-                }
-                settings.wifiPassword = fieldWifiPassword.text.length == 64 ? fieldWifiPassword.text : imageWriter.pbkdf2(fieldWifiPassword.text, fieldWifiSSID.text)
-                settings.wifiCountry = fieldWifiCountry.editText
-            }
-
 
             imageWriter.setSavedCustomizationSettings(settings)
 
