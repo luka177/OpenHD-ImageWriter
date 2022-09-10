@@ -243,8 +243,8 @@ ApplicationWindow {
                         onClicked: {
                             optionspopup.openPopup()
                         }
-                        visible: false
-                        Accessible.description: qsTr("Select this button to access advanced settings")
+                        visible: true
+                        Accessible.description: qsTr("Select this button to configure Settings")
                         contentItem: Image {
                             source: "icons/ic_cog_red.svg"
                             fillMode: Image.PreserveAspectFit
