@@ -122,7 +122,7 @@ Popup {
                           onCheckedChanged: {
                               if (checked) {
                                   setGround.checked = false
-                                  bootAsGround("yxz");
+                                  bootAsAir();
                               }
                           }
                       }
@@ -132,7 +132,7 @@ Popup {
                           onCheckedChanged: {
                               if (checked) {
                                   setAir.checked = false
-                                  bootAsAir("xyz");
+                                  bootAsGround();
 
                               }
                           }

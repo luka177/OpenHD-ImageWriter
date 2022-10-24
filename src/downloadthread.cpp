@@ -1063,7 +1063,7 @@ bool DownloadThread::_customizeImage()
             /* If issue.txt mentions pi-gen, and there is no user-data file assume
              * it is a RPI OS flavor, and use the old systemd unit firstrun script stuff */
             _initFormat = "systemd";
-            qDebug() << "using firstrun script invoked by systemd customization method";
+            qDebug() << "copying openhd detection file";
         }
         else
         {
