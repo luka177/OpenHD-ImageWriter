@@ -130,7 +130,7 @@ Popup {
                           text: qsTr("Set SBC to GROUND")
                           onCheckedChanged: {
                               if (checked) {
-                                  setAir.checked = true
+                                  setAir.checked = false
                                   addFirstRun("touch /boot/air.txt");
 
                               }
