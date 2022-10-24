@@ -116,32 +116,21 @@ Popup {
                       spacing: -10
 
                       ImCheckBox {
-                          id: setAuto
-                          text: qsTr("Autodetect Air/Ground")
-                          onCheckedChanged: {
-                              if (checked) {
-                                  setAir.checked = false
-                                  setGround.checked = false
-                              }
-                          }
-                      }
-                      ImCheckBox {
                           id: setAir
-                          text: qsTr("force SBC to be Air")
+                          text: qsTr("Set SBC to AIR")
                           onCheckedChanged: {
                               if (checked) {
                                   setGround.checked = false
-                                  setAuto.checked = false
+                                  addFirstRun("touch /boot/air.txt");
                               }
                           }
                       }
                       ImCheckBox {
                           id: setGround
-                          text: qsTr("force SBC to be Ground")
+                          text: qsTr("Set SBC to GROUND")
                           onCheckedChanged: {
                               if (checked) {
-                                  setAuto.checked = false
-                                  setAir.checked = false
+                                  setAir.checked = true
                                   addFirstRun("touch /boot/air.txt");
 
                               }
@@ -180,58 +169,6 @@ Popup {
                       }
                   }
               }
-            GroupBox {
-                title: qsTr("Camera settings")
-                label: RowLayout {
-                    Label {
-                        text: parent.parent.title
-                    }
-                 }
-                ColumnLayout {
-                    spacing: -10
-
-                    RowLayout {
-
-                    }
-
-                    ImCheckBox {
-                        id: setStd
-                        text: qsTr("Standart Camera")
-                        onCheckedChanged: {
-                            if (checked) {
-                                setHDMI.checked = false
-                                setIMX477.checked = false
-                            }
-                        }
-                    }
-                    ImCheckBox {
-                        id: setIMX477
-                        text: qsTr("IMX477")
-                        onCheckedChanged: {
-                            if (checked) {
-                                setHDMI.checked = false
-                                setStd.checkState = false
-                            }
-                        }
-                    }
-                        ImCheckBox {
-                            id: setHDMI
-                            text: qsTr("HDMI")
-                            onCheckedChanged: {
-                                if (checked) {
-                                    setIMX477.checked = false
-                                    setStd.checkState = false
-                                }
-                            }
-                    }
-                    GridLayout {
-                        Layout.leftMargin: 40
-                        columns: 2
-                        columnSpacing: 10
-                        rowSpacing: -5
-                    }
-                }
-            }
 
             GroupBox {
                 title: qsTr("Imager settings")
@@ -348,7 +285,6 @@ Popup {
         if (firstrun.length) {
             firstrun = "#!/bin/bash\n\n"+"set +e\n\n"+firstrun
             addFirstRun("rm -f /boot/firstrun.sh")
-            addFirstRun("mv /boot/secondrun.sh /boot/firstrun.sh")
             addFirstRun("exit 0")
         }
 

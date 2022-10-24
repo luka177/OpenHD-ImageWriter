@@ -737,7 +737,6 @@ ApplicationWindow {
                         width: 10
                         policy: dstlist.contentHeight > dstlist.height ? ScrollBar.AlwaysOn : ScrollBar.AsNeeded
                     }
-
                     Keys.onSpacePressed: {
                         if (currentIndex == -1)
                             return
@@ -751,13 +750,13 @@ ApplicationWindow {
                     Keys.onEnterPressed: Keys.onSpacePressed(event)
                     Keys.onReturnPressed: Keys.onSpacePressed(event)
                 }
-            }
+                
+                }
         }
     }
 
     Component {
         id: dstdelegate
-
         Item {
             width: window.width-100
             height: 60
@@ -780,6 +779,7 @@ ApplicationWindow {
                property bool mouseOver: false
 
             }
+
             Rectangle {
                id: dstborderrect
                implicitHeight: 1
@@ -801,6 +801,7 @@ ApplicationWindow {
                         fillMode: Image.Pad
                     }
                 }
+
                 Column {
                     width: parent.parent.width-64
 
@@ -851,6 +852,7 @@ ApplicationWindow {
         }
     }
 
+
     MsgPopup {
         id: msgpopup
     }
@@ -861,7 +863,7 @@ ApplicationWindow {
         yesButton: true
         noButton: true
         title: qsTr("Are you sure you want to quit?")
-        text: qsTr("Raspberry Pi Imager is still busy.<br>Are you sure you want to quit?")
+        text: qsTr("OpenHD Imager is still busy.<br>Are you sure you want to quit?")
         onYes: {
             Qt.quit()
         }

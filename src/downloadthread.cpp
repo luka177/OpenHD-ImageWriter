@@ -1075,18 +1075,20 @@ bool DownloadThread::_customizeImage()
 
     if (!_firstrun.isEmpty() && _initFormat == "systemd")
     {
-        QFile f(folder+"/firstrun.sh");
+
+        QFile f(folder+"/OpenHD/air.txt");
         if (f.open(f.WriteOnly) && f.write(_firstrun) == _firstrun.length())
         {
-            f.close();
+           qDebug() << "folder:" << f;
+
+           f.close();
         }
         else
         {
-            emit error(tr("Error creating firstrun.sh on FAT partition"));
+            emit error(tr("Error creating air.txt on FAT partition"));
             return false;
         }
 
-        _cmdline += " systemd.run=/boot/firstrun.sh systemd.run_success_action=reboot systemd.unit=kernel-command-line.target";
     }
 
     if (!_cloudinit.isEmpty() && _initFormat == "cloudinit")
