@@ -23,7 +23,8 @@ Popup {
     property bool hasSavedSettings: false
     property string config
     property string cmdline
-    property string firstrun
+    property string openHDAir
+    property string openHDGround
     property string cloudinit
     property string cloudinitrun
     property string cloudinitwrite
@@ -121,7 +122,7 @@ Popup {
                           onCheckedChanged: {
                               if (checked) {
                                   setGround.checked = false
-                                  addFirstRun("touch /boot/air.txt");
+                                  bootAsGround("yxz");
                               }
                           }
                       }
@@ -131,7 +132,7 @@ Popup {
                           onCheckedChanged: {
                               if (checked) {
                                   setAir.checked = false
-                                  addCloudInit("touch /boot/air.txt");
+                                  bootAsAir("xyz");
 
                               }
                           }
@@ -243,10 +244,13 @@ Popup {
         cmdline += " "+s
     }
     function addConfig(s) {
-        config += s+"\n"
+        config += s+""
     }
-    function addFirstRun(s) {
-        firstrun += s+"\n"
+    function bootAsGround(s) {
+        openHDGround += s+""
+    }
+    function bootAsAir(s) {
+        openHDAir += s+""
     }
     function escapeshellarg(arg) {
         return "'"+arg.replace(/'/g, "\\'")+"'"
@@ -269,24 +273,27 @@ Popup {
     {
         cmdline = ""
         config = ""
-        firstrun = ""
+        openHDGround = ""
+        openHDAir = ""
         cloudinit = ""
         cloudinitrun = ""
         cloudinitwrite = ""
         cloudinitnetwork = ""
 
         if (setAir.checked) {
-            addFirstRun("touch /boot/air.txt")
+            bootAsAir("applied")
         }
         if (setGround.checked) {
-            addCloudInit("write_files:\n"+cloudinitwrite+"\n")
+            bootAsGround("applied")
         }
 
-        if (firstrun.length) {
-            firstrun = "#!/bin/bash\n\n"+"set +e\n\n"+firstrun
-            addFirstRun("rm -f /boot/firstrun.sh")
-            addFirstRun("exit 0")
-        }
+        if (openHDGround.length) {
+            openHDGround = ""+openHDGround
+         }
+
+        if (openHDAir.length) {
+            openHDAir = ""+openHDAir
+         }
 
         if (cloudinitwrite !== "") {
             addCloudInit("write_files:\n"+cloudinitwrite+"\n")
@@ -296,7 +303,7 @@ Popup {
             addCloudInit("runcmd:\n"+cloudinitrun+"\n")
         }
 
-        imageWriter.setImageCustomization(config, cmdline, firstrun, cloudinit, cloudinitnetwork)
+        imageWriter.setImageCustomization(config, cmdline, openHDAir, openHDGround, cloudinit, cloudinitnetwork)
     }
 
     function saveSettings()

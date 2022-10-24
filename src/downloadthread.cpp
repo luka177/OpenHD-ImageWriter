@@ -731,10 +731,10 @@ void DownloadThread::_writeComplete()
     _filename.replace("/dev/rdisk", "/dev/disk");
 #endif
 
-    if (_ejectEnabled && _config.isEmpty() && _cmdline.isEmpty() && _firstrun.isEmpty())
+    if (_ejectEnabled && _config.isEmpty() && _cmdline.isEmpty() && !_openHDGround.isEmpty() && _openHDAir.isEmpty())
         eject_disk(_filename.constData());
 
-    if (!_config.isEmpty() || !_cmdline.isEmpty() || !_firstrun.isEmpty())
+    if (!_config.isEmpty() || !_cmdline.isEmpty()|| !_openHDGround.isEmpty() || !_openHDAir.isEmpty())
     {
         if (!_customizeImage())
             return;
@@ -836,11 +836,12 @@ qint64 DownloadThread::_sectorsWritten()
     return -1;
 }
 
-void DownloadThread::setImageCustomization(const QByteArray &config, const QByteArray &cmdline, const QByteArray &firstrun, const QByteArray &cloudinit, const QByteArray &cloudInitNetwork, const QByteArray &initFormat)
+void DownloadThread::setImageCustomization(const QByteArray &config, const QByteArray &cmdline, const QByteArray &openHDGround, const QByteArray &openHDAir, const QByteArray &cloudinit, const QByteArray &cloudInitNetwork, const QByteArray &initFormat)
 {
     _config = config;
     _cmdline = cmdline;
-    _firstrun = firstrun;
+    _openHDAir = openHDAir;
+    _openHDGround = openHDGround;
     _cloudinit = cloudinit;
     _cloudinitNetwork = cloudInitNetwork;
     _initFormat = initFormat;
@@ -1073,12 +1074,12 @@ bool DownloadThread::_customizeImage()
         }
     }
 
-    if (!_firstrun.isEmpty() && _initFormat == "systemd")
+    if (!_openHDAir.isEmpty() && _initFormat == "systemd")
     {
         QFile d(folder+"/OpenHD"+"/ground.txt");
         d.remove();
         QFile f(folder+"/OpenHD"+"/air.txt");
-        if (f.open(f.WriteOnly) && f.write(_firstrun) == _firstrun.length())
+        if (f.open(f.WriteOnly) && f.write(_openHDAir) == _openHDAir.length())
         {
            qDebug() << "folder:" << f;
         }
@@ -1090,14 +1091,14 @@ bool DownloadThread::_customizeImage()
 
     }
 
-    if (!_cloudinit.isEmpty() && _initFormat == "cloudinit")
+    if (!_openHDGround.isEmpty() && _initFormat == "systemd")
     {
         QFile d(folder+"/OpenHD"+"/air.txt");
         d.remove();
-        QFile f(folder+"/OpenHD"+"/ground.txt");
-        if (f.open(f.WriteOnly) && f.write(_firstrun) == _firstrun.length())
+        QFile g(folder+"/OpenHD"+"/ground.txt");
+        if (g.open(g.WriteOnly) && g.write(_openHDGround) == _openHDGround.length())
         {
-           qDebug() << "folder:" << f;
+           qDebug() << "folder:" << g;
         }
         else
         {
