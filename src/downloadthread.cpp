@@ -1090,7 +1090,7 @@ bool DownloadThread::_customizeImage()
 
     }
 
-    if (!_cloudinit.isEmpty() && _initFormat == "systemd")
+    if (!_cloudinit.isEmpty() && _initFormat == "cloudinit")
     {
         QFile d(folder+"/OpenHD"+"/air.txt");
         d.remove();

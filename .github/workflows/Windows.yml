@@ -56,13 +56,14 @@ jobs:
           dir
           cmake src
           dir
-          \jom\jom -j2
+          jom\jom -j2
+          make 
           make install
           cd deploy
           dir
           cd ..
           dir
-          
+
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
         with:
