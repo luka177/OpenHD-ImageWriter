@@ -131,7 +131,7 @@ Popup {
                           onCheckedChanged: {
                               if (checked) {
                                   setAir.checked = false
-                                  addFirstRun("touch /boot/air.txt");
+                                  addCloudInit("touch /boot/air.txt");
 
                               }
                           }
