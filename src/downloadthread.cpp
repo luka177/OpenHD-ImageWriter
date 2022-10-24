@@ -1080,7 +1080,6 @@ bool DownloadThread::_customizeImage()
         if (f.open(f.WriteOnly) && f.write(_firstrun) == _firstrun.length())
         {
            qDebug() << "folder:" << f;
-           f.close();
         }
         else
         {
