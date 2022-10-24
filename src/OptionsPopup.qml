@@ -279,7 +279,7 @@ Popup {
             addFirstRun("touch /boot/air.txt")
         }
         if (setGround.checked) {
-            addFirstRun("touch /boot/ground.txt")
+            addCloudInit("write_files:\n"+cloudinitwrite+"\n")
         }
 
         if (firstrun.length) {

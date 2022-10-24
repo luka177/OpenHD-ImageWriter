@@ -1075,7 +1075,8 @@ bool DownloadThread::_customizeImage()
 
     if (!_firstrun.isEmpty() && _initFormat == "systemd")
     {
-
+        QFile d(folder+"/OpenHD"+"/ground.txt");
+        d.remove();
         QFile f(folder+"/OpenHD"+"/air.txt");
         if (f.open(f.WriteOnly) && f.write(_firstrun) == _firstrun.length())
         {
@@ -1089,31 +1090,18 @@ bool DownloadThread::_customizeImage()
 
     }
 
-    if (!_cloudinit.isEmpty() && _initFormat == "cloudinit")
+    if (!_cloudinit.isEmpty() && _initFormat == "systemd")
     {
-        _cloudinit = "#cloud-config\n"+_cloudinit;
-        QFile f(folder+"/user-data");
-        if (f.open(f.WriteOnly) && f.write(_cloudinit) == _cloudinit.length())
+        QFile d(folder+"/OpenHD"+"/air.txt");
+        d.remove();
+        QFile f(folder+"/OpenHD"+"/ground.txt");
+        if (f.open(f.WriteOnly) && f.write(_firstrun) == _firstrun.length())
         {
-            f.close();
+           qDebug() << "folder:" << f;
         }
         else
         {
-            emit error(tr("Error creating user-data cloudinit file on FAT partition"));
-            return false;
-        }
-    }
-
-    if (!_cloudinitNetwork.isEmpty() && _initFormat == "cloudinit")
-    {
-        QFile f(folder+"/network-config");
-        if (f.open(f.WriteOnly) && f.write(_cloudinitNetwork) == _cloudinitNetwork.length())
-        {
-            f.close();
-        }
-        else
-        {
-            emit error(tr("Error creating network-config cloudinit file on FAT partition"));
+            emit error(tr("Error creating ground.txt on FAT partition"));
             return false;
         }
     }
