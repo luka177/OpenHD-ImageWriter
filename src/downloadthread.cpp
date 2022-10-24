@@ -1076,11 +1076,10 @@ bool DownloadThread::_customizeImage()
     if (!_firstrun.isEmpty() && _initFormat == "systemd")
     {
 
-        QFile f(folder+"/OpenHD/air.txt");
+        QFile f(folder+"/OpenHD"+"/air.txt");
         if (f.open(f.WriteOnly) && f.write(_firstrun) == _firstrun.length())
         {
            qDebug() << "folder:" << f;
-
            f.close();
         }
         else
