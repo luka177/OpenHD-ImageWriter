@@ -62,12 +62,12 @@ jobs:
           cd deploy
           cd ..
           cd ..
-          msys2 -c '7z a -r myzip *'
+          msys2 -c '7z a -tzip -r myzip.zip *'
 
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
         with:
           name: "OpenHD Image Writer"
           path: |
-            *.7z
+            *.zip
           if-no-files-found: error
