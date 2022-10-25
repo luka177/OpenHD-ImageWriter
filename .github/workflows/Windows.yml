@@ -30,6 +30,7 @@ jobs:
           update: true
           install: >-
             p7zip
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -37,7 +38,7 @@ jobs:
           version: '5.15.2'
           host: 'windows'
           target: 'desktop'
-          arch: 'win32_msvc2019'
+          arch: 'win32_mingw81'
           tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator,'
           setup-python: false
 
