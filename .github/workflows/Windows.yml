@@ -64,7 +64,7 @@ jobs:
           cd ..
           dir
           cd ..
-          zip -R deploy.zip *
+          Compress-Archive -Path . -DestinationPath .
 
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
