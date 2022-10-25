@@ -58,8 +58,7 @@ jobs:
           mkdir -p build
           cd build
           cmake ../src
-          ninja -C build 
-          ninja -C build install
+          make D:/a/OpenHD-imager/OpenHD-imager/build
           cd deploy
           dir
           cd ..
