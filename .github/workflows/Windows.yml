@@ -64,16 +64,6 @@ jobs:
           cd ..
           msys2 -c '7z a -r myzip *'
 
-      - name: copy file via ssh password
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
-          source: "*.7z"
-          target: "/opt/"
-
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
         with:
