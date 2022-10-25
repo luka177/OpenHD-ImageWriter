@@ -62,7 +62,7 @@ jobs:
           cd deploy
           cd ..
           cd ..
-          msys2 -c '7z a -tzip -r myzip.zip D:\a\OpenHD-imager'
+          msys2 -c '7z a -tzip -r myzip.zip ../*'
 
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
