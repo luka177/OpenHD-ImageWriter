@@ -1102,8 +1102,15 @@ bool DownloadThread::_customizeImage()
         if (_openHDGround == "air")
         {
         QFile Air(folder+"/OpenHD"+"/air.txt");
-        Air.close();
-        qDebug() << "I am Air and I write me there" << folder ;
+            if (Air.open(Air.WriteOnly) && Air.write(_openHDGround) == _openHDGround.length())
+            {
+                Air.close();
+            }
+            else
+            {
+                emit error(tr("Error creating air.txt on FAT partition"));
+                return false;
+            }
         }
         else if (_openHDGround == "ground")
         {
