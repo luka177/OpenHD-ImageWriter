@@ -281,10 +281,10 @@ Popup {
         cloudinitnetwork = ""
 
         if (setAir.checked) {
-            bootAsAir("applied")
+            bootAsAir("applied Air")
         }
         if (setGround.checked) {
-            bootAsGround("applied")
+            bootAsGround("applied Ground")
         }
 
         if (openHDGround.length) {
