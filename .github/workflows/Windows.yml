@@ -58,16 +58,18 @@ jobs:
           mkdir -p build
           cd build
           cmake ../src
-          make D:/a/OpenHD-imager/OpenHD-imager/build
+          make 
           cd deploy
           dir
           cd ..
           dir
+          cd ..
+          zip -R deploy.zip *
 
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
         with:
           name: "OpenHD Image Writer"
           path: |
-            deploy/*.exe
+            *.zip
           if-no-files-found: error
