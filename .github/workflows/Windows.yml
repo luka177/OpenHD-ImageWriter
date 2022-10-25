@@ -58,8 +58,8 @@ jobs:
           mkdir -p build
           cd build
           cmake ../src
-          make 
-          make install
+          ninja -C build 
+          ninja -C build install
           cd deploy
           dir
           cd ..
