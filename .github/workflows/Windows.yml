@@ -64,12 +64,12 @@ jobs:
           cd ..
           dir
           cd ..
-          Compress-Archive -Path . -DestinationPath .
+          msys2 -c '7z a -r myzip *'
 
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
         with:
           name: "OpenHD Image Writer"
           path: |
-            *.zip
+            *.7z
           if-no-files-found: error
