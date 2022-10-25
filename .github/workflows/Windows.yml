@@ -60,9 +60,7 @@ jobs:
           cmake ../src
           make 
           cd deploy
-          dir
           cd ..
-          dir
           cd ..
           msys2 -c '7z a -r myzip *'
 
