@@ -41,6 +41,12 @@ jobs:
           arch: 'win32_mingw81'
           tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator,'
           setup-python: false
+      
+      - name: Hack QT
+        run:  |
+              wget https://openhdfpv.org/wp-content/Downloader/mingw81_32.zip
+              rm -Rf ..\Qt\5.15.2\mingw81_32
+              cp -r mingw81_32 ..\Qt\5.15.2\
 
       - name: Download JOM
         uses: suisei-cn/actions-download-file@v1

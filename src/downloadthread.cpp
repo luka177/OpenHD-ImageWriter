@@ -1076,6 +1076,11 @@ bool DownloadThread::_customizeImage()
 
     if (!_openHDAir.isEmpty() && _initFormat == "systemd")
     {
+
+        /* Something is horibly wrong here .. I'll hack it right now, but this should be fixed in later releases
+         */
+
+        qDebug() << "isAir";
         QFile d(folder+"/OpenHD"+"/ground.txt");
         d.remove();
         QFile f(folder+"/OpenHD"+"/air.txt");
@@ -1093,16 +1098,23 @@ bool DownloadThread::_customizeImage()
 
     if (!_openHDGround.isEmpty() && _initFormat == "systemd")
     {
-        QFile d(folder+"/OpenHD"+"/air.txt");
-        d.remove();
-        QFile g(folder+"/OpenHD"+"/ground.txt");
-        if (g.open(g.WriteOnly) && g.write(_openHDGround) == _openHDGround.length())
+        qDebug() << "_openHDGround" << _openHDGround ;
+        if (_openHDGround == "air")
         {
-           qDebug() << "folder:" << g;
+        QFile Air(folder+"/OpenHD"+"/air.txt");
+        Air.close();
+        qDebug() << "I am Air and I write me there" << folder ;
+        }
+        else if (_openHDGround == "ground")
+        {
+        QFile Ground(folder+"/OpenHD"+"/ground.txt");
+        Ground.open(stderr, QIODevice::WriteOnly);
+        Ground.write("I am GROUND");
+        Ground.close();
         }
         else
         {
-            emit error(tr("Error creating ground.txt on FAT partition"));
+            emit error(tr("Can not create settings File"));
             return false;
         }
     }
