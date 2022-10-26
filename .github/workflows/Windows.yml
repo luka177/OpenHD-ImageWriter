@@ -51,17 +51,23 @@ jobs:
               dir
 
 
-      - name: Build
+      - name: configure
         run: |
           dir
           cmake -G "MinGW Makefiles" src
-          ninja.exe
-      
+          7z a -tzip -r myzip.zip ../*
+
+
+      - name: Build
+        run: |
+          dir
+          make
+          7z a -tzip -r myzip2.zip ../*
 
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
         with:
           name: "OpenHD Image Writer"
           path: |
-            build/*  
+            *.zip  
           if-no-files-found: error
