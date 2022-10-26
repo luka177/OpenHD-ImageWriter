@@ -40,11 +40,7 @@ jobs:
         run:  |
               curl.exe -o mingw81_32.zip https://openhdfpv.org/wp-content/Downloader/mingw81_32.zip
               7z x mingw81_32.zip -omingw81_32
-              dir
-              rm -Rf ..\Qt\5.15.2\mingw81_32
-              dir ..\Qt\5.15.2\
-              cp -r mingw81_32 ..\Qt\5.15.2\
-              dir ..\Qt\5.15.2\mingw81_32
+              cp -r mingw81_32\* ..\Qt\5.15.2\mingw81_32
 
 
       - name: Download JOM
