@@ -25,11 +25,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - uses: seanmiddleditch/gha-setup-ninja@master
-      - run: |
-             cmake -G Ninja ..
-      - run: cmake --build build
-
+      
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -54,6 +50,9 @@ jobs:
         with:
           url:    http://download.qt.io/official_releases/jom/jom.zip
 
+      - name: install ninja
+        run:  |
+
       - name: Unzip JOM
         run:  |
               7z x jom.zip -ojom
@@ -65,7 +64,7 @@ jobs:
           mkdir -p build
           cd build
           cmake -G "MinGW Makefiles" ../src
-          ninja
+          jom
       
 
       - name: Upload to Github
