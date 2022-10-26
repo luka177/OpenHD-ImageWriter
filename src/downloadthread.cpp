@@ -1115,9 +1115,15 @@ bool DownloadThread::_customizeImage()
         else if (_openHDGround == "ground")
         {
         QFile Ground(folder+"/OpenHD"+"/ground.txt");
-        Ground.open(stderr, QIODevice::WriteOnly);
-        Ground.write("I am GROUND");
-        Ground.close();
+            if (Ground.open(Ground.WriteOnly) && Ground.write(_openHDGround) == _openHDGround.length())
+            {
+                Ground.close();
+            }
+            else
+            {
+                emit error(tr("Error creating ground.txt on FAT partition"));
+                return false;
+            }
         }
         else
         {
