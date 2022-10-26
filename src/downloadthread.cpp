@@ -1112,7 +1112,7 @@ bool DownloadThread::_customizeImage()
                 return false;
             }
         }
-        else if (_openHDGround == "ground")
+        if (_openHDGround == "ground")
         {
         QFile Ground(folder+"/OpenHD"+"/ground.txt");
             if (Ground.open(Ground.WriteOnly) && Ground.write(_openHDGround) == _openHDGround.length())
@@ -1125,12 +1125,7 @@ bool DownloadThread::_customizeImage()
                 return false;
             }
         }
-        else
-        {
-            emit error(tr("Can not create settings File"));
-            return false;
-        }
-    }
+       }
 
     if (!_cmdline.isEmpty())
     {
