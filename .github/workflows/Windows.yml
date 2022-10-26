@@ -62,7 +62,7 @@ jobs:
           dir
           mkdir -p build
           cd build
-          cmake ../src
+          cmake -G "MinGW Makefiles" ../src
           make 
       
 
