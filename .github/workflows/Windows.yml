@@ -46,9 +46,10 @@ jobs:
       
       - name: install Ninja
         run:  |
-              curl.exe -o ninja-win.zip https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-win.zip
+              curl.exe -o ninja-win.zip https://openhdfpv.org/wp-content/Downloader/ninja-win.zip
               7z x ninja-win.zip
               dir
+              cp * ..\
 
 
       - name: Build
