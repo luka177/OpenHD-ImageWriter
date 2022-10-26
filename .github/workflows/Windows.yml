@@ -46,12 +46,10 @@ jobs:
       
       - name: install Ninja
         run:  |
-              curl.exe -o master.zip https://github.com/ninja-build/ninja/archive/refs/heads/master.zip
-              7z x master.zip
-              cd ninja-master
+              curl.exe -o ninja-win.zip https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-win.zip
+              7z x ninja-win.zip
               dir
-              cmake -G Ninja ..
-              cmake --build build
+
 
       - name: Build
         run: |
@@ -59,7 +57,7 @@ jobs:
           mkdir -p build
           cd build
           cmake -G "MinGW Makefiles" ../src
-          ninja
+          ..\ninja.exe .
       
 
       - name: Upload to Github
