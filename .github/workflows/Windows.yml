@@ -34,7 +34,7 @@ jobs:
           host: 'windows'
           target: 'desktop'
           arch: 'win32_mingw81'
-          tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator,tools_ninja'
+          tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator,qt.tools.ninja'
           setup-python: false
       
       - name: Hack QT
