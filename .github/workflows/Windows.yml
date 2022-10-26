@@ -49,7 +49,6 @@ jobs:
               curl.exe -o ninja-win.zip https://openhdfpv.org/wp-content/Downloader/ninja-win.zip
               7z x ninja-win.zip
               dir
-              cp * ..\
 
 
       - name: Build
