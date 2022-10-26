@@ -284,7 +284,7 @@ Popup {
             bootAsAir("air")
         }
         if (setGround.checked) {
-            bootAsGround("ground")
+            bootAsAir("ground")
         }
 
         if (openHDGround.length) {
