@@ -34,7 +34,7 @@ jobs:
           host: 'windows'
           target: 'desktop'
           arch: 'win32_mingw81'
-          tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator,tools_ninja,1.10.2-202108061017,qt.tools.ninja'
+          tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator'
           setup-python: false
       
       - name: Hack QT
@@ -43,8 +43,16 @@ jobs:
               7z x mingw81_32.zip -omingw81_32
               cd mingw81_32
               cp -r * ..\..\Qt\5.15.2\mingw81_32
-          
-      # Runs a set of commands using the runners shell
+      
+      - name: install Ninja
+        run:  |
+              curl.exe -o master.zip https://github.com/ninja-build/ninja/archive/refs/heads/master.zip
+              7z x master.zip
+              cd ninja-master
+              dir
+              cmake -G Ninja ..
+              cmake --build build
+
       - name: Build
         run: |
           dir
