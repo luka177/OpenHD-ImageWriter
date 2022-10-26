@@ -25,6 +25,14 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      - uses: seanmiddleditch/gha-setup-ninja@master
+        run: |
+          mkdir build
+          cd build
+          cmake -G Ninja ..
+          cmake --build build
+          rm -Rf build
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -60,7 +68,8 @@ jobs:
           mkdir -p build
           cd build
           cmake -G "MinGW Makefiles" ../src
-          make 
+          ninja
+          dir
       
 
       - name: Upload to Github
@@ -68,5 +77,5 @@ jobs:
         with:
           name: "OpenHD Image Writer"
           path: |
-            Imager.zip
+            build/*
           if-no-files-found: error
