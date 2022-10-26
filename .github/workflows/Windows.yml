@@ -25,12 +25,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - uses: msys2/setup-msys2@v2
-        with:
-          update: true
-          install: >-
-            p7zip
-
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -46,8 +40,12 @@ jobs:
         run:  |
               curl.exe -o mingw81_32.zip https://openhdfpv.org/wp-content/Downloader/mingw81_32.zip
               7z x mingw81_32.zip -omingw81_32
+              dir
               rm -Rf ..\Qt\5.15.2\mingw81_32
+              dir ..\Qt\5.15.2\
               cp -r mingw81_32 ..\Qt\5.15.2\
+              dir ..\Qt\5.15.2\mingw81_32
+
 
       - name: Download JOM
         uses: suisei-cn/actions-download-file@v1
@@ -66,15 +64,12 @@ jobs:
           cd build
           cmake ../src
           make 
-          cd deploy
-          cd ..
-          cd ..
-          msys2 -c '7z a -tzip -r myzip.zip ../*'
+      
 
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
         with:
           name: "OpenHD Image Writer"
           path: |
-            *.zip
+            Imager.zip
           if-no-files-found: error
