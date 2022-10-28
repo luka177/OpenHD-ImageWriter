@@ -231,6 +231,13 @@ Popup {
         initialized = true
     }
 
+    //Consti10
+    function check_air_or_ground_set_by_user(){
+        console.log("check_air_or_ground_set_by_user,current: ground:"+openHDGround+" air:"+openHDAir);
+        //return openHDGround.length>=1;
+        return openHDAir.length>=1;
+    }
+
     function openPopup() {
         if (!initialized) {
             initialize()

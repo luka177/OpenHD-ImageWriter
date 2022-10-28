@@ -181,6 +181,12 @@ ApplicationWindow {
                             if (!imageWriter.readyToWrite()) {
                                 return
                             }
+                            //Consti10
+                            if(!optionspopup.check_air_or_ground_set_by_user()){
+                                console.log("Cannot write yet, air or ground not set yet");
+                                onError("Cannot write yet, air or ground not set yet - please open settings and select air or ground")
+                                return;
+                            }
 
                             if (!optionspopup.initialized && imageWriter.imageSupportsCustomization() && imageWriter.hasSavedCustomizationSettings()) {
                                 usesavedsettingspopup.openPopup()
