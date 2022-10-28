@@ -1081,9 +1081,9 @@ bool DownloadThread::_customizeImage()
          */
 
         qDebug() << "isAir";
-        QFile d(folder+"/OpenHD"+"/ground.txt");
+        QFile d(folder+"/openhd"+"/ground.txt");
         d.remove();
-        QFile f(folder+"/OpenHD"+"/air.txt");
+        QFile f(folder+"/openhd"+"/air.txt");
         if (f.open(f.WriteOnly) && f.write(_openHDAir) == _openHDAir.length())
         {
            qDebug() << "folder:" << f;
@@ -1101,7 +1101,7 @@ bool DownloadThread::_customizeImage()
         qDebug() << "_openHDGround" << _openHDGround ;
         if (_openHDGround == "air")
         {
-        QFile Air(folder+"/OpenHD"+"/air.txt");
+        QFile Air(folder+"/openhd"+"/air.txt");
             if (Air.open(Air.WriteOnly) && Air.write(_openHDGround) == _openHDGround.length())
             {
                 Air.close();
@@ -1114,7 +1114,7 @@ bool DownloadThread::_customizeImage()
         }
         if (_openHDGround == "ground")
         {
-        QFile Ground(folder+"/OpenHD"+"/ground.txt");
+        QFile Ground(folder+"/openhd"+"/ground.txt");
             if (Ground.open(Ground.WriteOnly) && Ground.write(_openHDGround) == _openHDGround.length())
             {
                 Ground.close();
