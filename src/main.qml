@@ -181,13 +181,17 @@ ApplicationWindow {
                             if (!imageWriter.readyToWrite()) {
                                 return
                             }
+                            var image_name=imageWriter.srcFileName();
+                             console.log("Image name:"+image_name);
                             //Consti10
-                            if(!optionspopup.check_air_or_ground_set_by_user()){
-                                console.log (_initFormat);
-                                console.log("Cannot write yet, air or ground not set yet");
-                                onError("Cannot write yet, air or ground not set yet - please open settings and select air or ground")
-                                return;
-                            }                      
+                            if(image_name.includes("evo")){
+                                if(!optionspopup.check_air_or_ground_set_by_user()){
+                                    console.log (_initFormat);
+                                    console.log("Cannot write yet, air or ground not set yet");
+                                    onError("Cannot write yet, air or ground not set yet - please open settings and select air or ground")
+                                    return;
+                                }
+                            }
                         }
                     }
                 }
