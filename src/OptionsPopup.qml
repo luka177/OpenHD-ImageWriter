@@ -20,7 +20,6 @@ Popup {
     padding: 0
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
     property bool initialized: false
-    property bool hasSavedSettings: false
     property string config
     property string cmdline
     property string openHDAir
@@ -93,23 +92,7 @@ Popup {
 
           ColumnLayout {
               GroupBox {
-                  title: qsTr("Save")
-
-                                  label: RowLayout {
-                                      Label {
-                                          text: parent.parent.title
-                                      }
-                                      ComboBox {
-                                          id: comboSaveSettings
-                                          model: {
-                                              [qsTr("for this session only"),
-                                               qsTr("to always use")]
-                                          }
-                                          Layout.minimumWidth: 250
-                                          Layout.maximumHeight: 40
-                                          enabled: !imageWriter.isEmbeddedMode()
-                                      }
-                                  }
+                  title: qsTr("Necessary Options")
 
                   Layout.fillWidth: true
 
@@ -214,12 +197,7 @@ Popup {
     function initialize() {
         chkBeep.checked = imageWriter.getBoolSetting("beep")
         chkEject.checked = imageWriter.getBoolSetting("eject")
-        var settings = imageWriter.getSavedCustomizationSettings()
 
-        if (Object.keys(settings).length) {
-            comboSaveSettings.currentIndex = 1
-            hasSavedSettings = true
-        }       
         var tz;
         if (imageWriter.isEmbeddedMode()) {
             /* For some reason there is no password mask character set by default on Embedded edition */
@@ -313,23 +291,4 @@ Popup {
         imageWriter.setImageCustomization(config, cmdline, openHDAir, openHDGround, cloudinit, cloudinitnetwork)
     }
 
-    function saveSettings()
-    {
-        if (comboSaveSettings.currentIndex == 1) {
-            hasSavedSettings = true
-            var settings = { };
-            if (chkHostname.checked && fieldHostname.length) {
-                settings.hostname = fieldHostname.text
-            }
-
-            imageWriter.setSavedCustomizationSettings(settings)
-
-        } else if (hasSavedSettings) {
-            imageWriter.clearSavedCustomizationSettings()
-            hasSavedSettings = false
-        }
-
-        imageWriter.setSetting("beep", chkBeep.checked)
-        imageWriter.setSetting("eject", chkEject.checked)
-    }
 }

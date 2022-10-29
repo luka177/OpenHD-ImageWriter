@@ -1058,6 +1058,12 @@ bool DownloadThread::_customizeImage()
             _initFormat = "cloudinit";
             qDebug() << "user-data found on FAT partition. Assuming cloudinit support";
         }
+        if (QFile::exists(folder+"/openhd"))
+        {
+            /* If we have user-data file on FAT partition, then it must be cloudinit */
+            _initFormat = "OpenHDEvo";
+            qDebug() << "OpenHD Evo Image, you need air or ground.txt";
+        }
         else if (issue.contains("pi-gen"))
         {
             /* If issue.txt mentions pi-gen, and there is no user-data file assume
@@ -1074,7 +1080,7 @@ bool DownloadThread::_customizeImage()
         }
     }
 
-    if (!_openHDAir.isEmpty() && _initFormat == "systemd")
+    if (!_openHDAir.isEmpty() && _initFormat == "OpenHDEvo")
     {
 
         /* Something is horibly wrong here .. I'll hack it right now, but this should be fixed in later releases

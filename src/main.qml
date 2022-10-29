@@ -183,16 +183,11 @@ ApplicationWindow {
                             }
                             //Consti10
                             if(!optionspopup.check_air_or_ground_set_by_user()){
+                                console.log (_initFormat);
                                 console.log("Cannot write yet, air or ground not set yet");
                                 onError("Cannot write yet, air or ground not set yet - please open settings and select air or ground")
                                 return;
-                            }
-
-                            if (!optionspopup.initialized && imageWriter.imageSupportsCustomization() && imageWriter.hasSavedCustomizationSettings()) {
-                                usesavedsettingspopup.openPopup()
-                            } else {
-                                confirmwritepopup.askForConfirmation()
-                            }
+                            }                      
                         }
                     }
                 }
@@ -923,21 +918,6 @@ ApplicationWindow {
         id: optionspopup
     }
 
-    UseSavedSettingsPopup {
-        id: usesavedsettingspopup
-        onYes: {
-            optionspopup.initialize()
-            optionspopup.applySettings()
-            confirmwritepopup.askForConfirmation()
-        }
-        onNo: {
-            imageWriter.clearSavedCustomizationSettings()
-            confirmwritepopup.askForConfirmation()
-        }
-        onEditSettings: {
-            optionspopup.openPopup()
-        }
-    }
 
     /* Utility functions */
     function httpRequest(url, callback) {
