@@ -93,23 +93,13 @@ Popup {
 
           ColumnLayout {
               GroupBox {
-                  title: qsTr("Save")
+                  title: qsTr("   Necessary Settings")
 
                                   label: RowLayout {
                                       Label {
                                           text: parent.parent.title
                                       }
-                                      ComboBox {
-                                          id: comboSaveSettings
-                                          model: {
-                                              [qsTr("for this session only"),
-                                               qsTr("to always use")]
-                                          }
-                                          Layout.minimumWidth: 250
-                                          Layout.maximumHeight: 40
-                                          enabled: !imageWriter.isEmbeddedMode()
-                                      }
-                                  }
+                                    }
 
                   Layout.fillWidth: true
 
@@ -315,20 +305,6 @@ Popup {
 
     function saveSettings()
     {
-        if (comboSaveSettings.currentIndex == 1) {
-            hasSavedSettings = true
-            var settings = { };
-            if (chkHostname.checked && fieldHostname.length) {
-                settings.hostname = fieldHostname.text
-            }
-
-            imageWriter.setSavedCustomizationSettings(settings)
-
-        } else if (hasSavedSettings) {
-            imageWriter.clearSavedCustomizationSettings()
-            hasSavedSettings = false
-        }
-
         imageWriter.setSetting("beep", chkBeep.checked)
         imageWriter.setSetting("eject", chkEject.checked)
     }
