@@ -145,19 +145,20 @@ Popup {
                               }
                           }
                       }
-                      ImCheckBox {
-                          id: autoBndKey
-                          text: qsTr("Autogenerate bind key")
-                          onCheckedChanged: {
-                              if (checked) {
-                                  bndKey.checked = false
-                              }
-                          }
-                      }
+
                       TextField {
                           id: custBndKey
-                          Layout.minimumWidth: 200
+                          inputMask: "XXXX"
+                          text: "A0b1"
+                          width:10
+                          color: acceptableInput ? "green" : "red"
+                          selectByMouse: true
+                          anchors {
+                                   horizontalCenter: parent.horizontalCenter
+
+                             }
                       }
+
                   }
               }
 
