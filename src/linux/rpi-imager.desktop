@@ -4,6 +4,6 @@ Version=1.0
 Name=OpenHD-ImageWriter
 Comment=OpenHD Image Writer
 Icon=rpi-imager
-Exec=OpenHD-ImageWriter
+Exec=OpenHDImageWriter
 Categories=Utility
 StartupNotify=false
