@@ -1,8 +1,9 @@
-openhdimagewriter (1.7.2) unstable; urgency=medium
+openhdimagewriter (1.8.2) unstable; urgency=medium
 
+ * Initial OpenHD release based on rpi-imager
   
 
- -- Floris Bos <bos@je-eigen-domein.nl>  Thu, 24 Mar 2022 17:58:52 +0100
+ -- Raphael Scholle <raphael@openhdfpv.org>  Thu, 08 NOV 2022 18:47:52 +0100
 
 rpi-imager (1.7.1) unstable; urgency=medium
 

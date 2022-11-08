@@ -24,7 +24,7 @@
       During this process, OpenHD Imager also caches the downloaded
       operating system image – that is to say, it saves a local copy on your
       computer, so you can program additional SD cards without having to
-      download the file again.
+      download the file again and includes OpenHD settings into the image.
     </p>
   </description>
   <launchable type="desktop-id">openhdimagewriter.desktop</launchable>
