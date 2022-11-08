@@ -149,8 +149,8 @@ Popup {
 
                       TextField {
                           id: bndPhrase
-                          inputMask: "XXXX"
-                          text: "A0b1"
+                          inputMask: "XXXXXXXX"
+                          text: "A0b1C2fa"
                           width:10
                           color: acceptableInput ? "green" : "red"
                           selectByMouse: true
