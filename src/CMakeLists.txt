@@ -282,8 +282,8 @@ else()
     endif()
 
     configure_file(
-        "${CMAKE_CURRENT_SOURCE_DIR}/linux/rpi-imager.metainfo.xml.in"
-        "${CMAKE_CURRENT_BINARY_DIR}/rpi-imager.metainfo.xml"
+        "${CMAKE_CURRENT_SOURCE_DIR}/linux/openhdimagewriter.metainfo.xml.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/openhdimagewriter.metainfo.xml"
         @ONLY)
 
     install(TARGETS OpenHDImageWriter DESTINATION bin)
