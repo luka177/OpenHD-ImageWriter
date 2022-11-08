@@ -6,9 +6,9 @@ name: OpenHD Image Writer
 on:
   # Triggers the workflow on push or pull request events but only for the "qml" branch
   push:
-    branches: [ "qml" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "qml" ]
+    branches: [ "master" ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
