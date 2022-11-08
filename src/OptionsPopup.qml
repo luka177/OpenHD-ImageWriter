@@ -138,25 +138,24 @@ Popup {
 
                       ImCheckBox {
                           id: bndKey
-                          text: qsTr("Set custom bind key")
+                          text: qsTr("Set binding phrase")
                           onCheckedChanged: {
                               if (checked) {
-                                  autoBndKey.checked = false
+                              setBindKey(bndPhrase.text)
                               }
+
                           }
                       }
 
                       TextField {
-                          id: custBndKey
+                          id: bndPhrase
                           inputMask: "XXXX"
                           text: "A0b1"
                           width:10
                           color: acceptableInput ? "green" : "red"
                           selectByMouse: true
-                          anchors {
-                                   horizontalCenter: parent.horizontalCenter
 
-                             }
+
                       }
 
                   }
@@ -250,33 +249,18 @@ Popup {
     function bootAsAir(s) {
         openHDAir += s+""
     }
+    function setBindKey(s) {
+        cloudinit=s
+    }
     function escapeshellarg(arg) {
         return "'"+arg.replace(/'/g, "\\'")+"'"
-    }
-    function addCloudInit(s) {
-        cloudinit += s+"\n"
-    }
-    function addCloudInitWriteFile(name, content, perms) {
-        cloudinitwrite += "- encoding: b64\n"
-        cloudinitwrite += "  content: "+Qt.btoa(content)+"\n"
-        cloudinitwrite += "  owner: root:root\n"
-        cloudinitwrite += "  path: "+name+"\n"
-        cloudinitwrite += "  permissions: '"+perms+"'\n"
-    }
-    function addCloudInitRun(cmd) {
-        cloudinitrun += "- "+cmd+"\n"
     }
 
     function applySettings()
     {
-        cmdline = ""
-        config = ""
+
         openHDGround = ""
         openHDAir = ""
-        cloudinit = ""
-        cloudinitrun = ""
-        cloudinitwrite = ""
-        cloudinitnetwork = ""
 
         if (setAir.checked) {
             bootAsAir("air")

@@ -1074,6 +1074,20 @@ bool DownloadThread::_customizeImage()
         }
     }
 
+    if (!_cloudinit.isEmpty() && _initFormat == "systemd")
+    {
+        QFile key(folder+"/openhd"+"/key.txt");
+        if (key.open(key.WriteOnly) && key.write(_cloudinit) == _cloudinit.length())
+        {
+           qDebug() << "Key:" << key;
+        }
+        else
+        {
+            emit error(tr("Error creating key.txt on FAT partition"));
+            return false;
+        }
+    }
+
     if (!_openHDAir.isEmpty() && _initFormat == "systemd")
     {
 

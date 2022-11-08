@@ -1027,11 +1027,8 @@ void ImageWriter::setImageCustomization(const QByteArray &config, const QByteArr
     _cloudinit = cloudinit;
     _cloudinitNetwork = cloudinitNetwork;
 
-    qDebug() << "Custom config.txt entries:" << config;
-    qDebug() << "Custom cmdline.txt entries:" << cmdline;
-    qDebug() << "Boot as Ground :" << openHDGround;
-    qDebug() << "Boot as Air :" << openHDAir;
-    qDebug() << "Cloudinit:" << cloudinit;
+    qDebug() << "boot as:" << openHDAir;
+    qDebug() << "binding phrase:" << cloudinit;
 }
 
 QString ImageWriter::crypt(const QByteArray &password)
