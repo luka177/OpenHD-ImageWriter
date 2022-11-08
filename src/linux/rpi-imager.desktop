@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
 Version=1.0
-Name=OpenHD-ImageWriter
-Comment=OpenHD Imager
+Name=Imager
+Comment=Raspberry Pi Imager
 Icon=rpi-imager
-Exec=openhdimagewriter
+Exec=rpi-imager
 Categories=Utility
 StartupNotify=false
