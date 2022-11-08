@@ -52,7 +52,7 @@
   </screenshots>
   <url type="homepage">https://github.com/raspberrypi/rpi-imager</url>
   <provides>
-    <binary>rpi-imager</binary>
+    <binary>openhdimagewriter</binary>
   </provides>
   <releases>
     <release version="@IMAGER_VERSION_STR@" />
