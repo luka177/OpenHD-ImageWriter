@@ -171,7 +171,6 @@ int main(int argc, char *argv[])
             {
                 freopen("CONOUT$", "w", stdout);
                 freopen("CONOUT$", "w", stderr);
-                std::ios::sync_with_stdio();
                 qInstallMessageHandler(consoleMsgHandler);
             }
 #endif
