@@ -1,4 +1,4 @@
-# rpi-imager
+# OpenHD ImageWriter
 
 OpenHD ImageWriter
 
