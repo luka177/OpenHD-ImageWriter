@@ -61,7 +61,7 @@ elseif (UNIX)
 elseif (WIN32)
     set(DEPENDENCIES acceleratedcryptographichash.cpp dependencies/mountutils/src/windows/functions.cpp dependencies/drivelist/src/windows/list.cpp
         windows/winfile.cpp windows/winfile.h
-        windows/rpi-imager.rc)
+        windows/openhdimagewriter.rc)
     find_package(Qt5WinExtras REQUIRED)
     set(EXTRALIBS setupapi wlanapi Qt5::WinExtras)
 endif()

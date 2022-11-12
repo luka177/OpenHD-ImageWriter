@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
     app.setOrganizationName("OpenHd");
     app.setOrganizationDomain("openhdfpv.org");
     app.setApplicationName("Image writer");
-    app.setWindowIcon(QIcon(":/icons/rpi-imager.ico"));
+    app.setWindowIcon(QIcon(":/icons/openhdimagewriter.ico"));
     ImageWriter imageWriter;
     NetworkAccessManagerFactory namf;
     QQmlApplicationEngine engine;
