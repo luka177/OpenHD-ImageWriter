@@ -6,9 +6,9 @@ name: OpenHD Image Writer Windows
 on:
   # Triggers the workflow on push or pull request events but only for the "qml" branch
   push:
-    branches: [ "qml" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "qml" ]
+    branches: [ "master" ]
 
 
 defaults:
