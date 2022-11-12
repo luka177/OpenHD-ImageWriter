@@ -287,7 +287,7 @@ else()
         @ONLY)
 
     install(TARGETS OpenHDImageWriter DESTINATION bin)
-    install(FILES icons/rpi-imager.png DESTINATION share/icons/hicolor/128x128/apps)
+    install(FILES icons/openhdimagewriter.png DESTINATION share/icons/hicolor/128x128/apps)
     install(FILES linux/openhdimagewriter.desktop DESTINATION share/applications)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/openhdimagewriter.metainfo.xml" DESTINATION share/metainfo)
 endif()
