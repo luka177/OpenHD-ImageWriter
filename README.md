@@ -2,7 +2,7 @@
 
 OpenHD ImageWriter
 
-The OpenHD ImageWriter is a image flashing untillity based on https://github.com/raspberrypi/rpi-imager/
+The OpenHD ImageWriter is an image flashing untillity based on https://github.com/raspberrypi/rpi-imager/
 
 It's goal is to ease installation of OpenHD images and to integrate initial settings, which are necessary in 2.2-evo builds.
 
