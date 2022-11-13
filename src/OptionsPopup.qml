@@ -172,10 +172,7 @@ Popup {
                         id: chkBeep
                         text: qsTr("Play sound when finished")
                     }
-                    ImCheckBox {
-                        id: chkEject
-                        text: qsTr("Eject media when finished")
-                    }
+
                 }
             }
           }
@@ -203,7 +200,7 @@ Popup {
 
     function initialize() {
         chkBeep.checked = imageWriter.getBoolSetting("beep")
-        chkEject.checked = imageWriter.getBoolSetting("eject")
+        chkEject.checked = false
         var settings = imageWriter.getSavedCustomizationSettings()
 
         if (Object.keys(settings).length) {
@@ -291,6 +288,6 @@ Popup {
     function saveSettings()
     {
         imageWriter.setSetting("beep", chkBeep.checked)
-        imageWriter.setSetting("eject", chkEject.checked)
+        #imageWriter.setSetting("eject", chkEject.checked)
     }
 }
