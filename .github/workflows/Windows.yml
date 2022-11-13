@@ -42,7 +42,6 @@ jobs:
               curl.exe -o mingw81_32.zip https://openhdfpv.org/wp-content/Downloader/mingw81_32.zip
               7z x mingw81_32.zip -omingw81_32
               cd mingw81_32
-              cp -r * ..\..\Qt\5.15.2\mingw81_32
       
       - name: install Ninja
         run:  |
@@ -63,7 +62,8 @@ jobs:
           dir
           make
           make install
-          tree
+          rm *.zip
+          tree  
 
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
