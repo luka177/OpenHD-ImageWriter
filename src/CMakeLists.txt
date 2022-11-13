@@ -203,6 +203,19 @@ if (WIN32)
         COMMAND ${CMAKE_COMMAND} -E copy
             "${Qt5_DIR}/../../../bin/libcrypto-3.dll" "${Qt5_DIR}/../../../bin/libcrypto-3.dll"
             "${CMAKE_BINARY_DIR}/deploy")
+        add_custom_command(TARGET ${PROJECT_NAME}
+            POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_CURRENT_SOURCE_DIR}/windows/libssl-1_1.dll" "${CMAKE_BINARY_DIR}/deploy")
+        add_custom_command(TARGET ${PROJECT_NAME}
+            POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_CURRENT_SOURCE_DIR}/windows/libcrypto-1_1.dll" "${CMAKE_BINARY_DIR}/deploy")
+        add_custom_command(TARGET ${PROJECT_NAME}
+            POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_CURRENT_SOURCE_DIR}/windows/libcrypto.dll" "${CMAKE_BINARY_DIR}/deploy")
+
 
     configure_file(
         "${CMAKE_CURRENT_SOURCE_DIR}/windows/openhdimagewriter.nsi.in"
