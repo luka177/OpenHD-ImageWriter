@@ -595,7 +595,6 @@ Section -Icons_Reg
 
 !ifndef INNER
 SetOutPath "$INSTDIR"
-File "$%TEMP%\uninstall.exe"
 !endif
 
 !ifdef REG_START_MENU
