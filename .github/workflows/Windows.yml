@@ -62,7 +62,8 @@ jobs:
         run: |
           dir
           make
-          7z a -tzip -r myzip2.zip ../*
+          make install
+          tree
 
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
