@@ -670,7 +670,7 @@ Delete "$INSTDIR\Qt5WinExtras.dll"
 # Old name
 Delete "$INSTDIR\imagingutility.exe"
 Delete "$INSTDIR\openhdimagewriter.exe"
-Delete "$INSTDIR\openhdimagewriter-cli.cmd"
+Delete "$INSTDIR\openhdimagewriter.cmd"
 Delete "$INSTDIR\styles\qwindowsvistastyle.dll"
 Delete "$INSTDIR\QtQuick.2\plugins.qmltypes"
 Delete "$INSTDIR\QtQuick.2\qmldir"
