@@ -172,7 +172,10 @@ Popup {
                         id: chkBeep
                         text: qsTr("Play sound when finished")
                     }
-
+                    ImCheckBox {
+                        id: chkEject
+                        text: qsTr("Do not flash config files")
+                    }
                 }
             }
           }
