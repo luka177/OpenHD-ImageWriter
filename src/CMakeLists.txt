@@ -108,16 +108,16 @@ else()
     add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} ${DEPENDENCIES})
 endif()
 
-# Enable link time optimization if available
-include(CheckIPOSupported)
-check_ipo_supported(RESULT iposupported OUTPUT ipoerror)
+# # Enable link time optimization if available
+# include(CheckIPOSupported)
+# check_ipo_supported(RESULT iposupported OUTPUT ipoerror)
 
-if(iposupported)
-    message("Enabled LTO")
-    set_property(TARGET ${PROJECT_NAME} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-else()
-    message(STATUS "LTO not supported: <${ipoerror}>")
-endif()
+# if(iposupported)
+#     message("Enabled LTO")
+#     set_property(TARGET ${PROJECT_NAME} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+# else()
+#     message(STATUS "LTO not supported: <${ipoerror}>")
+# endif()
 
 if(ENABLE_TELEMETRY)
     add_definitions(-DTELEMETRY_ENABLED_DEFAULT=true)
