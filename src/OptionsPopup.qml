@@ -117,18 +117,9 @@ Popup {
                               }
                           }
                       }
-                      /*
-                      ImCheckBox {
-                          id: setIp
-                          text: qsTr("Set SBC to IP-Camera")
-                          onCheckedChanged: {
-                              if (checked) {
-                                  setGround.checked = false
-                                  bootAsIp();
-                              }
-                          }
-                      }
-                      */
+
+
+
                       ImCheckBox {
                           id: setGround
                           text: qsTr("Set SBC to GROUND")
@@ -137,6 +128,17 @@ Popup {
                                   setAir.checked = false
                                   bootAsGround();
 
+                              }
+                          }
+                      }
+
+                      ImCheckBox {
+                          id: setIp
+                          text: qsTr("DUMMY setting")
+                          onCheckedChanged: {
+                              if (checked) {
+                                  //setGround.checked = false
+                                  //bootAsIp();
                               }
                           }
                       }
