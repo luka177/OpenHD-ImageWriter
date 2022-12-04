@@ -1113,6 +1113,19 @@ bool DownloadThread::_customizeImage()
     if (!_openHDGround.isEmpty() && _initFormat == "systemd")
     {
         qDebug() << "_openHDGround" << _openHDGround ;
+        if (_openHDGround == "IP")
+        {
+        QFile Ip(folder+"/openhd"+"/force_ip_camera.txt");
+            if (Ip.open(Ip.WriteOnly) && Ip.write(_openHDGround) == _openHDGround.length())
+            {
+                Ip.close();
+            }
+            else
+            {
+                emit error(tr("Error creating force_ip_camera.txt on FAT partition"));
+                return false;
+            }
+        }
         if (_openHDGround == "air")
         {
         QFile Air(folder+"/openhd"+"/air.txt");

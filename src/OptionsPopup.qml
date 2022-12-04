@@ -24,6 +24,7 @@ Popup {
     property string config
     property string cmdline
     property string openHDAir
+    property string openHDIp
     property string openHDGround
     property string cloudinit
     property string cloudinitrun
@@ -116,6 +117,18 @@ Popup {
                               }
                           }
                       }
+                      /*
+                      ImCheckBox {
+                          id: setIp
+                          text: qsTr("Set SBC to IP-Camera")
+                          onCheckedChanged: {
+                              if (checked) {
+                                  setGround.checked = false
+                                  bootAsIp();
+                              }
+                          }
+                      }
+                      */
                       ImCheckBox {
                           id: setGround
                           text: qsTr("Set SBC to GROUND")
@@ -249,6 +262,9 @@ Popup {
     function bootAsAir(s) {
         openHDAir += s+""
     }
+    function bootAsIp(s) {
+        openHDIp += s+""
+    }
     function setBindKey(s) {
         cloudinit=s
     }
@@ -261,9 +277,14 @@ Popup {
 
         openHDGround = ""
         openHDAir = ""
+        openHDIp = ""
+
 
         if (setAir.checked) {
             bootAsAir("air")
+        }
+        if (setIp.checked) {
+            bootAsAir("IP")
         }
         if (setGround.checked) {
             bootAsAir("ground")
