@@ -1,9 +1,13 @@
 openhdimagewriter (1.8.2) unstable; urgency=medium
 
- * Initial OpenHD release based on rpi-imager
+ * Qol OpenHD release based on rpi-imager
   
+  * added compatibility for additional platform images
 
  -- Raphael Scholle <raphael@openhdfpv.org>  Thu, 08 NOV 2022 18:47:52 +0100
+
+
+
 
 rpi-imager (1.7.1) unstable; urgency=medium
 
