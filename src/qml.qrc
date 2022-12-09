@@ -37,5 +37,6 @@
         <file>OptionsPopup.qml</file>
         <file>icons/OpenHD-advanced.webp</file>
         <file>icons/OpenHD-old.webp</file>
+        <file>icons/donate.png</file>
     </qresource>
 </RCC>

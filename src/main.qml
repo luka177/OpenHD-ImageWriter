@@ -248,7 +248,20 @@ ApplicationWindow {
                         Layout.alignment: Qt.AlignRight
                         visible: false
                     }
-
+                    ImButton {
+                        Layout.bottomMargin: 25
+                        padding: 5
+                        id: donatebutton
+                        onClicked: {
+                            optionspopup.openPopup()
+                        }
+                        visible: true
+                        Accessible.description: qsTr("Donate")
+                        contentItem: Image {
+                            source: "icons/donate.png"
+                            fillMode: Image.PreserveAspectFit
+                        }
+                    }
                     ImButton {
                         Layout.bottomMargin: 25
                         padding: 5
