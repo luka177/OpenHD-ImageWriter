@@ -249,7 +249,7 @@ ApplicationWindow {
                         visible: false
                     }
                     ImButton {
-                        Layout.bottomMargin: 25
+                        Layout.bottomMargin: -15
                         padding: 5
                         id: donatebutton
                         onClicked: {
@@ -258,12 +258,11 @@ ApplicationWindow {
                         visible: true
                         Accessible.description: qsTr("Donate")
                         contentItem: Image {
-                            source: "icons/donate.png"
+                            source: "icons/donate.svg"
                             fillMode: Image.PreserveAspectFit
                         }
                     }
                     ImButton {
-                        Layout.bottomMargin: 25
                         padding: 5
                         id: customizebutton
                         onClicked: {
