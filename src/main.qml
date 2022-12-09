@@ -10,6 +10,7 @@ import QtQuick.Layouts 1.0
 import QtQuick.Controls.Material 2.2
 import "qmlcomponents"
 
+
 ApplicationWindow {
     id: window
     visible: true
@@ -249,20 +250,7 @@ ApplicationWindow {
                         visible: false
                     }
                     ImButton {
-                        Layout.bottomMargin: -15
-                        padding: 5
-                        id: donatebutton
-                        onClicked: {
-                            optionspopup.openPopup()
-                        }
-                        visible: true
-                        Accessible.description: qsTr("Donate")
-                        contentItem: Image {
-                            source: "icons/donate.svg"
-                            fillMode: Image.PreserveAspectFit
-                        }
-                    }
-                    ImButton {
+                        Layout.bottomMargin: -10
                         padding: 5
                         id: customizebutton
                         onClicked: {
@@ -272,6 +260,19 @@ ApplicationWindow {
                         Accessible.description: qsTr("Select this button to configure Settings")
                         contentItem: Image {
                             source: "icons/ic_cog_red.svg"
+                            fillMode: Image.PreserveAspectFit
+                        }
+                    }
+                    ImButton {
+                        padding: 5
+                        id: donatebutton
+                        onClicked: {
+                        Qt.openUrlExternally("https://opencollective.com/openhd");
+                        }
+                        visible: true
+                        Accessible.description: qsTr("Donate")
+                        contentItem: Image {
+                            source: "icons/donate.svg"
                             fillMode: Image.PreserveAspectFit
                         }
                     }
