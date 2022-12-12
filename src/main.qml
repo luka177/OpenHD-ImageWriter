@@ -58,9 +58,25 @@ ApplicationWindow {
         id: bg
         spacing: 0
 
+
+
         Rectangle {
             implicitHeight: window.height/2
 
+            ImButton {
+                Layout.leftMargin: window.width-75
+                padding: 5
+                id: donatebutton
+                onClicked: {
+                Qt.openUrlExternally("https://opencollective.com/openhd");
+                }
+                visible: true
+                Accessible.description: qsTr("Donate")
+                contentItem: Image {
+                    source: "icons/donate.svg"
+                    fillMode: Image.PreserveAspectFit
+                }
+            }
             Image {
                 id: image
                 Layout.fillWidth: true
@@ -71,6 +87,7 @@ ApplicationWindow {
                 height: window.height/2
             }
         }
+
 
         Rectangle {
             color: "#2C3E50"
@@ -250,7 +267,7 @@ ApplicationWindow {
                         visible: false
                     }
                     ImButton {
-                        Layout.bottomMargin: -10
+                        Layout.bottomMargin: 55
                         padding: 5
                         id: customizebutton
                         onClicked: {
@@ -263,19 +280,7 @@ ApplicationWindow {
                             fillMode: Image.PreserveAspectFit
                         }
                     }
-                    ImButton {
-                        padding: 5
-                        id: donatebutton
-                        onClicked: {
-                        Qt.openUrlExternally("https://opencollective.com/openhd");
-                        }
-                        visible: true
-                        Accessible.description: qsTr("Donate")
-                        contentItem: Image {
-                            source: "icons/donate.svg"
-                            fillMode: Image.PreserveAspectFit
-                        }
-                    }
+
                 }
 
                 Text {
