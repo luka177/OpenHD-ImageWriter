@@ -64,7 +64,6 @@ ApplicationWindow {
             implicitHeight: window.height/2
 
             ImButton {
-                Layout.leftMargin: window.width-75
                 padding: 5
                 id: donatebutton
                 onClicked: {
