@@ -134,6 +134,7 @@ Popup {
 
                       ImCheckBox {
                           id: setIp
+                          visible: false
                           text: qsTr("DUMMY setting")
                           onCheckedChanged: {
                               if (checked) {
@@ -147,6 +148,7 @@ Popup {
               GroupBox {
                   title: qsTr("Bind Settings")
                   Layout.fillWidth: true
+                  visible: false
 
                   ColumnLayout {
                       spacing: -10
