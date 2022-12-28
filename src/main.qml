@@ -905,7 +905,7 @@ ApplicationWindow {
         onYes: {
             langbar.visible = false
             writebutton.enabled = false
-            customizebutton.visible = true
+            customizebutton.visible = false
             cancelwritebutton.enabled = true
             cancelwritebutton.visible = true
             cancelverifybutton.enabled = true
@@ -1031,7 +1031,7 @@ ApplicationWindow {
     function resetWriteButton() {
         progressText.visible = false
         progressBar.visible = false
-        customizebutton.visible = true
+        customizebutton.visible = imageWriter.imageSupportsCustomization()
         osbutton.enabled = true
         dstbutton.enabled = true
         writebutton.visible = true
@@ -1076,7 +1076,7 @@ ApplicationWindow {
         if (imageWriter.readyToWrite()) {
             writebutton.enabled = true
         }
-        customizebutton.visible = true
+        customizebutton.visible = imageWriter.imageSupportsCustomization()
     }
 
     function onCancelled() {
@@ -1308,7 +1308,7 @@ ApplicationWindow {
             if (imageWriter.readyToWrite()) {
                 writebutton.enabled = true
             }
-            customizebutton.visible = true
+            customizebutton.visible = imageWriter.imageSupportsCustomization()
         }
     }
 
