@@ -1,3 +1,12 @@
+openhdimagewriter (1.8.6) stable; urgency=medium
+
+ * Qol OpenHD release based on rpi-imager
+
+  * removed cancel option, user now must save settings
+
+ -- Raphael Scholle <raphael@openhdfpv.org>  Thu, 12 JAN 2023 02:06:52 +0100
+
+
 openhdimagewriter (1.8.5) unstable; urgency=medium
 
  * Qol OpenHD release based on rpi-imager
