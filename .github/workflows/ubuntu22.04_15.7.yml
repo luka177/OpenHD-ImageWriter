@@ -38,7 +38,10 @@ jobs:
           sudo make install
           ls -a
           mkdir -p usr/bin
-          mv OpenHDImageWriter usr/bin/
+          mv OpenHDImageWriter usr/
+          cd usr
+          mv OpenHDImageWriter bin/
+          cd ../../
           fpm -a armhf -s dir -t deb -n openhdimagewriter-5.15.7 -v 2.3-evo -C usr -p OpenHDImageWriter-5.15.7.deb 
           ls -a
 
