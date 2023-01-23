@@ -40,12 +40,12 @@ jobs:
           mkdir usr
           cd usr
           mkdir bin
-          cd ../../
+          cd ../
           mv OpenHDImageWriter usr/
           cd usr
           mv OpenHDImageWriter bin/
           cd ../../
-          fpm -a armhf -s dir -t deb -n openhdimagewriter-5.15.7 -v 2.3-evo -C usr -p OpenHDImageWriter-5.15.7.deb 
+          fpm -a amd64 -s dir -t deb -n openhdimagewriter-5.15.7 -v 2.3-evo -C usr -p OpenHDImageWriter-5.15.7.deb 
           ls -a
 
       - name: Upload to Github
