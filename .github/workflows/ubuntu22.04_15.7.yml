@@ -32,8 +32,10 @@ jobs:
           mkdir build
           mv `ls -A | grep -v "build"` build
           cd build
-          debuild -uc -us
-          cd ..
+  	      cmake ../src
+          make
+          sudo make install
+          ls -a
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
         with:
