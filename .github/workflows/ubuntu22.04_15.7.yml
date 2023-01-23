@@ -6,7 +6,7 @@ name: OpenHD Image Writer
 on:
   # Triggers the workflow on push or pull request events but only for the "qml" branch
   push:
-    branches: [ "master" ]
+    branches: [ "5.15.7" ]
   pull_request:
     branches: [ "master" ]
 
