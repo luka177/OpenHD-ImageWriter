@@ -28,7 +28,7 @@ jobs:
           curl -1sLf 'https://dl.cloudsmith.io/public/openhd/openhd-2-3-evo/setup.deb.sh' | sudo -E bash
           sudo apt update
           sudo apt upgrade
-          sudo apt install -y --no-install-recommends libgnutls28-dev build-essential devscripts debhelper cmake git libarchive-dev libcurl4-openssl-dev libqt5svg5-dev libssl-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-layouts qml-module-qtquick-templates2 qml-module-qtquick-window2 qml-module-qtgraphicaleffects  openhd-qt-x86-jammy 
+          sudo apt install -y --no-install-recommends libmesa-dev libgnutls28-dev build-essential devscripts debhelper cmake git libarchive-dev libcurl4-openssl-dev libqt5svg5-dev libssl-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-layouts qml-module-qtquick-templates2 qml-module-qtquick-window2 qml-module-qtgraphicaleffects  openhd-qt-x86-jammy 
           mkdir build
           mv `ls -A | grep -v "build"` build
           cd build
