@@ -39,14 +39,14 @@ jobs:
           ls -a
           mkdir -p usr/bin
           mv OpenHDImageWriter usr/bin
-          fpm -a armhf -s dir -t deb -n OpenHDImageWriter-5.15.7 -v 2.3-evo -C usr -p OpenHDImageWriter-5.15.7.deb 
+          fpm -a armhf -s dir -t deb -n openhdimagewriter-5.15.7 -v 2.3-evo -C usr -p OpenHDImageWriter-5.15.7.deb 
 
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
         with:
           name: "OpenHD Image Writer"
           path: |
-            *.deb
+            OpenHDImageWriter/*.deb
           if-no-files-found: error
 
       # - name: Push
