@@ -28,7 +28,8 @@ jobs:
           curl -1sLf 'https://dl.cloudsmith.io/public/openhd/openhd-2-3-evo/setup.deb.sh' | sudo -E bash
           sudo apt update
           sudo apt upgrade
-          sudo apt install -y --no-install-recommends libgnutls28-dev build-essential devscripts debhelper cmake git libarchive-dev libcurl4-openssl-dev qtbase5-dev qtbase5-dev-tools qtdeclarative5-dev libqt5svg5-dev qttools5-dev libssl-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-layouts qml-module-qtquick-templates2 qml-module-qtquick-window2 qml-module-qtgraphicaleffects openhd-qt-x86-jammy 
+          sudo apt install -y --no-install-recommends ruby libgnutls28-dev build-essential devscripts debhelper cmake git libarchive-dev libcurl4-openssl-dev qtbase5-dev qtbase5-dev-tools qtdeclarative5-dev libqt5svg5-dev qttools5-dev libssl-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-layouts qml-module-qtquick-templates2 qml-module-qtquick-window2 qml-module-qtgraphicaleffects openhd-qt-x86-jammy 
+          sudo gem install fpm
           ls -a
           mkdir build
           cd build
@@ -36,6 +37,10 @@ jobs:
           make
           sudo make install
           ls -a
+          mkdir -p usr/bin
+          mv OpenHDImageWriter usr/bin
+          fpm -a armhf -s dir -t deb -n OpenHDImageWriter-5.15.7 -v 2.3-evo -C usr -p OpenHDImageWriter-5.15.7.deb 
+
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
         with:
