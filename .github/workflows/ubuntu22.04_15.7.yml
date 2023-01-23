@@ -32,7 +32,7 @@ jobs:
           mkdir build
           mv `ls -A | grep -v "build"` build
           cd build
-  	      cmake ../src
+          cmake ../src
           make
           sudo make install
           ls -a
