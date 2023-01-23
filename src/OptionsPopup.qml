@@ -18,7 +18,7 @@ Popup {
     width: popupbody.implicitWidth+60
     height: parent.height-20
     padding: 0
-    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+    closePolicy: Popup.CloseOnEscape
     property bool initialized: false
     property bool hasSavedSettings: false
     property string config
@@ -45,25 +45,6 @@ Popup {
         width: parent.width
         y: 35
         implicitHeight: 1
-    }
-
-    Text {
-        id: msgx
-        text: "X"
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.rightMargin: 25
-        anchors.topMargin: 10
-        font.family: roboto.name
-        font.bold: true
-
-        MouseArea {
-            anchors.fill: parent
-            cursorShape: Qt.PointingHandCursor
-            onClicked: {
-                popup.close()
-            }
-        }
     }
 
     ColumnLayout {
