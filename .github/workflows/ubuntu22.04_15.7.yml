@@ -37,7 +37,10 @@ jobs:
           make
           sudo make install
           ls -a
-          mkdir -p usr/bin
+          mkdir usr
+          cd usr
+          mkdir bin
+          cd ../../
           mv OpenHDImageWriter usr/
           cd usr
           mv OpenHDImageWriter bin/
