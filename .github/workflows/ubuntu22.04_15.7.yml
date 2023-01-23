@@ -47,7 +47,7 @@ jobs:
         with:
           name: "OpenHD Image Writer"
           path: |
-            *.deb
+            build/*.deb
           if-no-files-found: error
 
       # - name: Push
