@@ -36,7 +36,8 @@ jobs:
         mkdir build
         cd build
         cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -S ../src
-        mingw32-make -j%NUMBER_OF_PROCESSORS%
+        $cores = (Get-WMIObject Win32_Processor).NumberOfCores
+        mingw32-make -j$cores
         
     - name: Sign Installer
       if: success()
