@@ -8,25 +8,48 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-
     steps:
+    - name: Install Qt 5.x with Mingw32 32-bit toolchain and CMake
+      run: |
+        curl -o qt-installer.exe https://download.qt.io/official_releases/qt/5.15/5.15.0/qt-opensource-windows-x86-5.15.0.exe
+        echo yes | .\qt-installer.exe --verbose --script qt-installer-noninteractive.qs
+      shell: powershell
+
+    - name: Install OpenSSL libraries
+      run: |
+        curl -o openssl.zip https://www.openssl.org/source/openssl-1.1.1k.tar.gz
+        tar -xf openssl.zip
+        cd openssl-1.1.1k
+        perl Configure mingw shared --prefix=/c/openssl --openssldir=/c/openssl
+        make depend
+        make
+        make install
+        cd ..
+        cp /c/openssl/bin/*.dll /c/Qt/5.x/mingw73_32/bin
+        cp -R /c/openssl/include/* /c/Qt/5.x/mingw73_32/include
+        cp /c/openssl/lib/*.a /c/Qt/5.x/mingw73_32/lib
+      shell: powershell
+
+    - name: Install NSIS
+      run: |
+        curl -o nsis-setup.exe https://prdownloads.sourceforge.net/nsis/nsis-3.06.1-setup.exe
+        echo /S | .\nsis-setup.exe
+      shell: powershell
+
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install Qt and CMake
-      run: |
-        choco install qt5 -y
-        choco install cmake -y
-
-    - name: Build
+    - name: Build with Qt Creator
       run: |
         cd src
-        mkdir build
-        cd build
-        cmake -G "MinGW Makefiles" ..
-        mingw32-make
+        qmake
+        qmake --install qmake-install
+        cmake -Bbuild -H.
+        cmake --build build --config Release
+      shell: powershell
 
     - name: Create installer
       run: |
         cd build
-        cpack
+        "C:\Program Files (x86)\NSIS\makensis.exe" rpi-imager.nsi
+      shell: powershell
