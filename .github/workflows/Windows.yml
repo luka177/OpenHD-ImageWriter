@@ -20,7 +20,7 @@ jobs:
     - name: Configure CMake
       run: |
         mkdir build && cd build
-        cmake -G "MinGW Makefiles" .. -DCMAKE_PREFIX_PATH=C:\Qt\5.*\mingw81_32\lib\cmake
+        cmake -G "MinGW Makefiles" ..\src -DCMAKE_PREFIX_PATH=C:\Qt\5.*\mingw*_32\lib\cmake
     - name: Build
       run: |
         cd build
