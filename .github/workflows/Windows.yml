@@ -12,13 +12,17 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
+      
     - name: Install Qt
-      uses: jurplel/install-qt-action@v1
+      uses: jurplel/install-qt-action@v3
       with:
-        version: '5.12.11'
-        target: desktop
-        toolchain: msvc2017_64
+        aqtversion: '==2.1.*'
+        version: '5.15.2'
+        host: 'windows'
+        target: 'desktop'
+        arch: 'win32_mingw81'
+        tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator'
+        setup-python: false
 
     - name: Install dependencies
       run: |
