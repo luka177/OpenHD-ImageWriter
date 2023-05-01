@@ -23,6 +23,8 @@ jobs:
         arch: 'win32_mingw81'
         tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator'
         setup-python: false
+        cache: 'true'
+        cache-key-prefix: 'install-qt-action'
 
     - name: Install dependencies
       run: |
