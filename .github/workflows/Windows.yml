@@ -8,24 +8,32 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+
     steps:
-    - name: Checkout Code
+    - name: Checkout code
       uses: actions/checkout@v2
-    - name: Install Dependencies
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v1
+      with:
+        version: '5.12.11'
+        target: desktop
+        toolchain: msvc2017_64
+
+    - name: Install dependencies
       run: |
-        choco install -y qt5.winextras --params "/InstallDir:C:\Qt" 
-        choco install -y mingw 
-        choco install -y openssl.light
+        choco install -y openssl
         choco install -y nsis
+
     - name: Configure CMake
       run: |
-        mkdir build && cd build
-        cmake -G "MinGW Makefiles" ..\src -DCMAKE_PREFIX_PATH=C:\Qt\5.*\mingw*_32\lib\cmake
+        cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=C:/Qt/5.12.11/msvc2017_64/lib/cmake
+
     - name: Build
       run: |
-        cd build
-        mingw32-make
-    - name: Create Installer
+        cmake --build build --config Release
+
+    - name: Sign Installer
+      if: success()
       run: |
-        cd build
-        makensis rpi-imager.nsi
+        # Sign the installer here if you have a proper code signing certificate and signtool.exe installed
