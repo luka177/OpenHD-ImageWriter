@@ -1,74 +1,32 @@
-# This is a basic workflow to help you get started with Actions
-
 name: OpenHD Image Writer Windows
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "qml" branch
   push:
-    branches: [ "master" ]
+    branches: [ master ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ master ]
 
-
-defaults:
-  run:
-    shell: cmd
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: windows-latest
 
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v3
-        with:
-          aqtversion: '==2.1.*'
-          version: '5.15.2'
-          host: 'windows'
-          target: 'desktop'
-          arch: 'win32_mingw81'
-          tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator'
-          setup-python: false
-      
-      - name: Hack QT
-        run:  |
-              curl.exe -o mingw81_32.zip https://openhdfpv.org/wp-content/Downloader/mingw81_32.zip
-              7z x mingw81_32.zip -omingw81_32
-              cd mingw81_32
-      
-      - name: install Ninja
-        run:  |
-              curl.exe -o ninja-win.zip https://openhdfpv.org/wp-content/Downloader/ninja-win.zip
-              7z x ninja-win.zip
-              dir
+    - name: Checkout code
+      uses: actions/checkout@v2
 
+    - name: Install Qt and CMake
+      run: |
+        choco install qt5 -y
+        choco install cmake -y
 
-      - name: configure
-        run: |
-          dir
-          cmake -G "MinGW Makefiles" src
-          7z a -tzip -r myzip.zip ../*
+    - name: Build
+      run: |
+        cd src
+        mkdir build
+        cd build
+        cmake -G "MinGW Makefiles" ..
+        mingw32-make
 
-
-      - name: Build
-        run: |
-          dir
-          make
-          make install
-          rm *.zip
-          tree  
-
-      - name: Upload to Github
-        uses: 'actions/upload-artifact@v2'
-        with:
-          name: "OpenHD Image Writer"
-          path: |
-            *.zip  
-          if-no-files-found: error
+    - name: Create installer
+      run: |
+        cd build
+        cpack
