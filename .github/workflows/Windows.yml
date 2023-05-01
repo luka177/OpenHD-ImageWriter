@@ -31,7 +31,7 @@ jobs:
         choco install -y openssl.light
         choco install -y nsis
 
-    - name: Configure CMake
+    - name: Configure CMake & Build
       run: |
         mkdir build
         cd build
