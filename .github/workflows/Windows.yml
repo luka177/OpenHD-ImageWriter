@@ -33,9 +33,9 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=C:/Qt/5.12.11/mingw*_32/lib/cmake -S ../src
+        cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=C:/Qt/5.12.11/mingw*_32/lib/cmake -S ../src
         mingw32-make
-
+        
     - name: Sign Installer
       if: success()
       run: |
