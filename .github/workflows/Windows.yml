@@ -16,12 +16,11 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
-        aqtversion: '==2.1.*'
         version: '5.15.2'
         host: 'windows'
         target: 'desktop'
         arch: 'win32_mingw81'
-        tools: 'tools_cmake,3.23.2,qt.tools.cmake tools_mingw,8.1.0,qt.tools.win32_mingw810 tools_ninja,1.10.2,qt.tools.ninja'
+        tools: 'tools_cmake,3.23.2 tools_mingw,8.1.0,qt.tools.win32_mingw810 tools_ninja,1.10.2,qt.tools.ninja'
         setup-python: 'true'
         install-deps: 'true'
         cache: 'true'
