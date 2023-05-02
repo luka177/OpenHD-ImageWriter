@@ -27,7 +27,9 @@ jobs:
           echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV 
           add-apt-repository ppa:apt-fast/stable
           apt update
-          apt install -y git sudo apt-fast
+          apt install -y git sudo software-properties-common
+          add-apt-repository ppa:apt-fast/stable
+          apt install -y apt-fast
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
