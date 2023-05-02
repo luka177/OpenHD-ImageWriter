@@ -22,7 +22,7 @@ jobs:
         target: 'desktop'
         arch: 'win32_mingw81'
         tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator,tools_cmake,3.23.2,qt.tools.cmake tools_mingw,8.1.0,qt.tools.win32_mingw810 tools_ninja,1.10.2,qt.tools.ninja'
-        setup-python: 'true'
+        setup-python: 'false'
         install-deps: 'true'
         cache: 'true'
         cache-key-prefix: 'install-qt-action'
