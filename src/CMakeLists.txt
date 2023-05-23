@@ -173,6 +173,8 @@ if (WIN32)
     set(ENABLE_CPIO OFF CACHE BOOL "")
     set(ENABLE_CAT OFF CACHE BOOL "")
     add_subdirectory(dependencies/libarchive-3.6.2)
+    # Disable shared libarchive (we only want static)
+    set_target_properties(archive PROPERTIES EXCLUDE_FROM_ALL 1)
     set(LibArchive_LIBRARIES archive_static)
     set(LibArchive_INCLUDE_DIR dependencies/libarchive-3.6.2/libarchive)
 
@@ -256,12 +258,15 @@ elseif(APPLE)
     set(ZSTD_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/zstd-1.5.0/lib)
     set(ZSTD_LIBRARY libzstd_static)
 
+
     # Bundled libarchive
     set(ENABLE_TEST OFF CACHE BOOL "")
     set(ENABLE_TAR OFF CACHE BOOL "")
     set(ENABLE_CPIO OFF CACHE BOOL "")
     set(ENABLE_CAT OFF CACHE BOOL "")
     add_subdirectory(dependencies/libarchive-3.6.2)
+    # Disable shared libarchive (we only want static)
+    set_target_properties(archive PROPERTIES EXCLUDE_FROM_ALL 1)
     set(LibArchive_LIBRARIES archive_static)
     set(LibArchive_INCLUDE_DIR dependencies/libarchive-3.6.2/libarchive)
 
