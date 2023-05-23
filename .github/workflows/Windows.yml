@@ -17,6 +17,7 @@ jobs:
 
     - name: Debug
       run: |
+        mkdir -p D:/a/OpenHD-ImageWriter/OpenHD-ImageWriter/src/dependencies/libarchive-3.6.2/build
         cmake --build D:/a/OpenHD-ImageWriter/OpenHD-ImageWriter/src/dependencies/libarchive-3.6.2/build --config Release
 
     - name: Install Qt
