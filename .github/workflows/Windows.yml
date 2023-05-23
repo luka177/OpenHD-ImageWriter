@@ -31,8 +31,7 @@ jobs:
 
     - name: Configure CMake & Build
       run: |
-        dir
-        cmake --build build -- -j2
+        cmake --build src -- -j2
         
     - name: Sign Installer
       if: success()
