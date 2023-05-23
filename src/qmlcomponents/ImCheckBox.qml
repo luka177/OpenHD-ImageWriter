@@ -11,6 +11,4 @@ import QtQuick.Controls.Material 2.2
 CheckBox {
     Keys.onEnterPressed: toggle()
     Keys.onReturnPressed: toggle()
-    Material.accent: "steelblue"
-
 }

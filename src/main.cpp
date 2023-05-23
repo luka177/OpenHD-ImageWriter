@@ -85,14 +85,13 @@ int main(int argc, char *argv[])
 #else
     QApplication app(argc, argv);
 #endif
-    app.setOrganizationName("OpenHd");
-    app.setOrganizationDomain("openhdfpv.org");
-    app.setApplicationName("Image writer");
-    app.setWindowIcon(QIcon(":/icons/openhdimagewriter.ico"));
+    app.setOrganizationName("Raspberry Pi");
+    app.setOrganizationDomain("raspberrypi.org");
+    app.setApplicationName("Imager");
+    app.setWindowIcon(QIcon(":/icons/rpi-imager.ico"));
     ImageWriter imageWriter;
     NetworkAccessManagerFactory namf;
     QQmlApplicationEngine engine;
-    QTranslator *translator = new QTranslator;
     QString customQm;
     QSettings settings;
 
@@ -171,6 +170,7 @@ int main(int argc, char *argv[])
             {
                 freopen("CONOUT$", "w", stdout);
                 freopen("CONOUT$", "w", stderr);
+                std::ios::sync_with_stdio();
                 qInstallMessageHandler(consoleMsgHandler);
             }
 #endif
@@ -205,6 +205,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    QTranslator *translator = new QTranslator;
     if (customQm.isEmpty())
     {
 #ifdef Q_OS_DARWIN

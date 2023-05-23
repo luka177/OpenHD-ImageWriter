@@ -1,43 +1,56 @@
-openhdimagewriter (1.8.6) stable; urgency=medium
+rpi-imager (1.7.5) unstable; urgency=medium
 
- * Qol OpenHD release based on rpi-imager
+  * Bump version number to match bug fix release for Windows.
+    (No actual changes from 1.7.4.1 for Linux)
 
-  * removed cancel option, user now must save settings
+ -- Floris Bos <bos@je-eigen-domein.nl>  Mon, 22 May 2023 18:53:22 +0200
 
- -- Raphael Scholle <raphael@openhdfpv.org>  Thu, 12 JAN 2023 02:06:52 +0100
+rpi-imager (1.7.4.1) unstable; urgency=medium
 
+  * Advanced settings: fix creating files on FAT partition that are
+    an exact multiple of cluster size.
+  * Do you want to apply saved settings window: offer 'no' option,
+    without clearing settings.
+  * Eject storage properly on Linux.
 
-openhdimagewriter (1.8.5) unstable; urgency=medium
+ -- Floris Bos <bos@je-eigen-domein.nl>  Thu, 18 May 2023 15:05:28 +0200 
 
- * Qol OpenHD release based on rpi-imager
+rpi-imager (1.7.4) unstable; urgency=medium
 
-  * settings is no longer shown when not supported
-  * removed minor display bug
-  * removed settings that are not supported yet
+  * Advanced settings: fix escaping single quotes
+  * Advanced settings: default to using username of logged-in user
+  * Now uses a different method to edit files on the FAT partition
+    to apply advanced settings. Imager now understands the FAT16/FAT32
+    file system format and can edit files by itself using the raw
+    disk device, without having to rely on the operating system
+    to mount the partition first.
 
- -- Raphael Scholle <raphael@openhdfpv.org>  Thu, 12 DEC 2022 22:47:52 +0100
+ -- Floris Bos <bos@je-eigen-domein.nl>  Sun, 20 Nov 2022 17:30:20 +0100
 
+rpi-imager (1.7.3) unstable; urgency=medium
 
-openhdimagewriter (1.8.4) unstable; urgency=medium
+  * Linux: use GnuTLS instead of OpenSSL for computing SHA256
+  * Fix persistenting public key authentication setting
+  * Linux: prefill wlan PSK if Linux distro uses NetworkManager
+  * Add digital signage icon
+  * Fix ""Cannot send events to objects owned by a different thread" warning
+  * Update Slovan/Korean language files
+  * Allow selecting file names without extension
+  * Add possibility to outsource handling of custom settings to script at
+    /usr/lib/raspberrypi-sys-mods/imager_custom
+  * Advanced settings: disallow invalid characters in hostname field
 
- * Qol OpenHD release based on rpi-imager
+ -- Floris Bos <bos@je-eigen-domein.nl>  Thu, 18 Aug 2022 20:04:37 +0200
 
-  * added donate button
+rpi-imager (1.7.2) unstable; urgency=medium
 
- -- Raphael Scholle <raphael@openhdfpv.org>  Thu, 12 DEC 2022 22:47:52 +0100
+  * Remove overscan/piwiz supression advanced options
+  * gz/xz/zstd custom images: pad if image size is not dividable by 512 byte
+  * Store saved wifi password hashed
+  * Make buttons blue on keyboard navigation
+  * Add Japan, Korean translations
 
-
-
-openhdimagewriter (1.8.3) unstable; urgency=medium
-
- * Qol OpenHD release based on rpi-imager
-  
-  * added compatibility for additional platform images
-
- -- Raphael Scholle <raphael@openhdfpv.org>  Thu, 08 NOV 2022 18:47:52 +0100
-
-
-
+ -- Floris Bos <bos@je-eigen-domein.nl>  Thu, 24 Mar 2022 17:58:52 +0100
 
 rpi-imager (1.7.1) unstable; urgency=medium
 

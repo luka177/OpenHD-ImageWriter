@@ -10,11 +10,9 @@ import QtQuick.Layouts 1.0
 import QtQuick.Controls.Material 2.2
 import "qmlcomponents"
 
-
 ApplicationWindow {
     id: window
     visible: true
-    color: "#34495E"
 
     width: imageWriter.isEmbeddedMode() ? -1 : 680
     height: imageWriter.isEmbeddedMode() ? -1 : 420
@@ -23,7 +21,7 @@ ApplicationWindow {
     minimumHeight: imageWriter.isEmbeddedMode() ? -1 : 420
     //maximumHeight: imageWriter.isEmbeddedMode() ? -1 : 420
 
-    title: qsTr("OpenHD Imager v%1").arg(imageWriter.constantVersion())
+    title: qsTr("Raspberry Pi Imager v%1").arg(imageWriter.constantVersion())
 
     FontLoader {id: roboto;      source: "fonts/Roboto-Regular.ttf"}
     FontLoader {id: robotoLight; source: "fonts/Roboto-Light.ttf"}
@@ -58,24 +56,9 @@ ApplicationWindow {
         id: bg
         spacing: 0
 
-
-
         Rectangle {
             implicitHeight: window.height/2
 
-            ImButton {
-                padding: 5
-                id: donatebutton
-                onClicked: {
-                Qt.openUrlExternally("https://opencollective.com/openhd");
-                }
-                visible: true
-                Accessible.description: qsTr("Donate")
-                contentItem: Image {
-                    source: "icons/donate.svg"
-                    fillMode: Image.PreserveAspectFit
-                }
-            }
             Image {
                 id: image
                 Layout.fillWidth: true
@@ -87,9 +70,8 @@ ApplicationWindow {
             }
         }
 
-
         Rectangle {
-            color: "#2C3E50"
+            color: "#c31c4a"
             implicitWidth: window.width
             implicitHeight: window.height/2
 
@@ -149,8 +131,8 @@ ApplicationWindow {
 
                     Text {
                         id: text2
+                        color: "#ffffff"
                         text: qsTr("Storage")
-                        color: "#fff"
                         Layout.fillWidth: true
                         Layout.preferredHeight: 17
                         Layout.preferredWidth: 100
@@ -198,16 +180,6 @@ ApplicationWindow {
                             if (!imageWriter.readyToWrite()) {
                                 return
                             }
-                            var image_name=imageWriter.srcFileName();
-                            console.log("Image name:"+image_name);
-                            //Consti10
-                            if(image_name.includes("configurable")){
-                                   if(!optionspopup.check_air_or_ground_set_by_user()){
-                                    console.log("Cannot write yet, air or ground not set yet");
-                                    onError("Cannot write yet, air or ground not set yet - please open settings and select air or ground")
-                                    return;
-                                    }
-                              }
 
                             if (!optionspopup.initialized && imageWriter.imageSupportsCustomization() && imageWriter.hasSavedCustomizationSettings()) {
                                 usesavedsettingspopup.openPopup()
@@ -238,7 +210,7 @@ ApplicationWindow {
                         id: progressBar
                         Layout.fillWidth: true
                         visible: false
-                        Material.background: "#00b3f7"
+                        Material.background: "#d15d7d"
                     }
 
                     ImButton {
@@ -263,21 +235,21 @@ ApplicationWindow {
                         Layout.alignment: Qt.AlignRight
                         visible: false
                     }
+
                     ImButton {
-                        Layout.bottomMargin: 55
+                        Layout.bottomMargin: 25
                         padding: 5
                         id: customizebutton
                         onClicked: {
                             optionspopup.openPopup()
                         }
-                        visible: true
-                        Accessible.description: qsTr("Select this button to configure Settings")
+                        visible: false
+                        Accessible.description: qsTr("Select this button to access advanced settings")
                         contentItem: Image {
                             source: "icons/ic_cog_red.svg"
                             fillMode: Image.PreserveAspectFit
                         }
                     }
-
                 }
 
                 Text {
@@ -764,6 +736,7 @@ ApplicationWindow {
                         width: 10
                         policy: dstlist.contentHeight > dstlist.height ? ScrollBar.AlwaysOn : ScrollBar.AsNeeded
                     }
+
                     Keys.onSpacePressed: {
                         if (currentIndex == -1)
                             return
@@ -777,13 +750,13 @@ ApplicationWindow {
                     Keys.onEnterPressed: Keys.onSpacePressed(event)
                     Keys.onReturnPressed: Keys.onSpacePressed(event)
                 }
-                
-                }
+            }
         }
     }
 
     Component {
         id: dstdelegate
+
         Item {
             width: window.width-100
             height: 60
@@ -806,7 +779,6 @@ ApplicationWindow {
                property bool mouseOver: false
 
             }
-
             Rectangle {
                id: dstborderrect
                implicitHeight: 1
@@ -828,7 +800,6 @@ ApplicationWindow {
                         fillMode: Image.Pad
                     }
                 }
-
                 Column {
                     width: parent.parent.width-64
 
@@ -879,7 +850,6 @@ ApplicationWindow {
         }
     }
 
-
     MsgPopup {
         id: msgpopup
     }
@@ -890,7 +860,7 @@ ApplicationWindow {
         yesButton: true
         noButton: true
         title: qsTr("Are you sure you want to quit?")
-        text: qsTr("OpenHD Imager is still busy.<br>Are you sure you want to quit?")
+        text: qsTr("Raspberry Pi Imager is still busy.<br>Are you sure you want to quit?")
         onYes: {
             Qt.quit()
         }
@@ -952,6 +922,9 @@ ApplicationWindow {
             confirmwritepopup.askForConfirmation()
         }
         onNo: {
+            confirmwritepopup.askForConfirmation()
+        }
+        onNoClearSettings: {
             imageWriter.clearSavedCustomizationSettings()
             confirmwritepopup.askForConfirmation()
         }

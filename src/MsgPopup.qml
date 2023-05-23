@@ -102,7 +102,7 @@ Popup {
                 }
                 visible: msgpopup.noButton
                 Material.foreground: activeFocus ? "#d1dcfb" : "#ffffff"
-                Material.background: "#2C3E50"
+                Material.background: "#c51a4a"
             }
 
             ImButton {
@@ -113,7 +113,7 @@ Popup {
                 }
                 visible: msgpopup.yesButton
                 Material.foreground: activeFocus ? "#d1dcfb" : "#ffffff"
-                Material.background: "#2C3E50"
+                Material.background: "#c51a4a"
             }
 
             ImButton {
@@ -123,7 +123,7 @@ Popup {
                 }
                 visible: msgpopup.continueButton
                 Material.foreground: activeFocus ? "#d1dcfb" : "#ffffff"
-                Material.background: "#2C3E50"
+                Material.background: "#c51a4a"
             }
 
             ImButton {
@@ -134,7 +134,7 @@ Popup {
                 font.family: roboto.name
                 visible: msgpopup.quitButton
                 Material.foreground: activeFocus ? "#d1dcfb" : "#ffffff"
-                Material.background: "#2C3E50"
+                Material.background: "#c51a4a"
             }
 
             Text { text: " " }

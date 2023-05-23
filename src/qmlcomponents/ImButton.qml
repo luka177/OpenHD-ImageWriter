@@ -10,8 +10,8 @@ import QtQuick.Controls.Material 2.2
 
 Button {
     font.family: roboto.name
-    Material.background: activeFocus ? "#ffffff" : "#ffffff"
-    Material.foreground: "#2C3E50"
+    Material.background: activeFocus ? "#d1dcfb" : "#ffffff"
+    Material.foreground: "#c51a4a"
     Accessible.onPressAction: clicked()
     Keys.onEnterPressed: clicked()
     Keys.onReturnPressed: clicked()

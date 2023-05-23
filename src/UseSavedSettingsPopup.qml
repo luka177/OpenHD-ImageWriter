@@ -11,15 +11,16 @@ import "qmlcomponents"
 
 Popup {
     id: msgpopup
-    x: 75
+    x: (parent.width-width)/2
     y: (parent.height-height)/2
-    width: parent.width-150
+    width: Math.max(buttons.width+10, parent.width-150)
     height: msgpopupbody.implicitHeight+150
     padding: 0
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
     signal yes()
     signal no()
+    signal noClearSettings()
     signal editSettings()
 
     // background of title
@@ -90,12 +91,23 @@ Popup {
             Layout.alignment: Qt.AlignCenter | Qt.AlignBottom
             Layout.bottomMargin: 10
             spacing: 20
+            id: buttons
+
+            ImButton {
+                text: qsTr("NO")
+                onClicked: {
+                    msgpopup.close()
+                    msgpopup.no()
+                }
+                Material.foreground: activeFocus ? "#d1dcfb" : "#ffffff"
+                Material.background: "#c51a4a"
+            }
 
             ImButton {
                 text: qsTr("NO, CLEAR SETTINGS")
                 onClicked: {
                     msgpopup.close()
-                    msgpopup.no()
+                    msgpopup.noClearSettings()
                 }
                 Material.foreground: activeFocus ? "#d1dcfb" : "#ffffff"
                 Material.background: "#c51a4a"

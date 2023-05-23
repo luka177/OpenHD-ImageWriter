@@ -5,6 +5,8 @@
 
 #include "downloadthread.h"
 #include "config.h"
+#include "devicewrapper.h"
+#include "devicewrapperfatpartition.h"
 #include "dependencies/mountutils/src/mountutils.hpp"
 #include "dependencies/drivelist/src/drivelist.hpp"
 #include <fstream>
@@ -111,12 +113,29 @@ QByteArray DownloadThread::_fileGetContentsTrimmed(const QString &filename)
 
 bool DownloadThread::_openAndPrepareDevice()
 {
-    emit preparationStatusUpdate(tr("opening drive"));
-
     if (_filename.startsWith("/dev/"))
     {
+        emit preparationStatusUpdate(tr("unmounting drive"));
+#ifdef Q_OS_DARWIN
+        /* Also unmount any APFS volumes using this physical disk */
+        auto l = Drivelist::ListStorageDevices();
+        for (const auto &i : l)
+        {
+            if (QByteArray::fromStdString(i.device) == _filename)
+            {
+                for (const auto &j : i.childDevices)
+                {
+                    qDebug() << "Unmounting APFS volume:" << j.c_str();
+                    unmount_disk(j.c_str());
+                }
+                break;
+            }
+        }
+#endif
+        qDebug() << "Unmounting:" << _filename;
         unmount_disk(_filename.constData());
     }
+    emit preparationStatusUpdate(tr("opening drive"));
 
     _file.setFileName(_filename);
 
@@ -134,7 +153,7 @@ bool DownloadThread::_openAndPrepareDevice()
             qDebug() << "Removing partition table from Windows drive #" << _nr << "(" << _filename << ")";
 
             QProcess proc;
-            proc.start("diskpart");
+            proc.start("diskpart", QStringList());
             proc.waitForStarted();
             proc.write("select disk "+_nr+"\r\n"
                             "clean\r\n"
@@ -434,7 +453,7 @@ void DownloadThread::run()
                                    QSettings::Registry64Format);
                 if (registry.value("EnableControlledFolderAccess").toInt() == 1)
                 {
-                    msg += "<br>"+tr("Controlled Folder Access seems to be enabled. Please add both openhdimagewriter.exe and fat32format.exe to the list of allowed apps and try again.");
+                    msg += "<br>"+tr("Controlled Folder Access seems to be enabled. Please add both rpi-imager.exe and fat32format.exe to the list of allowed apps and try again.");
                 }
                 _onDownloadError(msg);
             }
@@ -566,7 +585,7 @@ void DownloadThread::_header(const string &header)
     {
         _lastModified = curl_getdate(header.data()+15, NULL);
     }
-    qDebug() << "Received header:" << header.c_str();
+    qDebug() << "Received header:" << QByteArray(header.c_str()).trimmed();
 }
 
 void DownloadThread::cancelDownload()
@@ -707,6 +726,15 @@ void DownloadThread::_writeComplete()
 
     emit finalizing();
 
+    if (!_config.isEmpty() || !_cmdline.isEmpty() || !_firstrun.isEmpty())
+    {
+        if (!_customizeImage())
+        {
+            _closeFiles();
+            return;
+        }
+    }
+
     if (_firstBlock)
     {
         qDebug() << "Writing first block (which we skipped at first)";
@@ -724,6 +752,21 @@ void DownloadThread::_writeComplete()
         _firstBlock = nullptr;
     }
 
+    if (!_file.flush())
+    {
+        DownloadThread::_onDownloadError(tr("Error writing to storage (while flushing)"));
+        _closeFiles();
+        return;
+    }
+
+#ifndef Q_OS_WIN
+    if (::fsync(_file.handle()) != 0) {
+        DownloadThread::_onDownloadError(tr("Error writing to storage (while fsync)"));
+        _closeFiles();
+        return;
+    }
+#endif
+
     _closeFiles();
 
 #ifdef Q_OS_DARWIN
@@ -731,16 +774,16 @@ void DownloadThread::_writeComplete()
     _filename.replace("/dev/rdisk", "/dev/disk");
 #endif
 
-    if (_ejectEnabled && _config.isEmpty() && _cmdline.isEmpty() && !_openHDGround.isEmpty() && _openHDAir.isEmpty())
-        eject_disk(_filename.constData());
-
-    if (!_config.isEmpty() || !_cmdline.isEmpty()|| !_openHDGround.isEmpty() || !_openHDAir.isEmpty())
+    if (_ejectEnabled)
     {
-        if (!_customizeImage())
-            return;
-
-        if (_ejectEnabled)
-            eject_disk(_filename.constData());
+        eject_disk(_filename.constData());
+#ifdef Q_OS_LINUX
+#ifndef QT_NO_DBUS
+        /* mountutils only implemented unmount and not eject on Linux. Do so through udisks2 */
+        UDisks2Api udisks;
+        udisks.ejectDrive(_filename);
+#endif
+#endif
     }
 
     emit success();
@@ -836,12 +879,11 @@ qint64 DownloadThread::_sectorsWritten()
     return -1;
 }
 
-void DownloadThread::setImageCustomization(const QByteArray &config, const QByteArray &cmdline, const QByteArray &openHDGround, const QByteArray &openHDAir, const QByteArray &cloudinit, const QByteArray &cloudInitNetwork, const QByteArray &initFormat)
+void DownloadThread::setImageCustomization(const QByteArray &config, const QByteArray &cmdline, const QByteArray &firstrun, const QByteArray &cloudinit, const QByteArray &cloudInitNetwork, const QByteArray &initFormat)
 {
     _config = config;
     _cmdline = cmdline;
-    _openHDAir = openHDAir;
-    _openHDGround = openHDGround;
+    _firstrun = firstrun;
     _cloudinit = cloudinit;
     _cloudinitNetwork = cloudInitNetwork;
     _initFormat = initFormat;
@@ -849,360 +891,111 @@ void DownloadThread::setImageCustomization(const QByteArray &config, const QByte
 
 bool DownloadThread::_customizeImage()
 {
-    QString folder;
-    std::vector<std::string> mountpoints;
-    QByteArray devlower = _filename.toLower();
-
-    emit preparationStatusUpdate(tr("Waiting for FAT partition to be mounted"));
-
-#ifdef Q_OS_WIN
-    qDebug() << "Running diskpart rescan";
-    QProcess proc;
-    proc.setProcessChannelMode(proc.MergedChannels);
-    proc.start("diskpart");
-    proc.waitForStarted();
-    proc.write("rescan\r\n");
-    proc.closeWriteChannel();
-    proc.waitForFinished();
-    qDebug() << proc.readAll();
-#endif
-
-    /* See if OS auto-mounted the device */
-    for (int tries = 0; tries < 3; tries++)
-    {
-        QThread::sleep(1);
-        auto l = Drivelist::ListStorageDevices();
-        for (auto i : l)
-        {
-            if (QByteArray::fromStdString(i.device).toLower() == devlower && i.mountpoints.size())
-            {
-                mountpoints = i.mountpoints;
-                break;
-            }
-        }
-    }
-
-#ifdef Q_OS_WIN
-    if (mountpoints.empty() && !_nr.isEmpty()) {
-        qDebug() << "Windows did not assign drive letter automatically. Ask diskpart to do so manually.";
-        proc.start("diskpart");
-        proc.waitForStarted();
-        proc.write("select disk "+_nr+"\r\n"
-                        "select partition 1\r\n"
-                        "assign\r\n");
-        proc.closeWriteChannel();
-        proc.waitForFinished();
-        qDebug() << proc.readAll();
-
-        auto l = Drivelist::ListStorageDevices();
-        for (auto i : l)
-        {
-            if (QByteArray::fromStdString(i.device).toLower() == devlower && i.mountpoints.size())
-            {
-                mountpoints = i.mountpoints;
-                break;
-            }
-        }
-    }
-#endif
-
-#ifdef Q_OS_LINUX
-    bool manualmount = false;
-
-    if (mountpoints.empty())
-    {
-        /* Manually mount folder */
-        manualmount = true;
-        QByteArray fatpartition = _filename;
-        if (isdigit(fatpartition.at(fatpartition.length()-1)))
-            fatpartition += "p1";
-        else
-            fatpartition += "1";
-
-        if (::access(devlower.constData(), W_OK) != 0)
-        {
-            /* Not running as root, try to outsource mounting to udisks2 */
-    #ifndef QT_NO_DBUS
-            UDisks2Api udisks2;
-            QString mp = udisks2.mountDevice(fatpartition);
-            if (!mp.isEmpty())
-                mountpoints.push_back(mp.toStdString());
-    #endif
-        }
-        else
-        {
-            /* Running as root, attempt running mount directly */
-            QTemporaryDir td;
-            QStringList args;
-            mountpoints.push_back(td.path().toStdString());
-            args << "-t" << "vfat" << fatpartition << td.path();
-
-            if (QProcess::execute("mount", args) != 0)
-            {
-                emit error(tr("Error mounting FAT32 partition"));
-                return false;
-            }
-            td.setAutoRemove(false);
-        }
-    }
-#endif
-
-    if (mountpoints.empty())
-    {
-        //
-        qDebug() << "drive info. searching for:" << devlower;
-        auto l = Drivelist::ListStorageDevices();
-        for (auto i : l)
-        {
-            qDebug() << "drive" << QByteArray::fromStdString(i.device).toLower();
-            for (auto mp : i.mountpoints) {
-                qDebug() << "mountpoint:" << QByteArray::fromStdString(mp);
-            }
-        }
-        //
-
-        emit error(tr("Operating system did not mount FAT32 partition"));
-        return false;
-    }
-
-    /* Some operating system take longer to complete mounting FAT32
-       wait up to 3 seconds for config.txt file to appear */
-    QString configFilename;
-    bool foundFile = false;
-
-    for (int tries = 0; tries < 3; tries++)
-    {
-        /* Search all mountpoints, as on some systems FAT partition
-           may not be first volume */
-        for (auto mp : mountpoints)
-        {
-            folder = QString::fromStdString(mp);
-            if (folder.right(1) == '\\')
-                folder.chop(1);
-            configFilename = folder+"/config.txt";
-
-            if (QFile::exists(configFilename))
-            {
-                foundFile = true;
-                break;
-            }
-        }
-        if (foundFile)
-            break;
-        QThread::sleep(1);
-    }
-
-    if (!foundFile)
-    {
-        emit error(tr("Unable to customize. File '%1' does not exist.").arg(configFilename));
-        return false;
-    }
-
     emit preparationStatusUpdate(tr("Customizing image"));
 
-    if (!_config.isEmpty())
+    try
     {
-        auto configItems = _config.split('\n');
-        configItems.removeAll("");
-        QByteArray config;
+        DeviceWrapper dw(&_file);
+        if (_firstBlock)
+        {
+            /* Outsource first block handling to DeviceWrapper.
+               It will still not actually be written out yet,
+               until we call sync(), and then it will
+               save the first 4k sector with MBR for last */
+            dw.pwrite(_firstBlock, _firstBlockSize, 0);
+            _bytesWritten += _firstBlockSize;
+            qFreeAligned(_firstBlock);
+            _firstBlock = nullptr;
+        }
+        DeviceWrapperFatPartition *fat = dw.fatPartition(1);
 
-        QFile f(configFilename);
-        if (f.open(f.ReadOnly))
+        if (!_config.isEmpty())
         {
-            config = f.readAll();
-            f.close();
-        }
+            auto configItems = _config.split('\n');
+            configItems.removeAll("");
+            QByteArray config = fat->readFile("config.txt");
 
-        for (QByteArray item : configItems)
-        {
-            if (config.contains("#"+item)) {
-                /* Uncomment existing line */
-                config.replace("#"+item, item);
-            } else if (config.contains("\n"+item)) {
-                /* config.txt already contains the line */
-            } else {
-                /* Append new line to config.txt */
-                if (config.right(1) != "\n")
-                    config += "\n"+item+"\n";
-                else
-                    config += item+"\n";
-            }
-        }
-
-        if (f.open(f.WriteOnly) && f.write(config) == config.length())
-        {
-            f.close();
-        }
-        else
-        {
-            emit error(tr("Error writing to config.txt on FAT partition"));
-            return false;
-        }
-    }
-
-    if (_initFormat == "auto")
-    {
-        /* Do an attempt at auto-detecting what customization format a custom
-           image provided by the user supports */
-        QByteArray issue;
-        QFile fi(folder+"/issue.txt");
-        if (fi.exists() && fi.open(fi.ReadOnly))
-        {
-            issue = fi.readAll();
-            fi.close();
-        }
-
-        if (QFile::exists(folder+"/user-data"))
-        {
-            /* If we have user-data file on FAT partition, then it must be cloudinit */
-            _initFormat = "cloudinit";
-            qDebug() << "user-data found on FAT partition. Assuming cloudinit support";
-        }
-        else if (issue.contains("pi-gen"))
-        {
-            /* If issue.txt mentions pi-gen, and there is no user-data file assume
-             * it is a RPI OS flavor, and use the old systemd unit firstrun script stuff */
-            _initFormat = "systemd";
-            qDebug() << "copying openhd detection file";
-        }
-        else
-        {
-            /* Fallback to writing cloudinit file, as it does not hurt having one
-             * Will just have no customization if OS does not support it */
-            _initFormat = "cloudinit";
-            qDebug() << "Unknown what customization method image supports. Falling back to cloudinit";
-        }
-    }
-
-    if (!_cloudinit.isEmpty() && _initFormat == "systemd")
-    {
-        QFile key(folder+"/openhd"+"/key.txt");
-        if (key.open(key.WriteOnly) && key.write(_cloudinit) == _cloudinit.length())
-        {
-           qDebug() << "Key:" << key;
-        }
-        else
-        {
-            emit error(tr("Error creating key.txt on FAT partition"));
-            return false;
-        }
-    }
-
-    if (!_openHDAir.isEmpty() && _initFormat == "systemd")
-    {
-
-        /* Something is horibly wrong here .. I'll hack it right now, but this should be fixed in later releases
-         */
-
-        qDebug() << "isAir";
-        QFile d(folder+"/openhd"+"/ground.txt");
-        d.remove();
-        QFile f(folder+"/openhd"+"/air.txt");
-        if (f.open(f.WriteOnly) && f.write(_openHDAir) == _openHDAir.length())
-        {
-           qDebug() << "folder:" << f;
-        }
-        else
-        {
-            emit error(tr("Error creating air.txt on FAT partition"));
-            return false;
-        }
-
-    }
-
-    if (!_openHDGround.isEmpty() && _initFormat == "systemd")
-    {
-        qDebug() << "_openHDGround" << _openHDGround ;
-        if (_openHDGround == "IP")
-        {
-        QFile Ip(folder+"/openhd"+"/force_ip_camera.txt");
-            if (Ip.open(Ip.WriteOnly) && Ip.write(_openHDGround) == _openHDGround.length())
+            for (const QByteArray& item : qAsConst(configItems))
             {
-                Ip.close();
+                if (config.contains("#"+item)) {
+                    /* Uncomment existing line */
+                    config.replace("#"+item, item);
+                } else if (config.contains("\n"+item)) {
+                    /* config.txt already contains the line */
+                } else {
+                    /* Append new line to config.txt */
+                    if (config.right(1) != "\n")
+                        config += "\n"+item+"\n";
+                    else
+                        config += item+"\n";
+                }
+            }
+
+            fat->writeFile("config.txt", config);
+        }
+
+        if (_initFormat == "auto")
+        {
+            /* Do an attempt at auto-detecting what customization format a custom
+               image provided by the user supports */
+            QByteArray issue = fat->readFile("issue.txt");
+
+            if (fat->fileExists("user-data"))
+            {
+                /* If we have user-data file on FAT partition, then it must be cloudinit */
+                _initFormat = "cloudinit";
+                qDebug() << "user-data found on FAT partition. Assuming cloudinit support";
+            }
+            else if (issue.contains("pi-gen"))
+            {
+                /* If issue.txt mentions pi-gen, and there is no user-data file assume
+                 * it is a RPI OS flavor, and use the old systemd unit firstrun script stuff */
+                _initFormat = "systemd";
+                qDebug() << "using firstrun script invoked by systemd customization method";
             }
             else
             {
-                emit error(tr("Error creating force_ip_camera.txt on FAT partition"));
-                return false;
+                /* Fallback to writing cloudinit file, as it does not hurt having one
+                 * Will just have no customization if OS does not support it */
+                _initFormat = "cloudinit";
+                qDebug() << "Unknown what customization method image supports. Falling back to cloudinit";
             }
         }
-        if (_openHDGround == "air")
-        {
-        QFile Air(folder+"/openhd"+"/air.txt");
-            if (Air.open(Air.WriteOnly) && Air.write(_openHDGround) == _openHDGround.length())
-            {
-                Air.close();
-            }
-            else
-            {
-                emit error(tr("Error creating air.txt on FAT partition"));
-                return false;
-            }
-        }
-        if (_openHDGround == "ground")
-        {
-        QFile Ground(folder+"/openhd"+"/ground.txt");
-            if (Ground.open(Ground.WriteOnly) && Ground.write(_openHDGround) == _openHDGround.length())
-            {
-                Ground.close();
-            }
-            else
-            {
-                emit error(tr("Error creating ground.txt on FAT partition"));
-                return false;
-            }
-        }
-       }
 
-    if (!_cmdline.isEmpty())
+        if (!_firstrun.isEmpty() && _initFormat == "systemd")
+        {
+            fat->writeFile("firstrun.sh", _firstrun);
+            _cmdline += " systemd.run=/boot/firstrun.sh systemd.run_success_action=reboot systemd.unit=kernel-command-line.target";
+        }
+
+        if (!_cloudinit.isEmpty() && _initFormat == "cloudinit")
+        {
+            _cloudinit = "#cloud-config\n"+_cloudinit;
+            fat->writeFile("user-data", _cloudinit);
+        }
+
+        if (!_cloudinitNetwork.isEmpty() && _initFormat == "cloudinit")
+        {
+            fat->writeFile("network-config", _cloudinitNetwork);
+        }
+
+        if (!_cmdline.isEmpty())
+        {
+            QByteArray cmdline = fat->readFile("cmdline.txt").trimmed();
+
+            cmdline += _cmdline;
+
+            fat->writeFile("cmdline.txt", cmdline);
+        }
+        dw.sync();
+    }
+    catch (std::runtime_error &err)
     {
-        QByteArray cmdline;
-
-        QFile f(folder+"/cmdline.txt");
-        if (f.exists() && f.open(f.ReadOnly))
-        {
-            cmdline = f.readAll().trimmed();
-            f.close();
-        }
-
-        cmdline += _cmdline;
-        if (f.open(f.WriteOnly) && f.write(cmdline) == cmdline.length())
-        {
-            f.close();
-        }
-        else
-        {
-            emit error(tr("Error writing to cmdline.txt on FAT partition"));
-            return false;
-        }
+        emit error(err.what());
+        return false;
     }
 
     emit finalizing();
-
-#ifdef Q_OS_LINUX
-    if (manualmount)
-    {
-        if (::access(devlower.constData(), W_OK) != 0)
-        {
-    #ifndef QT_NO_DBUS
-            UDisks2Api udisks2;
-            udisks2.unmountDrive(devlower);
-    #endif
-        }
-        else
-        {
-            QStringList args;
-            args << folder;
-            QProcess::execute("umount", args);
-            QDir d;
-            d.rmdir(folder);
-        }
-    }
-#endif
-
-#ifndef Q_OS_WIN
-    ::sync();
-#endif
 
     return true;
 }

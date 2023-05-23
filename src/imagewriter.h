@@ -74,6 +74,9 @@ public:
     /* Set custom repository */
     Q_INVOKABLE void setCustomOsListUrl(const QUrl &url);
 
+    /* Set custom cache file */
+    void setCustomCacheFile(const QString &cacheFile, const QByteArray &sha256);
+
     /* Utility function to open OS file dialog */
     Q_INVOKABLE void openFileDialog();
 
@@ -100,11 +103,11 @@ public:
     Q_INVOKABLE QStringList getCountryList();
     Q_INVOKABLE QStringList getKeymapLayoutList();
     Q_INVOKABLE QString getSSID();
-    Q_INVOKABLE QString getPSK(const QString &ssid);
+    Q_INVOKABLE QString getPSK();
 
     Q_INVOKABLE bool getBoolSetting(const QString &key);
     Q_INVOKABLE void setSetting(const QString &key, const QVariant &value);
-    Q_INVOKABLE void setImageCustomization(const QByteArray &config, const QByteArray &cmdline, const QByteArray &openHDAir, const QByteArray &openHDGround, const QByteArray &cloudinit, const QByteArray &cloudinitNetwork);
+    Q_INVOKABLE void setImageCustomization(const QByteArray &config, const QByteArray &cmdline, const QByteArray &firstrun, const QByteArray &cloudinit, const QByteArray &cloudinitNetwork);
     Q_INVOKABLE void setSavedCustomizationSettings(const QVariantMap &map);
     Q_INVOKABLE QVariantMap getSavedCustomizationSettings();
     Q_INVOKABLE void clearSavedCustomizationSettings();
@@ -117,6 +120,7 @@ public:
     Q_INVOKABLE QStringList getTranslations();
     Q_INVOKABLE QString getCurrentLanguage();
     Q_INVOKABLE QString getCurrentKeyboard();
+    Q_INVOKABLE QString getCurrentUser();
     Q_INVOKABLE void changeLanguage(const QString &newLanguageName);
     Q_INVOKABLE void changeKeyboard(const QString &newKeymapLayout);
     Q_INVOKABLE bool customRepo();
@@ -157,7 +161,7 @@ protected slots:
 protected:
     QUrl _src, _repo;
     QString _dst, _cacheFileName, _parentCategory, _osName, _currentLang, _currentLangcode, _currentKeyboard;
-    QByteArray _expectedHash, _cachedFileHash, _cmdline, _config, _openHDAir, _openHDGround, _cloudinit, _cloudinitNetwork, _initFormat;
+    QByteArray _expectedHash, _cachedFileHash, _cmdline, _config, _firstrun, _cloudinit, _cloudinitNetwork, _initFormat;
     quint64 _downloadLen, _extrLen, _devLen, _dlnow, _verifynow;
     DriveListModel _drivelist;
     QQmlApplicationEngine *_engine;
@@ -167,6 +171,7 @@ protected:
     bool _verifyEnabled, _multipleFilesInZip, _cachingEnabled, _embeddedMode, _online;
     QSettings _settings;
     QMap<QString,QString> _translations;
+    bool _customCacheFile;
     QTranslator *_trans;
 #ifdef Q_OS_WIN
     QWinTaskbarButton *_taskbarButton;
