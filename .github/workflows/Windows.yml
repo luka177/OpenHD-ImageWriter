@@ -14,7 +14,12 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-      
+
+    - name: Debug
+      run: |
+        dir D:/a/OpenHD-ImageWriter/OpenHD-ImageWriter/src/dependencies/
+        cat D:/a/OpenHD-ImageWriter/OpenHD-ImageWriter/src/dependencies/libarchive-3.6.2/build/version
+
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
