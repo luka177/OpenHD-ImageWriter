@@ -136,6 +136,9 @@ if (WIN32)
     # Target Windows 7 (needed for drivelist module)
     add_definitions(-DWINVER=0x0601 -D_WIN32_WINNT=0x0601)
 
+    # Ignore Warnings
+    add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
+
     #find_package(OpenSSL REQUIRED)
 
     # Bundled zlib
