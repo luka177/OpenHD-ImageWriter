@@ -1,9 +1,9 @@
 name: OpenHD Image Writer Windows
 on:
   push:
-    branches: [ master ]
+    branches: [ windows ]
   pull_request:
-    branches: [ master ]
+    branches: [ windows ]
 
 jobs:
   build:
