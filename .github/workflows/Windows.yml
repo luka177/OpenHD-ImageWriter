@@ -18,16 +18,16 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
-        version: '5.12.4'
+        aqtversion: '==3.1.*'
+        version: '5.15.0'
         host: 'windows'
         target: 'desktop'
-        arch: 'win32_mingw73'
+        arch: 'win32_mingw81'
         dir: ${{ github.workspace }}/qt/
 
     - name: Install dependencies
       run: |
-        choco install -y openssl.light
-        choco install -y nsis ninja
+        choco install -y openssl nsis ninja
 
     - name: cmake config
       run: |
