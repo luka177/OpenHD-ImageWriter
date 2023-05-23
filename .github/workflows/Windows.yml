@@ -16,21 +16,16 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
-        version: '5.15.2'
+        aqtversion: '==3.1.*'
+        version: '5.15.0'
         host: 'windows'
         target: 'desktop'
         arch: 'win32_mingw81'
-        tools: 'tools_mingw,8.1.0,qt.tools.win32_mingw810 tools_ninja,1.10.2,qt.tools.ninja'
-        setup-python: 'true'
-        install-deps: 'true'
-        cache: 'true'
-        cache-key-prefix: 'install-qt-action'
         dir: ${{ github.workspace }}/qt/
 
     - name: Install dependencies
       run: |
-        #choco install -y openssl.light
-        choco install -y nsis
+        choco install -y openssl nsis ninja
 
     - name: Configure CMake & Build
       run: |
