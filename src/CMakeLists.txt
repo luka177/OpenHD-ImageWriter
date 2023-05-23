@@ -8,6 +8,7 @@ endif()
 
 OPTION (ENABLE_CHECK_VERSION "Check for version updates" ON)
 OPTION (ENABLE_TELEMETRY "Enable sending telemetry" ON)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-dev")
 
 project(OpenHDImageWriter LANGUAGES CXX C)
 set(IMAGER_VERSION_MAJOR 1)
@@ -160,7 +161,7 @@ if (WIN32)
     # Bundled zstd
     set(ZSTD_BUILD_PROGRAMS OFF)
     set(ZSTD_BUILD_SHARED OFF)
-    add_subdirectory(dependencies/zstd-4/build/cmake)
+    add_subdirectory(dependencies/zstd-1.5.4/build/cmake)
     set(ZSTD_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/zstd-1.5.4/lib)
     set(ZSTD_LIBRARY libzstd_static)
 
