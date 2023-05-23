@@ -10,7 +10,7 @@ Files: dependencies/mountutils/* dependencies/drivelist/*
 Copyright: 2017 Balena.io 
 License: Apache-2.0
 
-Files-Excluded: dependencies/cmcurl/* dependencies/cmliblzma/* dependencies/fat32format/* dependencies/libarchive-3.4.1/* dependencies/zlib-1.2.11/*
+Files-Excluded: dependencies/cmcurl/* dependencies/cmliblzma/* dependencies/fat32format/* dependencies/libarchive-3.4.1/* dependencies/zlib-1.2.13/*
 Comment: Not used in Linux build (depending on the official packages instead) 
 
 License: Apache-2.0

@@ -12,7 +12,7 @@
 "gperf","3.1","GPL-3.0+","COPYING","gperf-3.1.tar.gz","http://ftpmirror.gnu.org/gperf","host-skeleton [unknown]"
 "pkgconf","1.6.3","pkgconf license","COPYING","pkgconf-1.6.3.tar.xz","https://distfiles.dereferenced.org/pkgconf","host-skeleton [unknown]"
 "libopenssl","1.1.1m","OpenSSL or SSLeay","LICENSE","openssl-1.1.1m.tar.gz","https://www.openssl.org/source","host-libzlib [Zlib] host-skeleton [unknown]"
-"libzlib","1.2.11","Zlib","README","zlib-1.2.11.tar.xz","http://www.zlib.net","host-skeleton [unknown]"
+"libzlib","1.2.11","Zlib","README","zlib-1.2.13.tar.xz","http://www.zlib.net","host-skeleton [unknown]"
 "python3","3.10.1","Python-2.0, others","LICENSE","Python-3.10.1.tar.xz","https://python.org/ftp/python/3.10.1","host-autoconf [GPL-3.0+ with exceptions] host-autoconf-archive [GPL-3.0+ with exception] host-automake [GPL-2.0+] host-expat [MIT] host-libffi [MIT] host-libtool [GPL-2.0+ (libtool), LGPL-2.1+ (libltdl)] host-libzlib [Zlib] host-m4 [GPL-3.0+] host-pkgconf [pkgconf license] host-skeleton [unknown]"
 "autoconf","2.71","GPL-3.0+ with exceptions","COPYINGv3 COPYING.EXCEPTION","autoconf-2.71.tar.xz","http://ftpmirror.gnu.org/autoconf","host-libtool [GPL-2.0+ (libtool), LGPL-2.1+ (libltdl)] host-m4 [GPL-3.0+] host-skeleton [unknown]"
 "libtool","2.4.6","GPL-2.0+ (libtool), LGPL-2.1+ (libltdl)","COPYING libltdl/COPYING.LIB","libtool-2.4.6.tar.xz","http://ftpmirror.gnu.org/libtool","host-m4 [GPL-3.0+] host-skeleton [unknown]"
