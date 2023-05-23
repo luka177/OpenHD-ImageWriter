@@ -1,9 +1,7 @@
 name: OpenHD Image Writer Windows
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+
 
 jobs:
   build:
@@ -19,8 +17,8 @@ jobs:
         version: '5.15.2'
         host: 'windows'
         target: 'desktop'
-        arch: 'win32_mingw81'
-        tools: 'tools_mingw,8.1.0,qt.tools.win32_mingw810 tools_ninja,1.10.2,qt.tools.ninja'
+        arch: 'win64_mingw81'
+        tools: 'tools_ninja,1.10.2,qt.tools.ninja'
         setup-python: 'true'
         install-deps: 'true'
         cache: 'true'
