@@ -29,12 +29,10 @@ jobs:
         choco install -y openssl.light
         choco install -y nsis ninja
 
-    - name: Configure CMake & Build
+    - name: cmake config
       run: |
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release
-        cmake --build ${{github.workspace}}/build --config Release
-        
-    - name: Sign Installer
-      if: success()
+
+    - name: cmake build
       run: |
-        # Sign the installer here if you have a proper code signing certificate and signtool.exe installed
+        cmake --build ${{github.workspace}}/build --config Release
