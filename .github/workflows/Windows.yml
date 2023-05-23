@@ -35,8 +35,8 @@ jobs:
 
     - name: Configure CMake & Build
       run: |
-        cmake -B ${{github.workspace}}/build
-        cmake --build ${{github.workspace}}/build
+        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release
+        cmake --build ${{github.workspace}}/build --config Release
         
     - name: Sign Installer
       if: success()
