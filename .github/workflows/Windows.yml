@@ -17,8 +17,7 @@ jobs:
 
     - name: Debug
       run: |
-        dir D:/a/OpenHD-ImageWriter/OpenHD-ImageWriter/src/dependencies/libarchive-3.6.2/
-        cat D:/a/OpenHD-ImageWriter/OpenHD-ImageWriter/src/dependencies/libarchive-3.6.2/build/version
+        cmake --build D:/a/OpenHD-ImageWriter/OpenHD-ImageWriter/src/dependencies/libarchive-3.6.2/build --config Release
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
