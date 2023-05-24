@@ -48,59 +48,10 @@
 /*
  * Initialize a Message digest.
  */
-static int
-win_crypto_init(Digest_CTX *ctx, DWORD prov, ALG_ID algId)
-{
-
-	ctx->valid = 0;
-	if (!CryptAcquireContext(&ctx->cryptProv, NULL, NULL,
-	    prov, CRYPT_VERIFYCONTEXT)) {
-		if (GetLastError() != (DWORD)NTE_BAD_KEYSET)
-			return (ARCHIVE_FAILED);
-		if (!CryptAcquireContext(&ctx->cryptProv, NULL, NULL,
-		    prov, CRYPT_NEWKEYSET))
-			return (ARCHIVE_FAILED);
-	}
-
-	if (!CryptCreateHash(ctx->cryptProv, algId, 0, 0, &ctx->hash)) {
-		CryptReleaseContext(ctx->cryptProv, 0);
-		return (ARCHIVE_FAILED);
-	}
-
-	ctx->valid = 1;
-	return (ARCHIVE_OK);
-}
 
 /*
  * Update a Message digest.
  */
-static int
-win_crypto_Update(Digest_CTX *ctx, const unsigned char *buf, size_t len)
-{
-
-	if (!ctx->valid)
-		return (ARCHIVE_FAILED);
-
-	CryptHashData(ctx->hash,
-		      (unsigned char *)(uintptr_t)buf,
-		      (DWORD)len, 0);
-	return (ARCHIVE_OK);
-}
-
-static int
-win_crypto_Final(unsigned char *buf, size_t bufsize, Digest_CTX *ctx)
-{
-	DWORD siglen = (DWORD)bufsize;
-
-	if (!ctx->valid)
-		return (ARCHIVE_FAILED);
-
-	CryptGetHashParam(ctx->hash, HP_HASHVAL, buf, &siglen, 0);
-	CryptDestroyHash(ctx->hash);
-	CryptReleaseContext(ctx->cryptProv, 0);
-	ctx->valid = 0;
-	return (ARCHIVE_OK);
-}
 
 #endif /* defined(ARCHIVE_CRYPTO_*_WIN) */
 
