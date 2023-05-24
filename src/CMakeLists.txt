@@ -8,7 +8,6 @@ endif()
 
 OPTION (ENABLE_CHECK_VERSION "Check for version updates" ON)
 OPTION (ENABLE_TELEMETRY "Enable sending telemetry" OFF)
-add_compile_options(/D_CRT_SECURE_NO_WARNINGS)
 
 project(OpenHDImageWriter LANGUAGES CXX C)
 set(IMAGER_VERSION_MAJOR 1)
