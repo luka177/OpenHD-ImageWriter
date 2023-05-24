@@ -14,7 +14,7 @@ Popup {
     x: 75
     y: (parent.height-height)/2
     width: parent.width-150
-    height: msgpopupbody.implicitHeight+150
+    height: msgpopupbody.implicitHeight+175
     padding: 0
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
@@ -91,7 +91,6 @@ Popup {
 
         RowLayout {
             Layout.alignment: Qt.AlignCenter | Qt.AlignBottom
-            Layout.bottomMargin: 10
             spacing: 20
 
             ImButton {
@@ -138,6 +137,22 @@ Popup {
             }
 
             Text { text: " " }
+        }
+        RowLayout {
+            Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
+            Layout.leftMargin: 20
+            Layout.bottomMargin: 10
+            Text {
+                id: changelog
+                text: "<a href='https://openhdfpv.org/changelogs'>changelogs</a>"
+                font.family: roboto.name
+                font.pointSize: 10
+                visible: msgpopup.continueButton
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: Qt.openUrlExternally("https://openhdfpv.org/changelogs")
+                }
+            }
         }
     }
 

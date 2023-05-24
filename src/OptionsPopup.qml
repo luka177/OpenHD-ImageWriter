@@ -225,6 +225,18 @@ Popup {
         //return openHDGround.length>=1;
         return openHDAir.length>=1;
     }
+     function check_air(){
+         if (openHDAir == "air") {
+                    console.log("Image type:"+openHDAir);
+             return openHDAir.length>=1;
+         }
+    }
+        function check_ground(){
+         if (openHDAir == "ground") {
+                    console.log("Image type:"+openHDAir);
+             return openHDAir.length>=1;
+         }
+    }
 
     function openPopup() {
         if (!initialized) {

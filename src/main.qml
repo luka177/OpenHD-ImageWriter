@@ -307,7 +307,6 @@ ApplicationWindow {
                     visible: imageWriter.isEmbeddedMode()
 
                     Rectangle {
-                        anchors.fill: langbar
                         color: "#ffffe3"
                         radius: 5
                     }
@@ -1048,8 +1047,8 @@ ApplicationWindow {
     }
 
     function onSuccess() {
-        msgpopup.title = qsTr("Write Successful")
-        if (osbutton.text === qsTr("Erase"))
+        msgpopup.title = qsTr("Image was written successfully!")
+         if (osbutton.text === qsTr("Erase"))
             msgpopup.text = qsTr("<b>%1</b> has been erased<br><br>You can now remove the SD card from the reader").arg(dstbutton.text)
         else if (imageWriter.isEmbeddedMode()) {
             //msgpopup.text = qsTr("<b>%1</b> has been written to <b>%2</b>").arg(osbutton.text).arg(dstbutton.text)
@@ -1057,7 +1056,13 @@ ApplicationWindow {
             Qt.quit()
         }
         else
-            msgpopup.text = qsTr("<b>%1</b> has been written to <b>%2</b><br><br>You can now remove the SD card from the reader").arg(osbutton.text).arg(dstbutton.text)
+            if(optionspopup.check_air())
+             msgpopup.text = qsTr("<b>%1</b> has been written to <b>%2</b> It was flashed as <b>AIR</b>! <br><br>You can now remove the SD card from the reader").arg(osbutton.text).arg(dstbutton.text)
+            else if(optionspopup.check_ground())
+             msgpopup.text = qsTr("<b>%1</b> has been written to <b>%2</b> It was flashed as <b>GROUND</b>! <br><br>You can now remove the SD card from the reader").arg(osbutton.text).arg(dstbutton.text)
+            else
+             msgpopup.text = qsTr("<b>%1</b> has been written to <b>%2</b> <b>Air/Ground wasn't selected </b>! <br><br>You can now remove the SD card from the reader").arg(osbutton.text).arg(dstbutton.text)
+
         if (imageWriter.isEmbeddedMode()) {
             msgpopup.continueButton = false
             msgpopup.quitButton = true
