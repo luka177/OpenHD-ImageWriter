@@ -5,11 +5,11 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2019, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
- * are also available at https://curl.se/docs/copyright.html.
+ * are also available at https://curl.haxx.se/docs/copyright.html.
  *
  * You may opt to use, copy, modify, merge, publish, distribute and/or sell
  * copies of the Software, and permit persons to whom the Software is
@@ -17,8 +17,6 @@
  *
  * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
  * KIND, either express or implied.
- *
- * SPDX-License-Identifier: curl
  *
  ***************************************************************************/
 /*
@@ -102,20 +100,16 @@ static int parsedate(const char *date, time_t *output);
 #define PARSEDATE_LATER  1
 #define PARSEDATE_SOONER 2
 
-#if !defined(CURL_DISABLE_PARSEDATE) || !defined(CURL_DISABLE_FTP) || \
-  !defined(CURL_DISABLE_FILE)
-/* These names are also used by FTP and FILE code */
+#ifndef CURL_DISABLE_PARSEDATE
+
 const char * const Curl_wkday[] =
 {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
-const char * const Curl_month[]=
-{ "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-#endif
-
-#ifndef CURL_DISABLE_PARSEDATE
 static const char * const weekday[] =
 { "Monday", "Tuesday", "Wednesday", "Thursday",
   "Friday", "Saturday", "Sunday" };
+const char * const Curl_month[]=
+{ "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
 struct tzinfo {
   char name[5];
@@ -212,55 +206,56 @@ static int checkday(const char *check, size_t len)
 {
   int i;
   const char * const *what;
+  bool found = FALSE;
   if(len > 3)
     what = &weekday[0];
-  else if(len == 3)
-    what = &Curl_wkday[0];
   else
-    return -1; /* too short */
+    what = &Curl_wkday[0];
   for(i = 0; i<7; i++) {
-    size_t ilen = strlen(what[0]);
-    if((ilen == len) &&
-       strncasecompare(check, what[0], len))
-      return i;
+    if(strcasecompare(check, what[0])) {
+      found = TRUE;
+      break;
+    }
     what++;
   }
-  return -1;
+  return found?i:-1;
 }
 
-static int checkmonth(const char *check, size_t len)
+static int checkmonth(const char *check)
 {
   int i;
-  const char * const *what = &Curl_month[0];
-  if(len != 3)
-    return -1; /* not a month */
+  const char * const *what;
+  bool found = FALSE;
 
+  what = &Curl_month[0];
   for(i = 0; i<12; i++) {
-    if(strncasecompare(check, what[0], 3))
-      return i;
+    if(strcasecompare(check, what[0])) {
+      found = TRUE;
+      break;
+    }
     what++;
   }
-  return -1; /* return the offset or -1, no real offset is -1 */
+  return found?i:-1; /* return the offset or -1, no real offset is -1 */
 }
 
 /* return the time zone offset between GMT and the input one, in number
    of seconds or -1 if the timezone wasn't found/legal */
 
-static int checktz(const char *check, size_t len)
+static int checktz(const char *check)
 {
   unsigned int i;
-  const struct tzinfo *what = tz;
-  if(len > 4) /* longer than any valid timezone */
-    return -1;
+  const struct tzinfo *what;
+  bool found = FALSE;
 
+  what = tz;
   for(i = 0; i< sizeof(tz)/sizeof(tz[0]); i++) {
-    size_t ilen = strlen(what->name);
-    if((ilen == len) &&
-       strncasecompare(check, what->name, len))
-      return what->offset*60;
+    if(strcasecompare(check, what->name)) {
+      found = TRUE;
+      break;
+    }
     what++;
   }
-  return -1;
+  return found?what->offset*60:-1;
 }
 
 static void skip(const char **date)
@@ -276,68 +271,48 @@ enum assume {
   DATE_TIME
 };
 
-/*
- * time2epoch: time stamp to seconds since epoch in GMT time zone.  Similar to
- * mktime but for GMT only.
+/* this is a clone of 'struct tm' but with all fields we don't need or use
+   cut out */
+struct my_tm {
+  int tm_sec;
+  int tm_min;
+  int tm_hour;
+  int tm_mday;
+  int tm_mon;
+  int tm_year; /* full year */
+};
+
+/* struct tm to time since epoch in GMT time zone.
+ * This is similar to the standard mktime function but for GMT only, and
+ * doesn't suffer from the various bugs and portability problems that
+ * some systems' implementations have.
+ *
+ * Returns 0 on success, otherwise non-zero.
  */
-static time_t time2epoch(int sec, int min, int hour,
-                         int mday, int mon, int year)
+static void my_timegm(struct my_tm *tm, time_t *t)
 {
   static const int month_days_cumulative [12] =
     { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 };
-  int leap_days = year - (mon <= 1);
+  int month, year, leap_days;
+
+  year = tm->tm_year;
+  month = tm->tm_mon;
+  if(month < 0) {
+    year += (11 - month) / 12;
+    month = 11 - (11 - month) % 12;
+  }
+  else if(month >= 12) {
+    year -= month / 12;
+    month = month % 12;
+  }
+
+  leap_days = year - (tm->tm_mon <= 1);
   leap_days = ((leap_days / 4) - (leap_days / 100) + (leap_days / 400)
                - (1969 / 4) + (1969 / 100) - (1969 / 400));
-  return ((((time_t) (year - 1970) * 365
-            + leap_days + month_days_cumulative[mon] + mday - 1) * 24
-           + hour) * 60 + min) * 60 + sec;
-}
 
-/* Returns the value of a single-digit or two-digit decimal number, return
-   then pointer to after the number. The 'date' pointer is known to point to a
-   digit. */
-static int oneortwodigit(const char *date, const char **endp)
-{
-  int num = date[0] - '0';
-  if(ISDIGIT(date[1])) {
-    *endp = &date[2];
-    return num*10 + (date[1] - '0');
-  }
-  *endp = &date[1];
-  return num;
-}
-
-
-/* HH:MM:SS or HH:MM and accept single-digits too */
-static bool match_time(const char *date,
-                       int *h, int *m, int *s, char **endp)
-{
-  const char *p;
-  int hh, mm, ss = 0;
-  hh = oneortwodigit(date, &p);
-  if((hh < 24) && (*p == ':') && ISDIGIT(p[1])) {
-    mm = oneortwodigit(&p[1], &p);
-    if(mm < 60) {
-      if((*p == ':') && ISDIGIT(p[1])) {
-        ss = oneortwodigit(&p[1], &p);
-        if(ss <= 60) {
-          /* valid HH:MM:SS */
-          goto match;
-        }
-      }
-      else {
-        /* valid HH:MM */
-        goto match;
-      }
-    }
-  }
-  return FALSE; /* not a time string */
-  match:
-  *h = hh;
-  *m = mm;
-  *s = ss;
-  *endp = (char *)p;
-  return TRUE;
+  *t = ((((time_t) (year - 1970) * 365
+          + leap_days + month_days_cumulative[month] + tm->tm_mday - 1) * 24
+         + tm->tm_hour) * 60 + tm->tm_min) * 60 + tm->tm_sec;
 }
 
 /*
@@ -351,9 +326,6 @@ static bool match_time(const char *date,
  * PARSEDATE_SOONER - time underflow at the low end of time_t
  */
 
-/* Wednesday is the longest name this parser knows about */
-#define NAME_LEN 12
-
 static int parsedate(const char *date, time_t *output)
 {
   time_t t = 0;
@@ -365,6 +337,7 @@ static int parsedate(const char *date, time_t *output)
   int secnum = -1;
   int yearnum = -1;
   int tzoff = -1;
+  struct my_tm tm;
   enum assume dignext = DATE_MDAY;
   const char *indate = date; /* save the original pointer */
   int part = 0; /* max 6 parts */
@@ -376,32 +349,32 @@ static int parsedate(const char *date, time_t *output)
 
     if(ISALPHA(*date)) {
       /* a name coming up */
-      size_t len = 0;
-      const char *p = date;
-      while(ISALPHA(*p) && (len < NAME_LEN)) {
-        p++;
-        len++;
+      char buf[32]="";
+      size_t len;
+      if(sscanf(date, "%31[ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                          "abcdefghijklmnopqrstuvwxyz]", buf))
+        len = strlen(buf);
+      else
+        len = 0;
+
+      if(wdaynum == -1) {
+        wdaynum = checkday(buf, len);
+        if(wdaynum != -1)
+          found = TRUE;
+      }
+      if(!found && (monnum == -1)) {
+        monnum = checkmonth(buf);
+        if(monnum != -1)
+          found = TRUE;
       }
 
-      if(len != NAME_LEN) {
-        if(wdaynum == -1) {
-          wdaynum = checkday(date, len);
-          if(wdaynum != -1)
-            found = TRUE;
-        }
-        if(!found && (monnum == -1)) {
-          monnum = checkmonth(date, len);
-          if(monnum != -1)
-            found = TRUE;
-        }
-
-        if(!found && (tzoff == -1)) {
-          /* this just must be a time zone string */
-          tzoff = checktz(date, len);
-          if(tzoff != -1)
-            found = TRUE;
-        }
+      if(!found && (tzoff == -1)) {
+        /* this just must be a time zone string */
+        tzoff = checktz(buf);
+        if(tzoff != -1)
+          found = TRUE;
       }
+
       if(!found)
         return PARSEDATE_FAIL; /* bad string */
 
@@ -411,10 +384,18 @@ static int parsedate(const char *date, time_t *output)
       /* a digit */
       int val;
       char *end;
+      int len = 0;
       if((secnum == -1) &&
-         match_time(date, &hournum, &minnum, &secnum, &end)) {
-        /* time stamp */
-        date = end;
+         (3 == sscanf(date, "%02d:%02d:%02d%n",
+                      &hournum, &minnum, &secnum, &len))) {
+        /* time stamp! */
+        date += len;
+      }
+      else if((secnum == -1) &&
+              (2 == sscanf(date, "%02d:%02d%n", &hournum, &minnum, &len))) {
+        /* time stamp without seconds */
+        date += len;
+        secnum = 0;
       }
       else {
         long lval;
@@ -548,11 +529,18 @@ static int parsedate(const char *date, time_t *output)
      (hournum > 23) || (minnum > 59) || (secnum > 60))
     return PARSEDATE_FAIL; /* clearly an illegal date */
 
-  /* time2epoch() returns a time_t. time_t is often 32 bits, sometimes even on
+  tm.tm_sec = secnum;
+  tm.tm_min = minnum;
+  tm.tm_hour = hournum;
+  tm.tm_mday = mdaynum;
+  tm.tm_mon = monnum;
+  tm.tm_year = yearnum;
+
+  /* my_timegm() returns a time_t. time_t is often 32 bits, sometimes even on
      architectures that feature 64 bit 'long' but ultimately time_t is the
      correct data type to use.
   */
-  t = time2epoch(secnum, minnum, hournum, mdaynum, monnum, yearnum);
+  my_timegm(&tm, &t);
 
   /* Add the time zone diff between local time zone and GMT. */
   if(tzoff == -1)
@@ -595,30 +583,6 @@ time_t curl_getdate(const char *p, const time_t *now)
   return -1;
 }
 
-/* Curl_getdate_capped() differs from curl_getdate() in that this will return
-   TIME_T_MAX in case the parsed time value was too big, instead of an
-   error. */
-
-time_t Curl_getdate_capped(const char *p)
-{
-  time_t parsed = -1;
-  int rc = parsedate(p, &parsed);
-
-  switch(rc) {
-  case PARSEDATE_OK:
-    if(parsed == -1)
-      /* avoid returning -1 for a working scenario */
-      parsed++;
-    return parsed;
-  case PARSEDATE_LATER:
-    /* this returns the maximum time value */
-    return parsed;
-  default:
-    return -1; /* everything else is fail */
-  }
-  /* UNREACHABLE */
-}
-
 /*
  * Curl_gmtime() is a gmtime() replacement for portability. Do not use the
  * gmtime_r() or gmtime() functions anywhere else but here.
@@ -632,7 +596,6 @@ CURLcode Curl_gmtime(time_t intime, struct tm *store)
   /* thread-safe version */
   tm = (struct tm *)gmtime_r(&intime, store);
 #else
-  /* !checksrc! disable BANNEDFUNC 1 */
   tm = gmtime(&intime);
   if(tm)
     *store = *tm; /* copy the pointed struct to the local copy */
