@@ -47,8 +47,8 @@ jobs:
           cd usr
           mv OpenHDImageWriter bin/
           cd ../../
-          fpm -a amd64 -s dir -t deb -n openhdimagewriter-5.15.7 -v 2.3-evo -C usr -p OpenHDImageWriter-5.15.7.deb 
           ls -a
+          fpm -a amd64 -s dir -t deb -n openhdimagewriter-5.15.7 -v 2.3-evo -C usr -p OpenHDImageWriter-5.15.7.deb 
 
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
