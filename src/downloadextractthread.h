@@ -53,11 +53,14 @@ protected:
     virtual void _onDownloadSuccess();
     virtual void _onDownloadError(const QString &msg);
 
-    virtual ssize_t _on_read(struct archive *a, const void **buff);
-    virtual int _on_close(struct archive *a);
-
     static ssize_t _archive_read(struct archive *a, void *client_data, const void **buff);
     static int _archive_close(struct archive *a, void *client_data);
+
+    ssize_t _on_read(struct archive *a, const void **buff);
+    int _on_close(struct archive *a);
+
+    friend ssize_t _archive_read(struct archive *a, void *client_data, const void **buff);
+    friend int _archive_close(struct archive *a, void *client_data);
 };
 
 #endif // DOWNLOADEXTRACTTHREAD_H
