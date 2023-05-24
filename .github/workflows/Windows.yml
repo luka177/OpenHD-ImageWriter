@@ -28,7 +28,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        choco install -y openssl.lite nsis ninja
+        choco install -y openssl nsis ninja
 
     - name: cmake config
       run: |
