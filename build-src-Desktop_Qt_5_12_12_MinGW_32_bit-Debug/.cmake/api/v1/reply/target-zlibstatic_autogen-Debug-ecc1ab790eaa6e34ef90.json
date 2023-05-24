@@ -1,0 +1,58 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"dependencies/zlib-1.2.11/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"id" : "zlibstatic_autogen::@b161eb875f337056c161",
+	"isGeneratorProvided" : true,
+	"name" : "zlibstatic_autogen",
+	"paths" : 
+	{
+		"build" : "dependencies/zlib-1.2.11",
+		"source" : "dependencies/zlib-1.2.11"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/dependencies/zlib-1.2.11/CMakeFiles/zlibstatic_autogen",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/dependencies/zlib-1.2.11/CMakeFiles/zlibstatic_autogen.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

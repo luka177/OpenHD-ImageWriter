@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "dependencies/libarchive-3.5.2/tar",
+		"source" : "dependencies/libarchive-3.5.2/tar"
+	}
+}

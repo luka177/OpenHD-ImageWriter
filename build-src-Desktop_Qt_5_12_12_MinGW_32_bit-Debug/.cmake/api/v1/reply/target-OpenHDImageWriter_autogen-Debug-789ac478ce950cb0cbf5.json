@@ -1,0 +1,73 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 0,
+			"id" : "cmcurl::@90a0a052798c007866cb"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "archive_static::@5311f703d79ea9c2c172"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "fat32format::@4e86e98ae47187dc93b5"
+		}
+	],
+	"id" : "OpenHDImageWriter_autogen::@6890427a1f51a3e7e1df",
+	"isGeneratorProvided" : true,
+	"name" : "OpenHDImageWriter_autogen",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/CMakeFiles/OpenHDImageWriter_autogen",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/CMakeFiles/OpenHDImageWriter_autogen.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

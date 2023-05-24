@@ -1,0 +1,10 @@
+# This file is managed by Qt Creator, do not edit!
+
+set("CMAKE_GENERATOR" "Ninja" CACHE "STRING" "" FORCE)
+set("CMAKE_BUILD_TYPE" "Release" CACHE "STRING" "" FORCE)
+set("CMAKE_PROJECT_INCLUDE_BEFORE" "C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Release/.qtc/package-manager/auto-setup.cmake" CACHE "FILEPATH" "" FORCE)
+set("QT_QMAKE_EXECUTABLE" "C:/Qt/5.12.12/mingw73_32/bin/qmake.exe" CACHE "FILEPATH" "" FORCE)
+set("CMAKE_PREFIX_PATH" "C:/Qt/5.12.12/mingw73_32" CACHE "PATH" "" FORCE)
+set("CMAKE_C_COMPILER" "C:/Qt/Tools/mingw730_32/bin/gcc.exe" CACHE "FILEPATH" "" FORCE)
+set("CMAKE_CXX_COMPILER" "C:/Qt/Tools/mingw730_32/bin/g++.exe" CACHE "FILEPATH" "" FORCE)
+set("CMAKE_CXX_FLAGS_INIT" "" CACHE "STRING" "" FORCE)

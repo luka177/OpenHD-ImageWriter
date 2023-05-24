@@ -1,0 +1,33 @@
+{
+	"BUILD_DIR" : "C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/OpenHDImageWriter_autogen",
+	"CMAKE_BINARY_DIR" : "C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug",
+	"CMAKE_CURRENT_BINARY_DIR" : "C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug",
+	"CMAKE_CURRENT_SOURCE_DIR" : "C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/src",
+	"CMAKE_SOURCE_DIR" : "C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/src",
+	"INCLUDE_DIR" : "C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/OpenHDImageWriter_autogen/include",
+	"INPUTS" : 
+	[
+		"C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/rpi-imager_sk.qm",
+		"C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/rpi-imager_ja.qm",
+		"C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/rpi-imager_de.qm",
+		"C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/rpi-imager_it.qm",
+		"C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/rpi-imager_zh.qm",
+		"C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/rpi-imager_sl.qm",
+		"C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/rpi-imager_en.qm",
+		"C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/rpi-imager_ko.qm",
+		"C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/rpi-imager_nl.qm",
+		"C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/rpi-imager_tr.qm",
+		"C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/rpi-imager_ca.qm",
+		"C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/rpi-imager_fr.qm"
+	],
+	"LOCK_FILE" : "C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/CMakeFiles/OpenHDImageWriter_autogen.dir/AutoRcc_translations_EJRQKI7XPS_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "-name", "translations" ],
+	"OUTPUT_CHECKSUM" : "EJRQKI7XPS",
+	"OUTPUT_NAME" : "qrc_translations.cpp",
+	"RCC_EXECUTABLE" : "C:/Qt/5.12.12/mingw73_32/bin/rcc.exe",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/CMakeFiles/OpenHDImageWriter_autogen.dir/AutoRcc_translations_EJRQKI7XPS_Used.txt",
+	"SOURCE" : "C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/translations.qrc",
+	"VERBOSITY" : 0
+}

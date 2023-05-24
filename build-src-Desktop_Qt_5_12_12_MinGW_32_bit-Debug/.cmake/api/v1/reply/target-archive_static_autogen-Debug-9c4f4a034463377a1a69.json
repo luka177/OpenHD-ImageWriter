@@ -1,0 +1,73 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"dependencies/libarchive-3.5.2/libarchive/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 0,
+			"id" : "zlibstatic::@b161eb875f337056c161"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "cmliblzma::@aec529835eb63fe64e38"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "libzstd_static::@ab79e9e9e4579a694c5c"
+		}
+	],
+	"id" : "archive_static_autogen::@5311f703d79ea9c2c172",
+	"isGeneratorProvided" : true,
+	"name" : "archive_static_autogen",
+	"paths" : 
+	{
+		"build" : "dependencies/libarchive-3.5.2/libarchive",
+		"source" : "dependencies/libarchive-3.5.2/libarchive"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/dependencies/libarchive-3.5.2/libarchive/CMakeFiles/archive_static_autogen",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Debug/dependencies/libarchive-3.5.2/libarchive/CMakeFiles/archive_static_autogen.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

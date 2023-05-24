@@ -1,0 +1,68 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"dependencies/zstd-1.5.0/build/cmake/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 194,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 199,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/zstd",
+			"exportName" : "zstdExports",
+			"exportTargets" : 
+			[
+				{
+					"id" : "libzstd_static::@ab79e9e9e4579a694c5c",
+					"index" : 39
+				}
+			],
+			"paths" : 
+			[
+				"dependencies/zstd-1.5.0/build/cmake/CMakeFiles/Export/24b5c28278294f635c8f75e4f2508fe8/zstdTargets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/zstd",
+			"paths" : 
+			[
+				"dependencies/zstd-1.5.0/build/cmake/zstdConfig.cmake",
+				"C:/Users/rapha/Documents/GitHub/OpenHD-ImageWriter/build-src-Desktop_Qt_5_12_12_MinGW_32_bit-Release/dependencies/zstd-1.5.0/build/cmake/zstdConfigVersion.cmake"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "dependencies/zstd-1.5.0/build/cmake",
+		"source" : "dependencies/zstd-1.5.0/build/cmake"
+	}
+}
