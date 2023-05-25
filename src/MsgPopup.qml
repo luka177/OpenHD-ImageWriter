@@ -144,7 +144,7 @@ Popup {
             Layout.bottomMargin: 10
             Text {
                 id: changelog
-                text: "<a href='https://openhdfpv.org/changelogs'>changelogs</a>"
+                text: "<a href='https://openhdfpv.org/changelogs'>changelogs</a>&nbsp;&nbsp;&nbsp; FIRST BOOT MAY TAKE UP TO 5 MINUTES! "
                 font.family: roboto.name
                 font.pointSize: 10
                 visible: msgpopup.continueButton
