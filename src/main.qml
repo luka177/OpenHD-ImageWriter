@@ -11,6 +11,7 @@ import QtQuick.Controls.Material 2.2
 import "qmlcomponents"
 
 
+
 ApplicationWindow {
     id: window
     visible: true
@@ -188,6 +189,7 @@ ApplicationWindow {
 
                     ImButton {
                         id: writebutton
+                        property var image_name
                         text: qsTr("WRITE")
                         Layout.minimumHeight: 40
                         Layout.fillWidth: true
@@ -198,7 +200,7 @@ ApplicationWindow {
                             if (!imageWriter.readyToWrite()) {
                                 return
                             }
-                            var image_name=imageWriter.srcFileName();
+                            image_name=imageWriter.srcFileName();
                             console.log("Image name:"+image_name);
                             //Consti10
                             if(image_name.includes("configurable")){
@@ -1060,8 +1062,10 @@ ApplicationWindow {
              msgpopup.text = qsTr("<b>%1</b> has been written to <b>%2</b> It was flashed as <b>AIR</b>! <br><br>You can now remove the SD card from the reader").arg(osbutton.text).arg(dstbutton.text)
             else if(optionspopup.check_ground())
              msgpopup.text = qsTr("<b>%1</b> has been written to <b>%2</b> It was flashed as <b>GROUND</b>! <br><br>You can now remove the SD card from the reader").arg(osbutton.text).arg(dstbutton.text)
-            else
+            else if(writebutton.image_name.includes("configurable"))
              msgpopup.text = qsTr("<b>%1</b> has been written to <b>%2</b> <b>Air/Ground wasn't selected </b>! <br><br>You can now remove the SD card from the reader").arg(osbutton.text).arg(dstbutton.text)
+            else
+             msgpopup.text = qsTr("<b>%1</b> has been written to <b>%2</b>! <br><br>You can now remove the SD card from the reader").arg(osbutton.text).arg(dstbutton.text)
 
         if (imageWriter.isEmbeddedMode()) {
             msgpopup.continueButton = false
