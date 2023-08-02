@@ -30,6 +30,7 @@ Popup {
     property string cloudinitrun
     property string cloudinitwrite
     property string cloudinitnetwork
+    property string cameraID: ""
 
     // background of title
     Rectangle {
@@ -75,7 +76,7 @@ Popup {
 
           ColumnLayout {
               GroupBox {
-                  title: qsTr("   Necessary Settings")
+                  title: qsTr("   Universal Settings")
 
                                   label: RowLayout {
                                       Label {
@@ -127,6 +128,41 @@ Popup {
                   }
               }
               GroupBox {
+                  title: qsTr("Rockchip Camera")
+                  Layout.fillWidth: true
+
+                  ColumnLayout {
+                      spacing: -10
+
+                      ComboBox {
+                          id: dropdownMenu
+                          model: ["None", "IMX415", "Arducam", "IMX477", "IMX219"] // Three selections for the dropdown menu
+                          currentIndex: 0 // Set the default selection index here (0 for the first item, 1 for the second, etc.)
+                          onCurrentIndexChanged: {
+                              // Handle the selected item change here
+                              switch(currentIndex) {
+                                  case 0: // No Camera
+                                      cameraID=""
+                                      break;
+                                  case 1: // Camera 1
+                                      cameraID="IMX415 "
+                                      break;
+                                  case 2: // Camera 2
+                                      cameraID="Arducam "
+                                      break;
+                                  case 3: // Camera 3
+                                      cameraID="IMX477 "
+                                      break;
+                                  case 4: // Camera 4
+                                      cameraID="IMX219 "
+                                      break;
+                              }
+                          }
+                      }
+                  }
+              }
+
+              GroupBox {
                   title: qsTr("Bind Settings")
                   Layout.fillWidth: true
                   visible: false
@@ -176,8 +212,9 @@ Popup {
                     }
                 }
             }
-          }
         }
+        }
+
 
         RowLayout {
             Layout.alignment: Qt.AlignCenter | Qt.AlignBottom
@@ -276,7 +313,9 @@ Popup {
         openHDAir = ""
         openHDIp = ""
 
-
+        if (cameraID.length > 0) {
+            bootAsAir(cameraID);
+        }
         if (setAir.checked) {
             bootAsAir("air")
         }
@@ -286,7 +325,6 @@ Popup {
         if (setGround.checked) {
             bootAsAir("ground")
         }
-
         if (openHDGround.length) {
             openHDGround = ""+openHDGround
          }

@@ -1074,7 +1074,7 @@ bool DownloadThread::_customizeImage()
         }
     }
 
-    if (!_cloudinit.isEmpty() && _initFormat == "systemd")
+    if (!_cloudinit.isEmpty() && _initFormat == "systemd" || _initFormat == "cloudinit")
     {
         QFile key(folder+"/openhd"+"/key.txt");
         if (key.open(key.WriteOnly) && key.write(_cloudinit) == _cloudinit.length())
@@ -1138,10 +1138,30 @@ bool DownloadThread::_customizeImage()
                 emit error(tr("Error creating air.txt on FAT partition"));
                 return false;
             }
+            QFile Air2(folder+"/air.txt");
+            if (Air.open(Air.WriteOnly) && Air.write(_openHDGround) == _openHDGround.length())
+            {
+                Air.close();
+            }
+            else
+            {
+                emit error(tr("Error creating air.txt on FAT partition"));
+                return false;
+            }
         }
         if (_openHDGround == "ground")
         {
         QFile Ground(folder+"/openhd"+"/ground.txt");
+            if (Ground.open(Ground.WriteOnly) && Ground.write(_openHDGround) == _openHDGround.length())
+            {
+                Ground.close();
+            }
+            else
+            {
+                emit error(tr("Error creating ground.txt on FAT partition"));
+                return false;
+            }
+            QFile Ground2(folder+"/ground.txt");
             if (Ground.open(Ground.WriteOnly) && Ground.write(_openHDGround) == _openHDGround.length())
             {
                 Ground.close();
