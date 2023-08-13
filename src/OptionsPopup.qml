@@ -129,7 +129,7 @@ Popup {
               GroupBox {
                   title: qsTr("Bind Settings")
                   Layout.fillWidth: true
-                  visible: false
+                  visible: true
 
                   ColumnLayout {
                       spacing: -10

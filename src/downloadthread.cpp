@@ -1076,7 +1076,7 @@ bool DownloadThread::_customizeImage()
 
     if (!_cloudinit.isEmpty() && _initFormat == "systemd")
     {
-        QFile key(folder+"/openhd"+"/key.txt");
+        QFile key(folder+"/openhd"+"/password.txt");
         if (key.open(key.WriteOnly) && key.write(_cloudinit) == _cloudinit.length())
         {
            qDebug() << "Key:" << key;
