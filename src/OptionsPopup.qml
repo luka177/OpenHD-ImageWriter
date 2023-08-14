@@ -7,6 +7,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.0
 import QtQuick.Controls.Material 2.2
+import Qt.labs.settings 1.0
 import "qmlcomponents"
 
 Popup {
@@ -98,9 +99,6 @@ Popup {
                               }
                           }
                       }
-
-
-
                       ImCheckBox {
                           id: setGround
                           text: qsTr("Set SBC to GROUND")
@@ -137,25 +135,24 @@ Popup {
                       ImCheckBox {
                           id: bndKey
                           text: qsTr("Set binding phrase")
+                          checkable: false
                           onCheckedChanged: {
-                              if (checked) {
-                              setBindKey(bndPhrase.text)
-                              }
-
+                          cloudinit=(bndPhrase.text)
                           }
                       }
-
                       TextField {
                           id: bndPhrase
-                          inputMask: "XXXXXXXX"
-                          text: "A0b1C2fa"
+                          maximumLength:8
                           width:10
-                          color: acceptableInput ? "green" : "red"
+                          color: bndPhrase.text.length >= 4 ? "green" : "red"
                           selectByMouse: true
-
+                          placeholderTextColor: "blue"
+                          placeholderText: "OpenHD"
+                          onTextChanged: {
+                            bndKey.checkable = bndPhrase.text.length >= 4
+                          }
 
                       }
-
                   }
               }
 
@@ -262,9 +259,7 @@ Popup {
     function bootAsIp(s) {
         openHDIp += s+""
     }
-    function setBindKey(s) {
-        cloudinit=s
-    }
+    //
     function escapeshellarg(arg) {
         return "'"+arg.replace(/'/g, "\\'")+"'"
     }
