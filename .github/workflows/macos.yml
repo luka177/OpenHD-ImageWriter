@@ -32,7 +32,7 @@ jobs:
         cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
         cd ../build/
         ls -a
-        create-dmg *.app
+        # create-dmg *.app
 
 
     - name: Upload to Github  
