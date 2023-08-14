@@ -32,10 +32,10 @@ jobs:
         cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
         ls ../
 
-    - name: Upload to Github
-        uses: 'actions/upload-artifact@v3'
-        with:
-          name: "OpenHD Image Writer"
-          path: |
-            ../.app
-          if-no-files-found: error
+    - name: Upload to Github  
+      uses: 'actions/upload-artifact@v3'
+      with:
+        name: "OpenHD Image Writer"
+        path: |
+          ../.app
+        if-no-files-found: error
