@@ -44,6 +44,5 @@ jobs:
       with:
         name: "OpenHD Image Writer"
         path: |
-          *.app
-          *.dmg
+          /Users/runner/work/OpenHD-ImageWriter/OpenHD-ImageWriter/build/OpenHDImageWriter.dmg
         if-no-files-found: error
