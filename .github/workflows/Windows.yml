@@ -15,18 +15,7 @@ jobs:
       
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
-      with:
-        version: '5.15.2'
-        host: 'windows'
-        target: 'desktop'
-        arch: 'win32_mingw81'
-        tools: 'tools_ninja,1.10.2'
-        setup-python: 'true'
-        install-deps: 'true'
-        cache: 'true'
-        cache-key-prefix: 'install-qt-action'
-        dir: ${{ github.workspace }}/qt/
-
+     
     - name: Install dependencies
       run: |
         #choco install -y openssl.light
