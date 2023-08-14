@@ -22,7 +22,7 @@ jobs:
       uses: jurplel/install-qt-action@v3
 
     - name: Install create-dmg
-      run: npm install -g create-dmg
+      run: brew install create-dmg
     
 
     - name: Configure CMake
