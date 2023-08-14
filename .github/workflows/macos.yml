@@ -2,9 +2,6 @@ name: Build MacOS
 
 on:
   push:
-    branches: [ "qml" ]
-  pull_request:
-    branches: [ "qml" ]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
