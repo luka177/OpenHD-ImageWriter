@@ -103,6 +103,7 @@ public:
     Q_INVOKABLE QString getPSK(const QString &ssid);
 
     Q_INVOKABLE bool getBoolSetting(const QString &key);
+    Q_INVOKABLE QString getValue(const QString &key);
     Q_INVOKABLE void setSetting(const QString &key, const QVariant &value);
     Q_INVOKABLE void setImageCustomization(const QByteArray &config, const QByteArray &cmdline, const QByteArray &openHDAir, const QByteArray &openHDGround, const QByteArray &cloudinit, const QByteArray &cloudinitNetwork);
     Q_INVOKABLE void setSavedCustomizationSettings(const QVariantMap &map);

@@ -1080,7 +1080,10 @@ bool DownloadThread::_customizeImage()
         if (key.open(key.WriteOnly) && key.write(_cloudinit) == _cloudinit.length())
         {
            qDebug() << "Key:" << key;
-           QSettings bindPhrase (_cloudinit);
+           QSettings settings;
+           settings.setValue("bindPhrase", _cloudinit);
+           settings.sync();
+           qDebug() << "SavedSettings" << settings.value("bindPhrase").toString();
         }
         else
         {

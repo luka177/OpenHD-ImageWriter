@@ -1012,6 +1012,11 @@ bool ImageWriter::getBoolSetting(const QString &key)
         return _settings.value(key).toBool();
 }
 
+QString ImageWriter::getValue(const QString &key)
+{
+         return _settings.value(key).toString();
+}
+
 void ImageWriter::setSetting(const QString &key, const QVariant &value)
 {
     _settings.setValue(key, value);

@@ -142,9 +142,10 @@ Popup {
                       }
                       TextField {
                           id: bndPhrase
-                          maximumLength:8
+                          maximumLength:10
                           width:10
                           color: bndPhrase.text.length >= 4 ? "green" : "red"
+                          text: imageWriter.getValue("bindPhrase")
                           selectByMouse: true
                           placeholderTextColor: "blue"
                           placeholderText: "OpenHD"
