@@ -31,7 +31,8 @@ jobs:
 
     - name: Install dependencies
       run: |
-        choco install -y nsis openssl
+        choco install -y nsis openssl.light
+        dir C:/Program Files/OpenSSL
 
     - name: Configure CMake
       run: |
