@@ -34,7 +34,7 @@ jobs:
         choco install -y nsis openssl.light
         mkdir C:/files
         cd C:/files
-        cp -r C:/Program Files/OpenSSL/ C:/files/
+        cp C:/Program Files/OpenSSL/ C:/files/
         dir "C:/files"
 
     - name: Configure CMake
