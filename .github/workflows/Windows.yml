@@ -32,10 +32,9 @@ jobs:
     - name: Install dependencies
       run: |
         choco install -y nsis openssl.light
-        mkdir C:/files
-        cd C:/files
-        cp C:/Program Files/OpenSSL/ C:/files/
-        dir "C:/files"
+        mkdir C:\files
+        xcopy "C:\Program Files\OpenSSL" C:\files /E /I /Q
+        dir "C:\files"
 
     - name: Configure CMake
       run: |
