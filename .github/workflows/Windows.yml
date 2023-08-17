@@ -1,4 +1,5 @@
 name: OpenHD Image Writer Windows
+
 on:
   push:
     branches: [ master ]
@@ -27,14 +28,14 @@ jobs:
         host: 'windows'
         target: 'desktop'
         arch: 'win32_mingw81'
-        tools: 'tools_openssl_src tools_openssl_x86 tools_openssl_x64'
 
     - name: Install dependencies
       run: |
-        choco install -y nsis
+        choco install -y nsis openssl
 
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -G "Unix Makefiles"
+      run: |
+        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -G "Unix Makefiles" -DOPENSSL_ROOT_DIR=C:/Program Files/OpenSSL
 
     - name: Build
       run: |
@@ -50,7 +51,3 @@ jobs:
         path: |
           *.exe
         if-no-files-found: error
-
-
-  
-
