@@ -96,9 +96,18 @@ Popup {
                               if (checked) {
                                   setGround.checked = false
                                   bootAsAir();
-                              }
-                          }
-                      }
+                                  var fileName = imageWriter.srcFileName();
+                                              if (fileName.includes("pi")) {
+                                                  cameraSettingsRpi.visible=true
+                                                  cameraSettingsRock5.visible=false
+                                              }
+                                              if (fileName.includes("rock")) {
+                                                  cameraSettingsRock5.visible=true
+                                                  cameraSettingsRpi.visible=false
+                                              }
+                                          }
+                                      }
+                                  }
                       ImCheckBox {
                           id: setGround
                           text: qsTr("Set SBC to GROUND")
@@ -106,11 +115,11 @@ Popup {
                               if (checked) {
                                   setAir.checked = false
                                   bootAsGround();
-
+                                  cameraSettingsRpi.visible=false
+                                  cameraSettingsRock5.visible=false
                               }
                           }
                       }
-
                       ImCheckBox {
                           id: setIp
                           visible: false
@@ -124,6 +133,62 @@ Popup {
                       }
                   }
               }
+              GroupBox {
+                         title: qsTr("Camera Settings")
+                         id: cameraSettingsRock5
+                         Layout.fillWidth: true
+                         visible: false
+
+                         ColumnLayout {
+                             spacing: -10
+                             // Add a ComboBox to select between cameras
+                             ComboBox {
+                                 id: cameraSelectorRock
+                                 textRole: "displayText"
+                                 model: ListModel {
+                                     ListElement { displayText: "NONE" }
+                                     ListElement { displayText: "IMX415" }
+                                     ListElement { displayText: "IMX462" }
+                                     ListElement { displayText: "HDMI" }
+                                 }
+                                 onCurrentIndexChanged: {
+                                     var selectedCamera = model.get(currentIndex).displayText;
+                                                 if (selectedCamera !== "NONE") {
+                                                     console.log("Selected camera:", selectedCamera);
+                                                 }
+                                 }
+                             }
+                         }
+                     }
+              GroupBox {
+                         title: qsTr("Camera Settings")
+                         id: cameraSettingsRpi
+                         Layout.fillWidth: true
+                         visible:false
+                         ColumnLayout {
+                             spacing: -10
+                             // Add a ComboBox to select between cameras
+                             ComboBox {
+                                 id: cameraSelectorRpi
+                                 textRole: "displayText"
+                                 width:300
+                                 model: ListModel {
+                                     ListElement { displayText: "NONE" }
+                                     ListElement { displayText: "IMX708" }
+                                     ListElement { displayText: "IMX462" }
+                                     ListElement { displayText: "IMX519" }
+                                     ListElement { displayText: "IMX477" }
+                                     ListElement { displayText: "IMX219" }
+                                 }
+                                 onCurrentIndexChanged: {
+                                     var selectedCamera = model.get(currentIndex).displayText;
+                                                 if (selectedCamera !== "NONE") {
+                                                     console.log("Selected camera:", selectedCamera);
+                                                 }
+                                 }
+                             }
+                         }
+                     }
               GroupBox {
                   title: qsTr("Bind Settings")
                   Layout.fillWidth: true
