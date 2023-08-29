@@ -1118,7 +1118,9 @@ bool DownloadThread::_customizeImage()
     {
         QSettings settings;
         QString cameraValue = settings.value("camera").toString();
-        
+        QString sbcValue = settings.value("SBC").toString();
+
+
         qDebug() << "_openHDGround" << _openHDGround ;
         if (_openHDGround == "IP")
         {
@@ -1131,6 +1133,18 @@ bool DownloadThread::_customizeImage()
             {
                 emit error(tr("Error creating force_ip_camera.txt on FAT partition"));
                 return false;
+            }
+            if (!sbcValue.isEmpty()) {
+            QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
+                if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
+            {
+                sbc.close();
+            }
+            else
+            {
+                emit error(tr("Error creating sbc file on FAT partition"));
+                return false;
+            }
             }
         }
         if (_openHDGround == "air")
@@ -1153,7 +1167,19 @@ bool DownloadThread::_customizeImage()
             }
             else
             {
-                emit error(tr("Error creating Camera on FAT partition"));
+                emit error(tr("Error creating Camera file on FAT partition"));
+                return false;
+            }
+            }
+            if (!sbcValue.isEmpty()) {
+            QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
+                if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
+            {
+                sbc.close();
+            }
+            else
+            {
+                emit error(tr("Error creating sbc file on FAT partition"));
                 return false;
             }
             }

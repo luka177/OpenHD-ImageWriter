@@ -103,9 +103,14 @@ Popup {
                                                   cameraSettingsRock5.visible=false
                                               }
                                               if (fileName.includes("rock")) {
-                                                  imageWriter.setSetting("SBC", "rock");
                                                   cameraSettingsRock5.visible=true
                                                   cameraSettingsRpi.visible=false
+                                              }
+                                              if (fileName.includes("rock5a")) {
+                                                  imageWriter.setSetting("SBC", "rock-5a");
+                                              }
+                                              if (fileName.includes("rock5b")) {
+                                                  imageWriter.setSetting("SBC", "rock-5b");
                                               }
                                           }
                                       }
