@@ -60,6 +60,9 @@
 #include <QtPlatformHeaders/QEglFSFunctions>
 #endif
 
+#include <iostream>
+
+
 ImageWriter::ImageWriter(QObject *parent)
     : QObject(parent), _repo(QUrl(QString(OSLIST_URL))), _dlnow(0), _verifynow(0),
       _engine(nullptr), _thread(nullptr), _verifyEnabled(false), _cachingEnabled(false),
@@ -1021,6 +1024,9 @@ void ImageWriter::setSetting(const QString &key, const QVariant &value)
 {
     _settings.setValue(key, value);
     _settings.sync();
+    // DEBUG
+    std::cout << "Setting changed: " << key.toStdString() << " -> " << value.toString().toStdString() << std::endl;
+
 }
 
 void ImageWriter::setImageCustomization(const QByteArray &config, const QByteArray &cmdline, const QByteArray &openHDAir, const QByteArray &openHDGround, const QByteArray &cloudinit, const QByteArray &cloudinitNetwork)

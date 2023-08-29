@@ -1116,6 +1116,9 @@ bool DownloadThread::_customizeImage()
 
     if (!_openHDGround.isEmpty() && _initFormat == "systemd")
     {
+        QSettings settings;
+        QString cameraValue = settings.value("camera").toString();
+        
         qDebug() << "_openHDGround" << _openHDGround ;
         if (_openHDGround == "IP")
         {
@@ -1141,6 +1144,18 @@ bool DownloadThread::_customizeImage()
             {
                 emit error(tr("Error creating air.txt on FAT partition"));
                 return false;
+            }
+            if (!cameraValue.isEmpty()) {
+            QFile Camera(folder+"/openhd"+"/"+cameraValue+".txt");
+                if (Camera.open(Camera.WriteOnly) && Camera.write(_openHDGround) == _openHDGround.length())
+            {
+                Camera.close();
+            }
+            else
+            {
+                emit error(tr("Error creating Camera on FAT partition"));
+                return false;
+            }
             }
         }
         if (_openHDGround == "ground")

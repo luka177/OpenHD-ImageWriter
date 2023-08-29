@@ -98,10 +98,12 @@ Popup {
                                   bootAsAir();
                                   var fileName = imageWriter.srcFileName();
                                               if (fileName.includes("pi")) {
+                                                  imageWriter.setSetting("SBC", "rpi");
                                                   cameraSettingsRpi.visible=true
                                                   cameraSettingsRock5.visible=false
                                               }
                                               if (fileName.includes("rock")) {
+                                                  imageWriter.setSetting("SBC", "rock");
                                                   cameraSettingsRock5.visible=true
                                                   cameraSettingsRpi.visible=false
                                               }
@@ -154,7 +156,7 @@ Popup {
                                  onCurrentIndexChanged: {
                                      var selectedCamera = model.get(currentIndex).displayText;
                                                  if (selectedCamera !== "NONE") {
-                                                     console.log("Selected camera:", selectedCamera);
+                                                     imageWriter.setSetting("camera", selectedCamera);
                                                  }
                                  }
                              }
@@ -183,7 +185,7 @@ Popup {
                                  onCurrentIndexChanged: {
                                      var selectedCamera = model.get(currentIndex).displayText;
                                                  if (selectedCamera !== "NONE") {
-                                                     console.log("Selected camera:", selectedCamera);
+                                                     imageWriter.setSetting("camera", selectedCamera);
                                                  }
                                  }
                              }
