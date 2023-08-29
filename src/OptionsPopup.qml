@@ -99,7 +99,7 @@ Popup {
                                   var fileName = imageWriter.srcFileName();
                                               if (fileName.includes("pi")) {
                                                   imageWriter.setSetting("SBC", "rpi");
-                                                  cameraSettingsRpi.visible=true
+                                                  cameraSettingsRpi.visible=false
                                                   cameraSettingsRock5.visible=false
                                               }
                                               if (fileName.includes("rock")) {
