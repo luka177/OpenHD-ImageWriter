@@ -27,7 +27,6 @@ Popup {
     property bool noButton: false
     signal yes()
     signal no()
-    signal details()
 
     // background of title
     Rectangle {
@@ -128,17 +127,19 @@ Popup {
             }
 
             Item {
-                width: parent.width // Adjust the width as needed
-                visible: msgpopup.detailsButton
-
-                ImButton {
-                    anchors.top: parent.top // Position 50 pixels from the top
-                    text: qsTr("Details")
-                    onClicked: {
-                        console.log("debug")
-                    }
-                    Material.foreground: activeFocus ? "#d1dcfb" : "#ffffff"
-                    Material.background: "#2C3E50"
+            id: detailsItem
+            width: parent.width
+            visible: msgpopup.detailsButton
+                Button {
+                anchors.top: parent.top
+                text: qsTr("Details")
+                onClicked:{
+                   onClicked: {
+                   detailsPopup.visible = !detailsPopup.visible;
+                   }   
+                }
+                Material.foreground: activeFocus ? "#d1dcfb" : "#ffffff"
+                Material.background: "#2C3E50"
                 }
             }
 

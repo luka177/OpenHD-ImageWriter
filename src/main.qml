@@ -60,10 +60,11 @@ ApplicationWindow {
         x: 75
         y: (parent.height - height) / 2
         width: parent.width - 150
-        height: parent.implicitHeight + 175
+        height: parent.implicitHeight + 275
         padding: 0
         modal: true
-        visible: false
+        property bool objectVisible: false
+        visible: objectVisible
 
         Rectangle {
             color: "#f5f5f5"
@@ -72,7 +73,6 @@ ApplicationWindow {
             height: 35
             width: parent.width
         }
-
         Rectangle {
             color: "#afafaf"
             width: parent.width
@@ -109,28 +109,42 @@ ApplicationWindow {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 Layout.fillWidth: true
-                Layout.topMargin: 10
                 font.family: roboto.name
                 font.bold: true
             }
 
-            // Manual Text objects for variables and values
-            Text {
-                text: imageWriter.srcFileName()
-                font.bold: true
-            }
-            Text {
-                text: "Value 1"
-            }
+            ColumnLayout {
+                id: detailsArea
+                spacing: 10
+                Layout.alignment:Qt.AlignVCenter
+                Layout.topMargin: -30
+                Layout.leftMargin: 20
 
-            Text {
-                text: "Variable 2:"
-                font.bold: true
+                Text {
+                    text: "Image Name:"
+                    font.bold: true
+                }
+                Text {
+                    text: "SBC:"
+                    font.bold: true
+                }
+                Text {
+                    text: "Boot Type:"
+                    font.bold: true
+                }
+                Text {
+                    text: "Camera:"
+                    font.bold: true
+                }
+                Text {
+                    text: "Bind Phrase:"
+                    font.bold: true
+                }
+                Text {
+                    text: "Changelog:"
+                    font.bold: true
+                }
             }
-            Text {
-                text: "Value 2"
-            }
-            // Add more Text elements for additional variables and values
         }
     }
 
@@ -963,11 +977,7 @@ ApplicationWindow {
 
     MsgPopup {
         id: msgpopup
-        onDetails:{
-            detailsPopup.visible=true
-        }
     }
-
     MsgPopup {
         id: quitpopup
         continueButton: false
