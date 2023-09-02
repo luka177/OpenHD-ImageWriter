@@ -21,11 +21,13 @@ Popup {
     property alias title: msgpopupheader.text
     property alias text: msgpopupbody.text
     property bool continueButton: true
+    property bool detailsButton: false
     property bool quitButton: false
     property bool yesButton: false
     property bool noButton: false
     signal yes()
     signal no()
+    signal details()
 
     // background of title
     Rectangle {
@@ -125,6 +127,21 @@ Popup {
                 Material.background: "#2C3E50"
             }
 
+            Item {
+                width: parent.width // Adjust the width as needed
+                visible: msgpopup.detailsButton
+
+                ImButton {
+                    anchors.top: parent.top // Position 50 pixels from the top
+                    text: qsTr("Details")
+                    onClicked: {
+                        console.log("debug")
+                    }
+                    Material.foreground: activeFocus ? "#d1dcfb" : "#ffffff"
+                    Material.background: "#2C3E50"
+                }
+            }
+
             ImButton {
                 text: qsTr("QUIT")
                 onClicked: {
@@ -162,3 +179,4 @@ Popup {
         msgpopupbody.forceActiveFocus()
     }
 }
+

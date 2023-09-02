@@ -55,6 +55,86 @@ ApplicationWindow {
         }
     }
 
+    Popup {
+        id: detailsPopup
+        x: 75
+        y: (parent.height - height) / 2
+        width: parent.width - 150
+        height: parent.implicitHeight + 175
+        padding: 0
+        modal: true
+        visible: false
+
+        Rectangle {
+            color: "#f5f5f5"
+            anchors.right: parent.right
+            anchors.top: parent.top
+            height: 35
+            width: parent.width
+        }
+
+        Rectangle {
+            color: "#afafaf"
+            width: parent.width
+            y: 35
+            implicitHeight: 1
+        }
+
+        Text {
+            id: msgx
+            text: "X"
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.rightMargin: 25
+            anchors.topMargin: 10
+            font.family: roboto.name
+            font.bold: true
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                    detailsPopup.close()
+                }
+            }
+        }
+
+        ColumnLayout {
+            spacing: 20
+            anchors.fill: parent
+
+            Text {
+                id: detailsPopupHeader
+                text: "List of applied settings and variables"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                Layout.fillWidth: true
+                Layout.topMargin: 10
+                font.family: roboto.name
+                font.bold: true
+            }
+
+            // Manual Text objects for variables and values
+            Text {
+                text: imageWriter.srcFileName()
+                font.bold: true
+            }
+            Text {
+                text: "Value 1"
+            }
+
+            Text {
+                text: "Variable 2:"
+                font.bold: true
+            }
+            Text {
+                text: "Value 2"
+            }
+            // Add more Text elements for additional variables and values
+        }
+    }
+
+
     ColumnLayout {
         id: bg
         spacing: 0
@@ -883,6 +963,9 @@ ApplicationWindow {
 
     MsgPopup {
         id: msgpopup
+        onDetails:{
+            detailsPopup.visible=true
+        }
     }
 
     MsgPopup {
@@ -1051,23 +1134,17 @@ ApplicationWindow {
     function onSuccess() {
         msgpopup.title = qsTr("Image was written successfully!")
          if (osbutton.text === qsTr("Erase"))
-            msgpopup.text = qsTr("<b>%1</b> has been erased<br><br>You can now remove the SD card from the reader").arg(dstbutton.text)
+            msgpopup.text = qsTr("<b>%1</b> has been erased<br><br> You can now remove the SD card from the reader").arg(dstbutton.text)
         else if (imageWriter.isEmbeddedMode()) {
             //msgpopup.text = qsTr("<b>%1</b> has been written to <b>%2</b>").arg(osbutton.text).arg(dstbutton.text)
             /* Just reboot to the installed OS */
             Qt.quit()
         }
         else
-            if(optionspopup.check_air())
-             msgpopup.text = qsTr("<b>%1</b> has been written to <b>%2</b> It was flashed as <b>AIR</b>! <br><br>You can now remove the SD card from the reader").arg(osbutton.text).arg(dstbutton.text)
-            else if(optionspopup.check_ground())
-             msgpopup.text = qsTr("<b>%1</b> has been written to <b>%2</b> It was flashed as <b>GROUND</b>! <br><br>You can now remove the SD card from the reader").arg(osbutton.text).arg(dstbutton.text)
-            else if(writebutton.image_name.includes("configurable"))
-             msgpopup.text = qsTr("<b>%1</b> has been written to <b>%2</b> <b>Air/Ground wasn't selected </b>! <br><br>You can now remove the SD card from the reader").arg(osbutton.text).arg(dstbutton.text)
-            else
-             msgpopup.text = qsTr("<b>%1</b> has been written to <b>%2</b>! <br><br>You can now remove the SD card from the reader").arg(osbutton.text).arg(dstbutton.text)
-
-        if (imageWriter.isEmbeddedMode()) {
+            msgpopup.text = qsTr("<b>%1</b> has been written to <b>%2</b>! You can now remove the SD card from the reader").arg(osbutton.text).arg(dstbutton.text)
+            msgpopup.continueButton = false
+            msgpopup.detailsButton = true
+         if (imageWriter.isEmbeddedMode()) {
             msgpopup.continueButton = false
             msgpopup.quitButton = true
         }
