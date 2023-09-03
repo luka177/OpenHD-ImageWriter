@@ -8,6 +8,7 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.0
 import QtQuick.Controls.Material 2.2
+import Qt.labs.settings 1.0
 import "qmlcomponents"
 
 
@@ -79,7 +80,9 @@ ApplicationWindow {
             y: 35
             implicitHeight: 1
         }
-
+        Settings {
+            id: appSettings
+        }
         Text {
             id: msgx
             text: "X"
@@ -112,6 +115,14 @@ ApplicationWindow {
                 font.family: roboto.name
                 font.bold: true
             }
+            Button{
+                id:refresh
+                visible:false
+                text: "button"
+                onClicked: {
+                    console.log(imageWriter.getValue("bindPhrase"))
+                }
+            }
 
             ColumnLayout {
                 id: detailsArea
@@ -121,23 +132,23 @@ ApplicationWindow {
                 Layout.leftMargin: 20
 
                 Text {
-                    text: "Image Name:"
+                    text: "Image Name:"+imageWriter.getValue("fileName")
                     font.bold: true
                 }
                 Text {
-                    text: "SBC:"
+                    text: "SBC:"+imageWriter.getValue("SBC")
                     font.bold: true
                 }
                 Text {
-                    text: "Boot Type:"
+                    text: "Boot Type:"+imageWriter.getValue("bootType")+"  "+imageWriter.getValue("mode")
                     font.bold: true
                 }
                 Text {
-                    text: "Camera:"
+                    text: "Camera:"+imageWriter.getValue("camera")
                     font.bold: true
                 }
                 Text {
-                    text: "Bind Phrase:"
+                    text: "Bind Phrase:"+imageWriter.getValue("bindPhrase")
                     font.bold: true
                 }
                 Text {

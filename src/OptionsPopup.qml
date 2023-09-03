@@ -94,7 +94,9 @@ Popup {
                                 if (checked) {
                                     setGround.checked = false
                                     bootAsAir();
+                                    imageWriter.setSetting("bootType", "Air");
                                     var fileName = imageWriter.srcFileName();
+                                    imageWriter.setSetting("fileName", fileName);
                                     if (fileName.includes("pi")) {
                                         imageWriter.setSetting("SBC", "rpi");
                                         cameraSettingsRpi.visible=true
@@ -120,6 +122,7 @@ Popup {
                                 if (checked) {
                                     setAir.checked = false
                                     bootAsGround();
+                                    imageWriter.setSetting("bootType", "Ground");
                                     cameraSettingsRpi.visible=false
                                     cameraSettingsRock5.visible=false
                                 }
@@ -276,7 +279,7 @@ Popup {
                             text: qsTr("Set binding phrase")
                             checkable: false
                             onCheckedChanged: {
-                                cloudinit=(bndPhrase.text)
+                                imageWriter.setSetting("bndPhrase", bndPhrase.text);
                             }
                         }
                         TextField {

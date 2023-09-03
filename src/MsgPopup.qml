@@ -131,7 +131,7 @@ Popup {
             width: parent.width
             visible: msgpopup.detailsButton
                 Button {
-                anchors.top: parent.top
+                Layout.alignment: Qt.AlignBottom
                 text: qsTr("Details")
                 onClicked:{
                    onClicked: {

@@ -1074,23 +1074,23 @@ bool DownloadThread::_customizeImage()
         }
     }
 
-    if (!_cloudinit.isEmpty() && _initFormat == "systemd")
-    {
-        QFile key(folder+"/openhd"+"/password.txt");
-        if (key.open(key.WriteOnly) && key.write(_cloudinit) == _cloudinit.length())
-        {
-           qDebug() << "Key:" << key;
-           QSettings settings;
-           settings.setValue("bindPhrase", _cloudinit);
-           settings.sync();
-           qDebug() << "SavedSettings" << settings.value("bindPhrase").toString();
-        }
-        else
-        {
-            emit error(tr("Error creating key.txt on FAT partition"));
-            return false;
-        }
-    }
+    // if (!_cloudinit.isEmpty() && _initFormat == "systemd")
+    // {
+    //     QFile key(folder+"/openhd"+"/password.txt");
+    //     if (key.open(key.WriteOnly) && key.write(_cloudinit) == _cloudinit.length())
+    //     {
+    //        qDebug() << "Key:" << key;
+    //        QSettings settings;
+    //        settings.setValue("bindPhrase", _cloudinit);
+    //        settings.sync();
+    //        qDebug() << "SavedSettings" << settings.value("bindPhrase").toString();
+    //     }
+    //     else
+    //     {
+    //         emit error(tr("Error creating key.txt on FAT partition"));
+    //         return false;
+    //     }
+    // }
 
     if (!_openHDAir.isEmpty() && _initFormat == "systemd")
     {
@@ -1120,8 +1120,8 @@ bool DownloadThread::_customizeImage()
         QString cameraValue = settings.value("camera").toString();
         QString sbcValue = settings.value("SBC").toString();
         QString modeValue = settings.value("mode").toString();
+        QString bindPhrase = settings.value("bindPhrase").toString();
 
-        qDebug() << "_openHDGround" << _openHDGround ;
         if (modeValue == "debug")
         {
         QFile Ip(folder+"/openhd"+"/debug.txt");
@@ -1197,8 +1197,33 @@ bool DownloadThread::_customizeImage()
                 return false;
             }
         }
-       }
+             if (_openHDGround == "ground")
+        {
+  QFile BindP(folder + "/openhd" + "/password.txt");
+    if (BindP.open(QIODevice::WriteOnly))
+    {
+        // Convert bindPhrase to UTF-8 bytes and write to the file
+        QByteArray bindPhraseBytes = bindPhrase.toUtf8();
+        qint64 bytesWritten = BindP.write(bindPhraseBytes);
+        BindP.close();
 
+        if (bytesWritten == bindPhraseBytes.length())
+        {
+            // Successfully wrote the password to the file
+        }
+        else
+        {
+            emit error(tr("Error writing password to password.txt on FAT partition"));
+            return false;
+        }
+    }
+    else
+    {
+        emit error(tr("Error creating password.txt on FAT partition"));
+        return false;
+    }
+       }
+    }
     if (!_cmdline.isEmpty())
     {
         QByteArray cmdline;
