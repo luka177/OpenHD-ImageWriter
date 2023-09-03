@@ -132,6 +132,7 @@ Popup {
             visible: msgpopup.detailsButton
                 Button {
                 Layout.alignment: Qt.AlignBottom
+                Layout.bottomMargin: -20
                 text: qsTr("Details")
                 onClicked:{
                    onClicked: {

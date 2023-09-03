@@ -127,30 +127,77 @@ ApplicationWindow {
             ColumnLayout {
                 id: detailsArea
                 spacing: 10
-                Layout.alignment:Qt.AlignVCenter
+                Layout.alignment: Qt.AlignVCenter
                 Layout.topMargin: -30
                 Layout.leftMargin: 20
 
-                Text {
-                    text: "Image Name:"+imageWriter.getValue("fileName")
-                    font.bold: true
+                RowLayout {
+                    Text {
+                        text: "Image Name:"
+                        font.bold: true
+                    }
+                    Text {
+                        text: {
+                            var fileName = imageWriter.getValue("FileName");
+                            if (fileName.length > 7) {
+                                return fileName.substring(0, fileName.length - 7);
+                            } else {
+                                return fileName;
+                            }
+                        }
+                        font.bold: false
+                        color: "grey"
+                    }
                 }
-                Text {
-                    text: "SBC:"+imageWriter.getValue("SBC")
-                    font.bold: true
+
+                RowLayout {
+                    Text {
+                        text: "SBC:"
+                        font.bold: true
+                    }
+                    Text {
+                        text: imageWriter.getValue("SBC")
+                        font.bold: false
+                        color: "grey"
+                    }
                 }
-                Text {
-                    text: "Boot Type:"+imageWriter.getValue("bootType")+"  "+imageWriter.getValue("mode")
-                    font.bold: true
+
+                RowLayout {
+                    Text {
+                        text: "Boot Type:"
+                        font.bold: true
+                    }
+                    Text {
+                        text: imageWriter.getValue("bootType") + "  " + imageWriter.getValue("mode")
+                        font.bold: false
+                        color: "grey"
+                    }
                 }
-                Text {
-                    text: "Camera:"+imageWriter.getValue("camera")
-                    font.bold: true
+
+                RowLayout {
+                    Text {
+                        text: "Camera:"
+                        font.bold: true
+                    }
+                    Text {
+                        text: imageWriter.getValue("camera")
+                        font.bold: false
+                        color: "grey"
+                    }
                 }
-                Text {
-                    text: "Bind Phrase:"+imageWriter.getValue("bindPhrase")
-                    font.bold: true
+
+                RowLayout {
+                    Text {
+                        text: "Bind Phrase:"
+                        font.bold: true
+                    }
+                    Text {
+                        text: imageWriter.getValue("bindPhrase")
+                        font.bold: false
+                        color: "grey"
+                    }
                 }
+
                 Text {
                     text: "Changelog:"
                     font.bold: true
