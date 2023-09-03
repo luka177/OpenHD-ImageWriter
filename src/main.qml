@@ -197,10 +197,20 @@ ApplicationWindow {
                         color: "grey"
                     }
                 }
-
-                Text {
-                    text: "Changelog:"
-                    font.bold: true
+                RowLayout {
+                    Text {
+                        text: "Changelog:"
+                        font.bold: true
+                    }
+                    Text {
+                        text: "<a href='https://openhdfpv.org/changelogs'>changelogs</a>"
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: Qt.openUrlExternally("https://openhdfpv.org/changelogs")
+                            }
+                        font.bold:false
+                        color: "grey"
+                    }
                 }
             }
         }
