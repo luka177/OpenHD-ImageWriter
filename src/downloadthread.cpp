@@ -137,8 +137,8 @@ bool DownloadThread::_openAndPrepareDevice()
             proc.start("diskpart");
             proc.waitForStarted();
             proc.write("select disk "+_nr+"\r\n"
-                            "clean\r\n"
-                            "rescan\r\n");
+                                              "clean\r\n"
+                                              "rescan\r\n");
             proc.closeWriteChannel();
             proc.waitForFinished();
 
@@ -293,9 +293,9 @@ bool DownloadThread::_openAndPrepareDevice()
     if (knownsize > emptyMB.size())
     {
         if (!_file.seek(knownsize-emptyMB.size())
-                || !_file.write(emptyMB.data(), emptyMB.size())
-                || !_file.flush()
-                || !::fsync(_file.handle()))
+            || !_file.write(emptyMB.data(), emptyMB.size())
+            || !_file.flush()
+            || !::fsync(_file.handle()))
         {
             emit error(tr("Write error while trying to zero out last part of card.<br>"
                           "Card could be advertising wrong capacity (possible counterfeit)."));
@@ -418,49 +418,49 @@ void DownloadThread::run()
 
     switch (ret)
     {
-        case CURLE_OK:
-            _successful = true;
-            qDebug() << "Download done in" << _timer.elapsed() / 1000 << "seconds";
-            _onDownloadSuccess();
-            break;
-        case CURLE_WRITE_ERROR:
-            deleteDownloadedFile();
+    case CURLE_OK:
+        _successful = true;
+        qDebug() << "Download done in" << _timer.elapsed() / 1000 << "seconds";
+        _onDownloadSuccess();
+        break;
+    case CURLE_WRITE_ERROR:
+        deleteDownloadedFile();
 
 #ifdef Q_OS_WIN
-            if (_file.errorCode() == ERROR_ACCESS_DENIED)
+        if (_file.errorCode() == ERROR_ACCESS_DENIED)
+        {
+            QString msg = tr("Access denied error while writing file to disk.");
+            QSettings registry("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows Defender\\Windows Defender Exploit Guard\\Controlled Folder Access",
+                               QSettings::Registry64Format);
+            if (registry.value("EnableControlledFolderAccess").toInt() == 1)
             {
-                QString msg = tr("Access denied error while writing file to disk.");
-                QSettings registry("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows Defender\\Windows Defender Exploit Guard\\Controlled Folder Access",
-                                   QSettings::Registry64Format);
-                if (registry.value("EnableControlledFolderAccess").toInt() == 1)
-                {
-                    msg += "<br>"+tr("Controlled Folder Access seems to be enabled. Please add both openhdimagewriter.exe and fat32format.exe to the list of allowed apps and try again.");
-                }
-                _onDownloadError(msg);
+                msg += "<br>"+tr("Controlled Folder Access seems to be enabled. Please add both openhdimagewriter.exe and fat32format.exe to the list of allowed apps and try again.");
             }
-            else
+            _onDownloadError(msg);
+        }
+        else
 #endif
             if (!_cancelled)
                 _onDownloadError(tr("Error writing file to disk"));
-            break;
-        case CURLE_ABORTED_BY_CALLBACK:
-            deleteDownloadedFile();
-            break;
-        default:
-            deleteDownloadedFile();
-            QString errorMsg;
+        break;
+    case CURLE_ABORTED_BY_CALLBACK:
+        deleteDownloadedFile();
+        break;
+    default:
+        deleteDownloadedFile();
+        QString errorMsg;
 
-            if (!errorBuf[0])
-                /* No detailed error message text provided, use standard text for libcurl result code */
-                errorMsg += curl_easy_strerror(ret);
-            else
-                errorMsg += errorBuf;
+        if (!errorBuf[0])
+            /* No detailed error message text provided, use standard text for libcurl result code */
+            errorMsg += curl_easy_strerror(ret);
+        else
+            errorMsg += errorBuf;
 
-            char *ipstr;
-            if (curl_easy_getinfo(_c, CURLINFO_PRIMARY_IP, &ipstr) == CURLE_OK && ipstr && ipstr[0])
-                errorMsg += QString(" - Server IP: ")+ipstr;
+        char *ipstr;
+        if (curl_easy_getinfo(_c, CURLINFO_PRIMARY_IP, &ipstr) == CURLE_OK && ipstr && ipstr[0])
+            errorMsg += QString(" - Server IP: ")+ipstr;
 
-            _onDownloadError(tr("Error downloading: %1").arg(errorMsg));
+        _onDownloadError(tr("Error downloading: %1").arg(errorMsg));
     }
 }
 
@@ -888,8 +888,8 @@ bool DownloadThread::_customizeImage()
         proc.start("diskpart");
         proc.waitForStarted();
         proc.write("select disk "+_nr+"\r\n"
-                        "select partition 1\r\n"
-                        "assign\r\n");
+                                          "select partition 1\r\n"
+                                          "assign\r\n");
         proc.closeWriteChannel();
         proc.waitForFinished();
         qDebug() << proc.readAll();
@@ -922,12 +922,12 @@ bool DownloadThread::_customizeImage()
         if (::access(devlower.constData(), W_OK) != 0)
         {
             /* Not running as root, try to outsource mounting to udisks2 */
-    #ifndef QT_NO_DBUS
+#ifndef QT_NO_DBUS
             UDisks2Api udisks2;
             QString mp = udisks2.mountDevice(fatpartition);
             if (!mp.isEmpty())
                 mountpoints.push_back(mp.toStdString());
-    #endif
+#endif
         }
         else
         {
@@ -1074,24 +1074,6 @@ bool DownloadThread::_customizeImage()
         }
     }
 
-    // if (!_cloudinit.isEmpty() && _initFormat == "systemd")
-    // {
-    //     QFile key(folder+"/openhd"+"/password.txt");
-    //     if (key.open(key.WriteOnly) && key.write(_cloudinit) == _cloudinit.length())
-    //     {
-    //        qDebug() << "Key:" << key;
-    //        QSettings settings;
-    //        settings.setValue("bindPhrase", _cloudinit);
-    //        settings.sync();
-    //        qDebug() << "SavedSettings" << settings.value("bindPhrase").toString();
-    //     }
-    //     else
-    //     {
-    //         emit error(tr("Error creating key.txt on FAT partition"));
-    //         return false;
-    //     }
-    // }
-
     if (!_openHDAir.isEmpty() && _initFormat == "systemd")
     {
 
@@ -1104,7 +1086,7 @@ bool DownloadThread::_customizeImage()
         QFile f(folder+"/openhd"+"/air.txt");
         if (f.open(f.WriteOnly) && f.write(_openHDAir) == _openHDAir.length())
         {
-           qDebug() << "folder:" << f;
+            qDebug() << "folder:" << f;
         }
         else
         {
@@ -1120,14 +1102,52 @@ bool DownloadThread::_customizeImage()
         QString cameraValue = settings.value("camera").toString();
         QString sbcValue = settings.value("SBC").toString();
         QString modeValue = settings.value("mode").toString();
-        QString bindPhrase = settings.value("bindPhrase").toString();
+        QString bindPhraseSaved = settings.value("bindPhrase").toString();
 
         if (modeValue == "debug")
         {
-        QFile Ip(folder+"/openhd"+"/debug.txt");
-            if (Ip.open(Ip.WriteOnly) && Ip.write(_openHDGround) == _openHDGround.length())
+            QFile Bp(folder+"/openhd"+"/password.txt");
+            if (Bp.open(QIODevice::WriteOnly))
             {
-                Ip.close();
+                // Convert bindPhrase to UTF-8 bytes and write to the file
+                QByteArray bindPhraseBytes = bindPhraseSaved.toUtf8();
+                qint64 bytesWritten = Bp.write(bindPhraseBytes);
+                Bp.close();
+
+                if (bytesWritten == bindPhraseBytes.length())
+                {
+                    // Successfully wrote the password to the file
+                }
+                else
+                {
+                    emit error(tr("Error writing password to password.txt on FAT partition"));
+                    return false;
+                }
+            }
+            else
+            {
+                emit error(tr("Error creating password.txt on FAT partition"));
+                return false;
+            }
+            if (!sbcValue.isEmpty()) {
+                QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
+                if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
+                {
+                    sbc.close();
+                }
+                else
+                {
+                    emit error(tr("Error creating sbc file on FAT partition"));
+                    return false;
+                }
+            }
+        }
+        if (modeValue == "debug")
+        {
+            QFile Db(folder+"/openhd"+"/debug.txt");
+            if (Db.open(Db.WriteOnly) && Db.write(_openHDGround) == _openHDGround.length())
+            {
+                Db.close();
             }
             else
             {
@@ -1135,21 +1155,21 @@ bool DownloadThread::_customizeImage()
                 return false;
             }
             if (!sbcValue.isEmpty()) {
-            QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
+                QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
                 if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
-            {
-                sbc.close();
-            }
-            else
-            {
-                emit error(tr("Error creating sbc file on FAT partition"));
-                return false;
-            }
+                {
+                    sbc.close();
+                }
+                else
+                {
+                    emit error(tr("Error creating sbc file on FAT partition"));
+                    return false;
+                }
             }
         }
         if (_openHDGround == "air")
         {
-        QFile Air(folder+"/openhd"+"/air.txt");
+            QFile Air(folder+"/openhd"+"/air.txt");
             if (Air.open(Air.WriteOnly) && Air.write(_openHDGround) == _openHDGround.length())
             {
                 Air.close();
@@ -1160,33 +1180,33 @@ bool DownloadThread::_customizeImage()
                 return false;
             }
             if (!cameraValue.isEmpty()) {
-            QFile Camera(folder+"/openhd"+"/"+cameraValue+".txt");
+                QFile Camera(folder+"/openhd"+"/"+cameraValue+".txt");
                 if (Camera.open(Camera.WriteOnly) && Camera.write(_openHDGround) == _openHDGround.length())
-            {
-                Camera.close();
-            }
-            else
-            {
-                emit error(tr("Error creating Camera file on FAT partition"));
-                return false;
-            }
+                {
+                    Camera.close();
+                }
+                else
+                {
+                    emit error(tr("Error creating Camera file on FAT partition"));
+                    return false;
+                }
             }
             if (!sbcValue.isEmpty()) {
-            QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
+                QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
                 if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
-            {
-                sbc.close();
-            }
-            else
-            {
-                emit error(tr("Error creating sbc file on FAT partition"));
-                return false;
-            }
+                {
+                    sbc.close();
+                }
+                else
+                {
+                    emit error(tr("Error creating sbc file on FAT partition"));
+                    return false;
+                }
             }
         }
         if (_openHDGround == "ground")
         {
-        QFile Ground(folder+"/openhd"+"/ground.txt");
+            QFile Ground(folder+"/openhd"+"/ground.txt");
             if (Ground.open(Ground.WriteOnly) && Ground.write(_openHDGround) == _openHDGround.length())
             {
                 Ground.close();
@@ -1197,32 +1217,10 @@ bool DownloadThread::_customizeImage()
                 return false;
             }
         }
-             if (_openHDGround == "ground")
+        if (_openHDGround == "ground")
         {
-  QFile BindP(folder + "/openhd" + "/password.txt");
-    if (BindP.open(QIODevice::WriteOnly))
-    {
-        // Convert bindPhrase to UTF-8 bytes and write to the file
-        QByteArray bindPhraseBytes = bindPhrase.toUtf8();
-        qint64 bytesWritten = BindP.write(bindPhraseBytes);
-        BindP.close();
 
-        if (bytesWritten == bindPhraseBytes.length())
-        {
-            // Successfully wrote the password to the file
         }
-        else
-        {
-            emit error(tr("Error writing password to password.txt on FAT partition"));
-            return false;
-        }
-    }
-    else
-    {
-        emit error(tr("Error creating password.txt on FAT partition"));
-        return false;
-    }
-       }
     }
     if (!_cmdline.isEmpty())
     {
@@ -1254,10 +1252,10 @@ bool DownloadThread::_customizeImage()
     {
         if (::access(devlower.constData(), W_OK) != 0)
         {
-    #ifndef QT_NO_DBUS
+#ifndef QT_NO_DBUS
             UDisks2Api udisks2;
             udisks2.unmountDrive(devlower);
-    #endif
+#endif
         }
         else
         {

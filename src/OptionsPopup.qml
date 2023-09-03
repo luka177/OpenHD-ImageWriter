@@ -134,7 +134,7 @@ Popup {
                             text: qsTr("Debug Mode")
                             onCheckedChanged: {
                                 if (checked) {
-                                imageWriter.setSetting("mode", "debug");
+                                    imageWriter.setSetting("mode", "debug");
                                 }
                             }
                         }
@@ -268,18 +268,18 @@ Popup {
                         spacing: 0
 
                         Text {
-                                        text: qsTr("   Must match on Air and Ground!")
-                                        font.pixelSize: 12
-                                        color: "gray"
-                                        Layout.alignment: Qt.AlignHCenter
-                                    }
+                            text: qsTr("   Must match on Air and Ground!")
+                            font.pixelSize: 12
+                            color: "gray"
+                            Layout.alignment: Qt.AlignHCenter
+                        }
 
                         ImCheckBox {
                             id: bndKey
                             text: qsTr("Set binding phrase")
                             checkable: false
                             onCheckedChanged: {
-                                imageWriter.setSetting("bndPhrase", bndPhrase.text);
+                                imageWriter.setSetting("bindPhrase", bndPhrase.text);
                             }
                         }
                         TextField {

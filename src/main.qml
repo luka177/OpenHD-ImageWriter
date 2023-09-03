@@ -173,7 +173,7 @@ ApplicationWindow {
                 padding: 5
                 id: donatebutton
                 onClicked: {
-                Qt.openUrlExternally("https://opencollective.com/openhd");
+                    Qt.openUrlExternally("https://opencollective.com/openhd");
                 }
                 visible: true
                 Accessible.description: qsTr("Donate")
@@ -309,12 +309,12 @@ ApplicationWindow {
                             console.log("Image name:"+image_name);
                             //Consti10
                             if(image_name.includes("configurable")){
-                                   if(!optionspopup.check_air_or_ground_set_by_user()){
+                                if(!optionspopup.check_air_or_ground_set_by_user()){
                                     console.log("Cannot write yet, air or ground not set yet");
                                     onError("Cannot write yet, air or ground not set yet - please open settings and select air or ground")
                                     return;
-                                    }
-                              }
+                                }
+                            }
 
                             if (!optionspopup.initialized && imageWriter.imageSupportsCustomization() && imageWriter.hasSavedCustomizationSettings()) {
                                 usesavedsettingspopup.openPopup()
@@ -685,18 +685,18 @@ ApplicationWindow {
             }
 
             Rectangle {
-               id: bgrect
-               anchors.fill: parent
-               color: "#f5f5f5"
-               visible: mouseOver && parent.ListView.view.currentIndex !== index
-               property bool mouseOver: false
+                id: bgrect
+                anchors.fill: parent
+                color: "#f5f5f5"
+                visible: mouseOver && parent.ListView.view.currentIndex !== index
+                property bool mouseOver: false
             }
             Rectangle {
-               id: borderrect
-               implicitHeight: 1
-               implicitWidth: parent.width
-               color: "#dcdcdc"
-               y: parent.height
+                id: borderrect
+                implicitHeight: 1
+                implicitWidth: parent.width
+                color: "#dcdcdc"
+                y: parent.height
             }
 
             RowLayout {
@@ -768,11 +768,11 @@ ApplicationWindow {
                         font.weight: Font.Light
                         visible: typeof(url) == "string" && url != "" && url != "internal://format"
                         text: !url ? "" :
-                              typeof(extract_sha256) != "undefined" && imageWriter.isCached(url,extract_sha256)
-                                ? qsTr("Cached on your computer")
-                                : url.startsWith("file://")
-                                  ? qsTr("Local file")
-                                  : qsTr("Online - %1 GB download").arg((image_download_size/1073741824).toFixed(1))
+                                     typeof(extract_sha256) != "undefined" && imageWriter.isCached(url,extract_sha256)
+                                     ? qsTr("Cached on your computer")
+                                     : url.startsWith("file://")
+                                       ? qsTr("Local file")
+                                       : qsTr("Online - %1 GB download").arg((image_download_size/1073741824).toFixed(1))
                     }
 
                     ToolTip {
@@ -884,7 +884,7 @@ ApplicationWindow {
                     Keys.onReturnPressed: Keys.onSpacePressed(event)
                 }
                 
-                }
+            }
         }
     }
 
@@ -905,20 +905,20 @@ ApplicationWindow {
             property string size: model.size
 
             Rectangle {
-               id: dstbgrect
-               anchors.fill: parent
-               color: "#f5f5f5"
-               visible: mouseOver && parent.ListView.view.currentIndex !== index
-               property bool mouseOver: false
+                id: dstbgrect
+                anchors.fill: parent
+                color: "#f5f5f5"
+                visible: mouseOver && parent.ListView.view.currentIndex !== index
+                property bool mouseOver: false
 
             }
 
             Rectangle {
-               id: dstborderrect
-               implicitHeight: 1
-               implicitWidth: parent.width
-               color: "#dcdcdc"
-               y: parent.height
+                id: dstborderrect
+                implicitHeight: 1
+                implicitWidth: parent.width
+                color: "#dcdcdc"
+                y: parent.height
             }
 
             Row {
@@ -1154,7 +1154,7 @@ ApplicationWindow {
 
     function onSuccess() {
         msgpopup.title = qsTr("Image was written successfully!")
-         if (osbutton.text === qsTr("Erase"))
+        if (osbutton.text === qsTr("Erase"))
             msgpopup.text = qsTr("<b>%1</b> has been erased<br><br> You can now remove the SD card from the reader").arg(dstbutton.text)
         else if (imageWriter.isEmbeddedMode()) {
             //msgpopup.text = qsTr("<b>%1</b> has been written to <b>%2</b>").arg(osbutton.text).arg(dstbutton.text)
@@ -1163,9 +1163,9 @@ ApplicationWindow {
         }
         else
             msgpopup.text = qsTr("<b>%1</b> has been written to <b>%2</b>! You can now remove the SD card from the reader").arg(osbutton.text).arg(dstbutton.text)
-            msgpopup.continueButton = false
-            msgpopup.detailsButton = true
-         if (imageWriter.isEmbeddedMode()) {
+        msgpopup.continueButton = false
+        msgpopup.detailsButton = true
+        if (imageWriter.isEmbeddedMode()) {
             msgpopup.continueButton = false
             msgpopup.quitButton = true
         }
@@ -1315,11 +1315,11 @@ ApplicationWindow {
                    fetch data by numeric role number */
                 if (driveListModel.data(driveListModel.index(i,0), 0x101) === drive) {
                     selectDstItem({
-                        device: drive,
-                        description: driveListModel.data(driveListModel.index(i,0), 0x102),
-                        size: driveListModel.data(driveListModel.index(i,0), 0x103),
-                        readonly: false
-                    })
+                                      device: drive,
+                                      description: driveListModel.data(driveListModel.index(i,0), 0x102),
+                                      size: driveListModel.data(driveListModel.index(i,0), 0x103),
+                                      readonly: false
+                                  })
                     break
                 }
             }
