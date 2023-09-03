@@ -120,7 +120,7 @@ ApplicationWindow {
                 visible:false
                 text: "button"
                 onClicked: {
-                    console.log(imageWriter.getValue("bindPhrase"))
+                    console.log(imageWriter.getValue("fileName"))
                 }
             }
 
@@ -136,13 +136,13 @@ ApplicationWindow {
                         text: "Image Name:"
                         font.bold: true
                     }
+
                     Text {
                         text: {
-                            var fileName = imageWriter.getValue("FileName");
-                            if (fileName.length > 7) {
-                                return fileName.substring(0, fileName.length - 7);
+                            if (typeof writebutton.image_name !== "undefined" && writebutton.image_name.length > 7) {
+                                return writebutton.image_name.substring(0, writebutton.image_name.length - 7);
                             } else {
-                                return fileName;
+                                return "Error";
                             }
                         }
                         font.bold: false
@@ -150,15 +150,18 @@ ApplicationWindow {
                     }
                 }
 
+
                 RowLayout {
                     Text {
                         text: "SBC:"
                         font.bold: true
                     }
+
                     Text {
                         text: imageWriter.getValue("SBC")
                         font.bold: false
                         color: "grey"
+
                     }
                 }
 
@@ -207,7 +210,7 @@ ApplicationWindow {
                         MouseArea {
                             anchors.fill: parent
                             onClicked: Qt.openUrlExternally("https://openhdfpv.org/changelogs")
-                            }
+                        }
                         font.bold:false
                         color: "grey"
                     }

@@ -128,16 +128,6 @@ Popup {
                                 }
                             }
                         }
-                        ImCheckBox {
-                            id: setDebug
-                            visible: true
-                            text: qsTr("Debug Mode")
-                            onCheckedChanged: {
-                                if (checked) {
-                                    imageWriter.setSetting("mode", "debug");
-                                }
-                            }
-                        }
                     }
                 }
                 GroupBox {
@@ -251,7 +241,7 @@ Popup {
                             Layout.maximumHeight: 40
                             onCurrentIndexChanged: {
                                 var selectedCamera = model.get(currentIndex).displayText;
-                                if (selectedCamera !== "Original") {
+                                if (selectedCamera !== "None") {
                                     console.debug(selectedCamera)
                                 }
                             }
@@ -299,6 +289,36 @@ Popup {
                     }
                 }
 
+                GroupBox {
+                    title: qsTr("Misc Settings")
+                    id: miscSettings
+                    Layout.fillWidth: true
+                    ColumnLayout {
+                        spacing: -10
+
+                        ImCheckBox {
+                        id: setDebug
+                        visible: true
+                        text: qsTr("Debug Mode")
+                        onCheckedChanged: {
+                            if (checked) {
+                                imageWriter.setSetting("mode", "debug");
+                            }
+                        }
+                    }
+
+                        ImCheckBox {
+                            id: setWifiHotspot
+                            visible: true
+                            text: qsTr("WifiHotspot")
+                            onCheckedChanged: {
+                                if (checked) {
+                                    imageWriter.setSetting("hotspot", "wifi");
+                                }
+                            }
+                        }
+                    }
+                }
                 GroupBox {
                     title: qsTr("Imager settings")
                     Layout.fillWidth: true

@@ -1103,174 +1103,200 @@ bool DownloadThread::_customizeImage()
         QString sbcValue = settings.value("SBC").toString();
         QString modeValue = settings.value("mode").toString();
         QString bindPhraseSaved = settings.value("bindPhrase").toString();
+        QString hotspot = settings.value("hotspot").toString();
 
-        if (modeValue == "debug")
-        {
-            QFile Bp(folder+"/openhd"+"/password.txt");
-            if (Bp.open(QIODevice::WriteOnly))
+        if (!bindPhraseSaved.isEmpty()) 
             {
-                // Convert bindPhrase to UTF-8 bytes and write to the file
-                QByteArray bindPhraseBytes = bindPhraseSaved.toUtf8();
-                qint64 bytesWritten = Bp.write(bindPhraseBytes);
-                Bp.close();
-
-                if (bytesWritten == bindPhraseBytes.length())
+                QFile Bp(folder+"/openhd"+"/password.txt");
+                if (Bp.open(QIODevice::WriteOnly))
                 {
-                    // Successfully wrote the password to the file
+                    // Convert bindPhrase to UTF-8 bytes and write to the file
+                    QByteArray bindPhraseBytes = bindPhraseSaved.toUtf8();
+                    qint64 bytesWritten = Bp.write(bindPhraseBytes);
+                    Bp.close();
+
+                    if (bytesWritten == bindPhraseBytes.length())
+                    {
+                        // Successfully wrote the password to the file
+                    }
+                    else
+                    {
+                        emit error(tr("Error writing password to password.txt on FAT partition"));
+                        return false;
+                    }
                 }
                 else
                 {
-                    emit error(tr("Error writing password to password.txt on FAT partition"));
+                    emit error(tr("Error creating password.txt on FAT partition"));
                     return false;
                 }
+                if (!sbcValue.isEmpty()) {
+                    QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
+                    if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
+                    {
+                        sbc.close();
+                    }
+                    else
+                    {
+                        emit error(tr("Error creating sbc file on FAT partition"));
+                        return false;
+                    }
+                }
             }
-            else
-            {
-                emit error(tr("Error creating password.txt on FAT partition"));
-                return false;
-            }
-            if (!sbcValue.isEmpty()) {
-                QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
-                if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
+            if (!hotspot.isEmpty())
                 {
-                    sbc.close();
+                    QFile Hs(folder+"/openhd"+"/wifi_hotspot.txt.txt");
+                    if (Hs.open(Hs.WriteOnly) && Hs.write(_openHDGround) == _openHDGround.length())
+                    {
+                        Hs.close();
+                    }
+                    else
+                    {
+                        emit error(tr("Error creating wifi_hotspot.txt on FAT partition"));
+                        return false;
+                    }
+                    if (!sbcValue.isEmpty()) {
+                        QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
+                        if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
+                        {
+                            sbc.close();
+                        }
+                        else
+                        {
+                            emit error(tr("Error creating sbc file on FAT partition"));
+                            return false;
+                        }
+                    }
+                }
+                if (modeValue == "debug")
+                {
+                    QFile Db(folder+"/openhd"+"/debug.txt");
+                    if (Db.open(Db.WriteOnly) && Db.write(_openHDGround) == _openHDGround.length())
+                    {
+                        Db.close();
+                    }
+                    else
+                    {
+                        emit error(tr("Error creating debug.txt on FAT partition"));
+                        return false;
+                    }
+                    if (!sbcValue.isEmpty()) {
+                        QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
+                        if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
+                        {
+                            sbc.close();
+                        }
+                        else
+                        {
+                            emit error(tr("Error creating sbc file on FAT partition"));
+                            return false;
+                        }
+                    }
+                }
+                if (_openHDGround == "air")
+                {
+                    QFile Air(folder+"/openhd"+"/air.txt");
+                    if (Air.open(Air.WriteOnly) && Air.write(_openHDGround) == _openHDGround.length())
+                    {
+                        Air.close();
+                    }
+                    else
+                    {
+                        emit error(tr("Error creating air.txt on FAT partition"));
+                        return false;
+                    }
+                    if (!cameraValue.isEmpty()) {
+                        QFile Camera(folder+"/openhd"+"/"+cameraValue+".txt");
+                        if (Camera.open(Camera.WriteOnly) && Camera.write(_openHDGround) == _openHDGround.length())
+                        {
+                            Camera.close();
+                        }
+                        else
+                        {
+                            emit error(tr("Error creating Camera file on FAT partition"));
+                            return false;
+                        }
+                    }
+                    if (!sbcValue.isEmpty()) {
+                        QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
+                        if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
+                        {
+                            sbc.close();
+                        }
+                        else
+                        {
+                            emit error(tr("Error creating sbc file on FAT partition"));
+                            return false;
+                        }
+                    }
+                }
+                if (_openHDGround == "ground")
+                {
+                    QFile Ground(folder+"/openhd"+"/ground.txt");
+                    if (Ground.open(Ground.WriteOnly) && Ground.write(_openHDGround) == _openHDGround.length())
+                    {
+                        Ground.close();
+                    }
+                    else
+                    {
+                        emit error(tr("Error creating ground.txt on FAT partition"));
+                        return false;
+                    }
+                }
+                if (_openHDGround == "ground")
+                {
+
+                }
+            }
+            if (!_cmdline.isEmpty())
+            {
+                QByteArray cmdline;
+
+                QFile f(folder+"/cmdline.txt");
+                if (f.exists() && f.open(f.ReadOnly))
+                {
+                    cmdline = f.readAll().trimmed();
+                    f.close();
+                }
+
+                cmdline += _cmdline;
+                if (f.open(f.WriteOnly) && f.write(cmdline) == cmdline.length())
+                {
+                    f.close();
                 }
                 else
                 {
-                    emit error(tr("Error creating sbc file on FAT partition"));
+                    emit error(tr("Error writing to cmdline.txt on FAT partition"));
                     return false;
                 }
             }
-        }
-        if (modeValue == "debug")
-        {
-            QFile Db(folder+"/openhd"+"/debug.txt");
-            if (Db.open(Db.WriteOnly) && Db.write(_openHDGround) == _openHDGround.length())
-            {
-                Db.close();
-            }
-            else
-            {
-                emit error(tr("Error creating debug.txt on FAT partition"));
-                return false;
-            }
-            if (!sbcValue.isEmpty()) {
-                QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
-                if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
-                {
-                    sbc.close();
-                }
-                else
-                {
-                    emit error(tr("Error creating sbc file on FAT partition"));
-                    return false;
-                }
-            }
-        }
-        if (_openHDGround == "air")
-        {
-            QFile Air(folder+"/openhd"+"/air.txt");
-            if (Air.open(Air.WriteOnly) && Air.write(_openHDGround) == _openHDGround.length())
-            {
-                Air.close();
-            }
-            else
-            {
-                emit error(tr("Error creating air.txt on FAT partition"));
-                return false;
-            }
-            if (!cameraValue.isEmpty()) {
-                QFile Camera(folder+"/openhd"+"/"+cameraValue+".txt");
-                if (Camera.open(Camera.WriteOnly) && Camera.write(_openHDGround) == _openHDGround.length())
-                {
-                    Camera.close();
-                }
-                else
-                {
-                    emit error(tr("Error creating Camera file on FAT partition"));
-                    return false;
-                }
-            }
-            if (!sbcValue.isEmpty()) {
-                QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
-                if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
-                {
-                    sbc.close();
-                }
-                else
-                {
-                    emit error(tr("Error creating sbc file on FAT partition"));
-                    return false;
-                }
-            }
-        }
-        if (_openHDGround == "ground")
-        {
-            QFile Ground(folder+"/openhd"+"/ground.txt");
-            if (Ground.open(Ground.WriteOnly) && Ground.write(_openHDGround) == _openHDGround.length())
-            {
-                Ground.close();
-            }
-            else
-            {
-                emit error(tr("Error creating ground.txt on FAT partition"));
-                return false;
-            }
-        }
-        if (_openHDGround == "ground")
-        {
 
-        }
-    }
-    if (!_cmdline.isEmpty())
-    {
-        QByteArray cmdline;
-
-        QFile f(folder+"/cmdline.txt");
-        if (f.exists() && f.open(f.ReadOnly))
-        {
-            cmdline = f.readAll().trimmed();
-            f.close();
-        }
-
-        cmdline += _cmdline;
-        if (f.open(f.WriteOnly) && f.write(cmdline) == cmdline.length())
-        {
-            f.close();
-        }
-        else
-        {
-            emit error(tr("Error writing to cmdline.txt on FAT partition"));
-            return false;
-        }
-    }
-
-    emit finalizing();
+            emit finalizing();
 
 #ifdef Q_OS_LINUX
-    if (manualmount)
-    {
-        if (::access(devlower.constData(), W_OK) != 0)
-        {
+            if (manualmount)
+            {
+                if (::access(devlower.constData(), W_OK) != 0)
+                {
 #ifndef QT_NO_DBUS
-            UDisks2Api udisks2;
-            udisks2.unmountDrive(devlower);
+                    UDisks2Api udisks2;
+                    udisks2.unmountDrive(devlower);
 #endif
-        }
-        else
-        {
-            QStringList args;
-            args << folder;
-            QProcess::execute("umount", args);
-            QDir d;
-            d.rmdir(folder);
-        }
-    }
+                }
+                else
+                {
+                    QStringList args;
+                    args << folder;
+                    QProcess::execute("umount", args);
+                    QDir d;
+                    d.rmdir(folder);
+                }
+            }
 #endif
 
 #ifndef Q_OS_WIN
-    ::sync();
+            ::sync();
 #endif
 
-    return true;
-}
+            return true;
+        }
