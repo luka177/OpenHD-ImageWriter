@@ -153,12 +153,12 @@ ApplicationWindow {
 
                 RowLayout {
                     Text {
-                        text: "SBC:"
+                        text: "sbc:"
                         font.bold: true
                     }
 
                     Text {
-                        text: imageWriter.getValue("SBC")
+                        text: imageWriter.getValue("sbc")
                         font.bold: false
                         color: "grey"
 
@@ -364,6 +364,9 @@ ApplicationWindow {
                     ImButton {
                         id: writebutton
                         property var image_name
+                        property var use_settings
+                        property var bootType
+
                         text: qsTr("WRITE")
                         Layout.minimumHeight: 40
                         Layout.fillWidth: true
@@ -375,7 +378,7 @@ ApplicationWindow {
                                 return
                             }
                             image_name=imageWriter.srcFileName();
-                            var bootType=imageWriter.getValue("bootType");
+                            bootType=imageWriter.getValue("bootType");
                             if(image_name.includes("configurable")){
                                 if(bootType!=="Air" && bootType!=="Ground" ){
                                     console.log("Cannot write yet, air or ground not set yet");
@@ -383,7 +386,7 @@ ApplicationWindow {
                                     return;
                                 }
                             }
-
+                            use_settings=imageWriter.getValue("useSettings")
                             if (!optionspopup.initialized && imageWriter.imageSupportsCustomization() && imageWriter.hasSavedCustomizationSettings()) {
                                 usesavedsettingspopup.openPopup()
                             } else {

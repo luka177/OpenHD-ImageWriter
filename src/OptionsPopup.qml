@@ -33,7 +33,8 @@ Popup {
     property string hotSpot
     property string beep
     property string eject
-
+    property bool rock
+    property bool rpi
 
 
 
@@ -119,7 +120,8 @@ Popup {
                     title: qsTr("Camera Settings")
                     id: cameraSettingsRock5
                     Layout.fillWidth: true
-                    visible: (sbc === "rock-5a" || sbc === "rock-5b") && bootType === "air"
+                    visible: rock && (bootType === "Air")
+
 
                     ColumnLayout {
                         spacing: -10
@@ -146,7 +148,7 @@ Popup {
                     title: qsTr("Camera Settings")
                     id: cameraSettingsRpi
                     Layout.fillWidth: true
-                    visible: false
+                    visible:  rpi && (bootType === "Air")
                     ColumnLayout {
                         // Add a ComboBox to select between cameras
                         ComboBox {
@@ -389,14 +391,21 @@ Popup {
 
         //get SBC
         imageWriter.setSetting("fileName", fileName)
+        console.log(fileName)
         if (fileName.includes("pi")) {
             imageWriter.setSetting("sbc", "rpi");
+            rpi=true;
+            rock=false;
         }
-        if (fileName.includes("rock5a")) {
+        else if (fileName.includes("rock5a")) {
             imageWriter.setSetting("sbc", "rock-5a");
+            rpi=false;
+            rock=true;
         }
-        if (fileName.includes("rock5b")) {
+        else if (fileName.includes("rock5b")) {
             imageWriter.setSetting("sbc", "rock-5b");
+            rpi=false;
+            rock=true;
         }
     }
 
