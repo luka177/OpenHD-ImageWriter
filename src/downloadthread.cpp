@@ -733,18 +733,14 @@ void DownloadThread::_writeComplete()
 
     //here the fun part begins
     bool useSettings = settings.value("useSettings", true).toBool();
-    qDebug() << "useSettings value: " << useSettings;
 
-    if (_ejectEnabled && useSettings)
-        eject_disk(_filename.constData());
-
-    if (!settings.value("eject", true).toBool())
-    {
-        if (!_customizeImage())
-            return;
-
-        if (_ejectEnabled)
-            eject_disk(_filename.constData());
+    if (!useSettings){
+    qDebug() << "no settings for: " << _filename.constData();
+    eject_disk(_filename.constData());
+    }
+    if (useSettings){
+    qDebug() << "settings for: " << _filename.constData();
+    return;
     }
 
     emit success();
@@ -1067,37 +1063,19 @@ bool DownloadThread::_customizeImage()
         }
     }
 
-    if (!_openHDAir.isEmpty() && _initFormat == "systemd")
-    {
-
-        /* Something is horibly wrong here .. I'll hack it right now, but this should be fixed in later releases
+         /* Here is the start of the OpenHD settings routine
          */
+        qDebug() << "Debug Settings from the start";
+    if (settings.value("useSettings", true).toBool()) {
+        qDebug() << "Writing OpenHD-Settings";
 
-        qDebug() << "isAir";
-        QFile d(folder+"/openhd"+"/ground.txt");
-        d.remove();
-        QFile f(folder+"/openhd"+"/air.txt");
-        if (f.open(f.WriteOnly) && f.write(_openHDAir) == _openHDAir.length())
-        {
-            qDebug() << "folder:" << f;
-        }
-        else
-        {
-            emit error(tr("Error creating air.txt on FAT partition"));
-            return false;
-        }
-
-    }
-
-    if (settings.value("eject", true).toBool()=true)
-    {
         QString cameraValue = settings.value("camera").toString();
         QString sbcValue = settings.value("SBC").toString();
         QString modeValue = settings.value("mode").toString();
         QString bindPhraseSaved = settings.value("bindPhrase").toString();
         QString hotspot = settings.value("hotspot").toString();
 
-        if (!bindPhraseSaved.isEmpty()) 
+        if (!bindPhraseSaved.isEmpty())
             {
                 QFile Bp(folder+"/openhd"+"/password.txt");
                 if (Bp.open(QIODevice::WriteOnly))
@@ -1123,121 +1101,115 @@ bool DownloadThread::_customizeImage()
                     return false;
                 }
                 if (!sbcValue.isEmpty()) {
-                    QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
-                    if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
-                    {
+                    QFile sbc(folder + "/openhd" + "/" + sbcValue + ".txt.executable");
+                    if (sbc.open(QIODevice::WriteOnly)) {
+                        QTextStream stream(&sbc);
+                        stream << sbcValue;  // Write sbcValue to the file
                         sbc.close();
-                    }
-                    else
-                    {
+                    } else {
                         emit error(tr("Error creating sbc file on FAT partition"));
                         return false;
                     }
                 }
-            }
-            if (!hotspot.isEmpty())
-                {
-                    QFile Hs(folder+"/openhd"+"/wifi_hotspot.txt.txt");
-                    if (Hs.open(Hs.WriteOnly) && Hs.write(_openHDGround) == _openHDGround.length())
-                    {
-                        Hs.close();
-                    }
-                    else
-                    {
-                        emit error(tr("Error creating wifi_hotspot.txt on FAT partition"));
-                        return false;
-                    }
-                    if (!sbcValue.isEmpty()) {
-                        QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
-                        if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
-                        {
-                            sbc.close();
-                        }
-                        else
-                        {
-                            emit error(tr("Error creating sbc file on FAT partition"));
-                            return false;
-                        }
-                    }
-                }
-                if (modeValue == "debug")
-                {
-                    QFile Db(folder+"/openhd"+"/debug.txt");
-                    if (Db.open(Db.WriteOnly) && Db.write(_openHDGround) == _openHDGround.length())
-                    {
-                        Db.close();
-                    }
-                    else
-                    {
-                        emit error(tr("Error creating debug.txt on FAT partition"));
-                        return false;
-                    }
-                    if (!sbcValue.isEmpty()) {
-                        QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
-                        if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
-                        {
-                            sbc.close();
-                        }
-                        else
-                        {
-                            emit error(tr("Error creating sbc file on FAT partition"));
-                            return false;
-                        }
-                    }
-                }
-                if (_openHDGround == "air")
-                {
-                    QFile Air(folder+"/openhd"+"/air.txt");
-                    if (Air.open(Air.WriteOnly) && Air.write(_openHDGround) == _openHDGround.length())
-                    {
-                        Air.close();
-                    }
-                    else
-                    {
-                        emit error(tr("Error creating air.txt on FAT partition"));
-                        return false;
-                    }
-                    if (!cameraValue.isEmpty()) {
-                        QFile Camera(folder+"/openhd"+"/"+cameraValue+".txt");
-                        if (Camera.open(Camera.WriteOnly) && Camera.write(_openHDGround) == _openHDGround.length())
-                        {
-                            Camera.close();
-                        }
-                        else
-                        {
-                            emit error(tr("Error creating Camera file on FAT partition"));
-                            return false;
-                        }
-                    }
-                    if (!sbcValue.isEmpty()) {
-                        QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
-                        if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
-                        {
-                            sbc.close();
-                        }
-                        else
-                        {
-                            emit error(tr("Error creating sbc file on FAT partition"));
-                            return false;
-                        }
-                    }
-                }
-                if (_openHDGround == "ground")
-                {
-                    QFile Ground(folder+"/openhd"+"/ground.txt");
-                    if (Ground.open(Ground.WriteOnly) && Ground.write(_openHDGround) == _openHDGround.length())
-                    {
-                        Ground.close();
-                    }
-                    else
-                    {
-                        emit error(tr("Error creating ground.txt on FAT partition"));
-                        return false;
-                    }
-                }
-                if (_openHDGround == "ground")
-                {
-
+            // if (!hotspot.isEmpty())
+            //     {
+            //         QFile Hs(folder+"/openhd"+"/wifi_hotspot.txt.txt");
+            //         if (Hs.open(Hs.WriteOnly) && Hs.write(_openHDGround) == _openHDGround.length())
+            //         {
+            //             Hs.close();
+            //         }
+            //         else
+            //         {
+            //             emit error(tr("Error creating wifi_hotspot.txt on FAT partition"));
+            //             return false;
+            //         }
+            //         if (!sbcValue.isEmpty()) {
+            //             QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
+            //             if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
+            //             {
+            //                 sbc.close();
+            //             }
+            //             else
+            //             {
+            //                 emit error(tr("Error creating sbc file on FAT partition"));
+            //                 return false;
+            //             }
+            //         }
+            //     }
+            //     if (modeValue == "debug")
+            //     {
+            //         QFile Db(folder+"/openhd"+"/debug.txt");
+            //         if (Db.open(Db.WriteOnly) && Db.write(_openHDGround) == _openHDGround.length())
+            //         {
+            //             Db.close();
+            //         }
+            //         else
+            //         {
+            //             emit error(tr("Error creating debug.txt on FAT partition"));
+            //             return false;
+            //         }
+            //         if (!sbcValue.isEmpty()) {
+            //             QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
+            //             if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
+            //             {
+            //                 sbc.close();
+            //             }
+            //             else
+            //             {
+            //                 emit error(tr("Error creating sbc file on FAT partition"));
+            //                 return false;
+            //             }
+            //         }
+            //     }
+            //     if (_openHDGround == "air")
+            //     {
+            //         QFile Air(folder+"/openhd"+"/air.txt");
+            //         if (Air.open(Air.WriteOnly) && Air.write(_openHDGround) == _openHDGround.length())
+            //         {
+            //             Air.close();
+            //         }
+            //         else
+            //         {
+            //             emit error(tr("Error creating air.txt on FAT partition"));
+            //             return false;
+            //         }
+            //         if (!cameraValue.isEmpty()) {
+            //             QFile Camera(folder+"/openhd"+"/"+cameraValue+".txt");
+            //             if (Camera.open(Camera.WriteOnly) && Camera.write(_openHDGround) == _openHDGround.length())
+            //             {
+            //                 Camera.close();
+            //             }
+            //             else
+            //             {
+            //                 emit error(tr("Error creating Camera file on FAT partition"));
+            //                 return false;
+            //             }
+            //         }
+            //         if (!sbcValue.isEmpty()) {
+            //             QFile sbc(folder+"/openhd"+"/"+sbcValue+".txt");
+            //             if (sbc.open(sbc.WriteOnly) && sbc.write(_openHDGround) == _openHDGround.length())
+            //             {
+            //                 sbc.close();
+            //             }
+            //             else
+            //             {
+            //                 emit error(tr("Error creating sbc file on FAT partition"));
+            //                 return false;
+            //             }
+            //         }
+            //     }
+            //     if (_openHDGround == "ground")
+            //     {
+            //         QFile Ground(folder+"/openhd"+"/ground.txt");
+            //         if (Ground.open(Ground.WriteOnly) && Ground.write(_openHDGround) == _openHDGround.length())
+            //         {
+            //             Ground.close();
+            //         }
+            //         else
+            //         {
+            //             emit error(tr("Error creating ground.txt on FAT partition"));
+            //             return false;
+            //         }
                 }
             }
             if (!_cmdline.isEmpty())
