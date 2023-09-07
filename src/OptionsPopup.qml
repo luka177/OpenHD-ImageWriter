@@ -21,16 +21,7 @@ Popup {
     padding: 0
     closePolicy: Popup.CloseOnEscape
     property bool initialized: false
-    property bool hasSavedSettings: false
-    property string config
-    property string cmdline
-    property string openHDAir
-    property string openHDIp
-    property string openHDGround
-    property string cloudinit
-    property string cloudinitrun
-    property string cloudinitwrite
-    property string cloudinitnetwork
+
     // refactored settings
     property string bootType
     property string fileName
