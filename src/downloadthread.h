@@ -109,12 +109,7 @@ public:
      */
     void setInputBufferSize(int len);
 
-    /*
-     * Enable image customization
-     */
-    void setImageCustomization(const QByteArray &config, const QByteArray &cmdline, const QByteArray &openHDAir, const QByteArray &openHDGround, const QByteArray &cloudinit, const QByteArray &cloudinitNetwork, const QByteArray &initFormat);
-
-    /*
+     /*
      * Thread safe download progress query functions
      */
     uint64_t dlNow();

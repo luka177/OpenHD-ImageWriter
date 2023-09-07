@@ -299,7 +299,6 @@ void ImageWriter::startWrite()
     connect(_thread, SIGNAL(preparationStatusUpdate(QString)), SLOT(onPreparationStatusUpdate(QString)));
     _thread->setVerifyEnabled(_verifyEnabled);
     _thread->setUserAgent(QString("Mozilla/5.0 rpi-imager/%1").arg(constantVersion()).toUtf8());
-    _thread->setImageCustomization(_config, _cmdline, _openHDAir, _openHDGround, _cloudinit, _cloudinitNetwork, _initFormat);
 
     if (!_expectedHash.isEmpty() && _cachedFileHash != _expectedHash && _cachingEnabled)
     {
@@ -1029,18 +1028,6 @@ void ImageWriter::setSetting(const QString &key, const QVariant &value)
 
 }
 
-void ImageWriter::setImageCustomization(const QByteArray &config, const QByteArray &cmdline, const QByteArray &openHDAir, const QByteArray &openHDGround, const QByteArray &cloudinit, const QByteArray &cloudinitNetwork)
-{
-    _config = config;
-    _cmdline = cmdline;
-    _openHDAir = openHDAir;
-    _openHDGround = openHDGround;
-    _cloudinit = cloudinit;
-    _cloudinitNetwork = cloudinitNetwork;
-
-    qDebug() << "boot as:" << openHDAir;
-}
-
 QString ImageWriter::crypt(const QByteArray &password)
 {
     QByteArray salt = "$5$";
@@ -1059,17 +1046,6 @@ QString ImageWriter::crypt(const QByteArray &password)
 QString ImageWriter::pbkdf2(const QByteArray &psk, const QByteArray &ssid)
 {
     return QPasswordDigestor::deriveKeyPbkdf2(QCryptographicHash::Sha1, psk, ssid, 4096, 32).toHex();
-}
-
-void ImageWriter::setSavedCustomizationSettings(const QVariantMap &map)
-{
-    _settings.beginGroup("imagecustomization");
-    _settings.remove("");
-    const QStringList keys = map.keys();
-    for (const QString &key : keys) {
-        _settings.setValue(key, map.value(key));
-    }
-    _settings.endGroup();
 }
 
 QVariantMap ImageWriter::getSavedCustomizationSettings()

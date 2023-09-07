@@ -836,17 +836,6 @@ qint64 DownloadThread::_sectorsWritten()
     return -1;
 }
 
-void DownloadThread::setImageCustomization(const QByteArray &config, const QByteArray &cmdline, const QByteArray &openHDGround, const QByteArray &openHDAir, const QByteArray &cloudinit, const QByteArray &cloudInitNetwork, const QByteArray &initFormat)
-{
-    _config = config;
-    _cmdline = cmdline;
-    _openHDAir = openHDAir;
-    _openHDGround = openHDGround;
-    _cloudinit = cloudinit;
-    _cloudinitNetwork = cloudInitNetwork;
-    _initFormat = initFormat;
-}
-
 bool DownloadThread::_customizeImage()
 {
     QString folder;
