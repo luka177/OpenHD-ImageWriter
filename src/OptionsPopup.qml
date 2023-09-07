@@ -367,11 +367,34 @@ Popup {
         hotSpot = imageWriter.getValue("hotSpot")
         beep = imageWriter.getBoolSetting("beep")
         eject = imageWriter.getBoolSetting("eject")
-        setAir.checked=false
-        setGround.checked=false
-        bndKey.checked=false
-        setDebug.checked=false
-        setWifiHotspot.checked=false
+
+        // set session settings
+        if (bootType==="Air") {
+            setAir.checked=true
+            setGround.checked=false
+        }
+        else if (bootType==="Ground") {
+            setAir.checked=false
+            setGround.checked=true
+        }
+        if (bindPhrase) {
+            bndKey.checked=true
+        }
+        else{
+            bndKey.checked=false
+        }
+        if (mode) {
+            setDebug.checked=true
+        }
+        else{
+            setDebug.checked=false
+        }
+        if (hotSpot) {
+            setWifiHotspot.checked=true
+        }
+        else{
+            setWifiHotspot.checked=false
+        }
 
         //get SBC
         imageWriter.setSetting("fileName", fileName)
