@@ -37,6 +37,7 @@ Popup {
     property string sbc
     property string camera
     property string bindPhrase
+    property bool bindPhrase_used
     property string mode
     property string hotSpot
     property string beep
@@ -117,10 +118,7 @@ Popup {
                             onCheckedChanged: {
                                 if (checked) {
                                     setAir.checked = false
-                                    bootAsGround();
-                                    imageWriter.setSetting("bootType", "Ground");
-                                    cameraSettingsRpi.visible=false
-                                    cameraSettingsRock5.visible=false
+                                    bootType = "Ground";
                                 }
                             }
                         }
@@ -130,7 +128,7 @@ Popup {
                     title: qsTr("Camera Settings")
                     id: cameraSettingsRock5
                     Layout.fillWidth: true
-                    visible: false
+                    visible: (sbc === "rock-5a" || sbc === "rock-5b") && bootType === "air"
 
                     ColumnLayout {
                         spacing: -10
@@ -147,7 +145,7 @@ Popup {
                             onCurrentIndexChanged: {
                                 var selectedCamera = model.get(currentIndex).displayText;
                                 if (selectedCamera !== "NONE") {
-                                    imageWriter.setSetting("camera", selectedCamera);
+                                    camera = selectedCamera;
                                 }
                             }
                         }
@@ -207,15 +205,15 @@ Popup {
                                 if (selectedCamera !== "None") {
                                     // Check if it's one of the specified values
                                     if (["SkyMaster HDR 708", "IMX462 Mini", "SkyVision Pro 519"].indexOf(selectedCamera) === -1) {
-                                        imageWriter.setSetting("camera", selectedCamera);
+                                        camera = selectedCamera;
                                     } else {
                                         // Handle the specified values differently
                                         if (selectedCamera === "SkyMaster HDR 708") {
-                                            imageWriter.setSetting("camera", "IMX708");
+                                            camera = "IMX708";
                                         } else if (selectedCamera === "IMX462 Mini") {
-                                            imageWriter.setSetting("camera", "ARDUCAM");
+                                            camera = "ARDUCAM";
                                         } else if (selectedCamera === "SkyVision Pro 519") {
-                                            imageWriter.setSetting("camera", "IMX519");
+                                            camera = "IMX519";
                                         }
                                     }
                                 }
@@ -263,22 +261,24 @@ Popup {
                         ImCheckBox {
                             id: bndKey
                             text: qsTr("Set binding phrase")
-                            checkable: false
+                            checkable: true
                             onCheckedChanged: {
-                                imageWriter.setSetting("bindPhrase", bndPhrase.text);
+                                bndPhrase.visible=true;
+                                bindPhrase_used=true;
                             }
                         }
                         TextField {
                             id: bndPhrase
+                            visible: false
                             maximumLength:10
                             width:10
                             color: bndPhrase.text.length >= 4 ? "green" : "red"
-                            text: imageWriter.getValue("bindPhrase")
+                            text: bindPhrase
                             selectByMouse: true
                             placeholderTextColor: "blue"
                             placeholderText: "openhd"
                             onTextChanged: {
-                                bndKey.checkable = bndPhrase.text.length >= 4
+                                bindPhrase = bndPhrase.text;
                             }
 
                         }
@@ -298,7 +298,7 @@ Popup {
                         text: qsTr("Debug Mode")
                         onCheckedChanged: {
                             if (checked) {
-                                imageWriter.setSetting("mode", "debug");
+                                mode = "debug";
                             }
                         }
                     }
@@ -309,7 +309,7 @@ Popup {
                             text: qsTr("WifiHotspot")
                             onCheckedChanged: {
                                 if (checked) {
-                                    imageWriter.setSetting("hotspot", "wifi");
+                                    hotspot = "wifi";
                                 }
                             }
                         }
@@ -399,18 +399,6 @@ Popup {
         //return openHDGround.length>=1;
         return openHDAir.length>=1;
     }
-    function check_air(){
-        if (openHDAir == "air") {
-            console.log("Image type:"+openHDAir);
-            return openHDAir.length>=1;
-        }
-    }
-    function check_ground(){
-        if (openHDAir == "ground") {
-            console.log("Image type:"+openHDAir);
-            return openHDAir.length>=1;
-        }
-    }
 
     function openPopup() {
         if (!initialized) {
@@ -419,26 +407,6 @@ Popup {
 
         open()
         popupbody.forceActiveFocus()
-    }
-
-    function addCmdline(s) {
-        cmdline += " "+s
-    }
-    function addConfig(s) {
-        config += s+""
-    }
-    function bootAsGround(s) {
-        openHDGround += s+""
-    }
-    function bootAsAir(s) {
-        openHDAir += s+""
-    }
-    function bootAsIp(s) {
-        openHDIp += s+""
-    }
-    //
-    function escapeshellarg(arg) {
-        return "'"+arg.replace(/'/g, "\\'")+"'"
     }
 
     function applySettings()
