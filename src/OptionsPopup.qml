@@ -300,7 +300,7 @@ Popup {
                             text: qsTr("WifiHotspot")
                             onCheckedChanged: {
                                 if (checked) {
-                                    hotspot = "wifi";
+                                    hotSpot = "wifi";
                                 }
                             }
                         }
