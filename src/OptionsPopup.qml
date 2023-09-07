@@ -35,6 +35,7 @@ Popup {
     property string eject
     property bool rock
     property bool rpi
+    property bool useSettings:true
 
 
 
@@ -316,12 +317,11 @@ Popup {
                         spacing: -10
 
                         ImCheckBox {
-                            id: chkBeep
-                            text: qsTr("Play sound when finished")
-                        }
-                        ImCheckBox {
                             id: chkEject
                             text: qsTr("Do not flash config files")
+                            onCheckedChanged: {
+                               useSettings=false;
+                            }
                         }
                     }
                 }
@@ -422,15 +422,13 @@ Popup {
     {
 
         imageWriter.setSetting("bootType", bootType)
-        imageWriter.setSetting("fileName", fileName)
-        imageWriter.setSetting("sbc", sbc)
         imageWriter.setSetting("camera", camera)
         imageWriter.setSetting("bindPhrase" , bindPhrase)
         imageWriter.setSetting("mode", mode)
         imageWriter.setSetting("hotSpot" , hotSpot)
         imageWriter.setSetting("beep", beep)
         imageWriter.setSetting("eject", eject)
-        imageWriter.setSetting("useSettings", "true")
+        imageWriter.setSetting("useSettings", useSettings)
 
     }
 }

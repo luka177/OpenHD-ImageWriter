@@ -139,9 +139,11 @@ ApplicationWindow {
 
                     Text {
                         text: {
-                            if (typeof writebutton.image_name !== "undefined" && writebutton.image_name.length > 7) {
+                            if (typeof writebutton.image_name !== "undefined" && writebutton.image_name.length > 45) {
                                 return writebutton.image_name.substring(0, writebutton.image_name.length - 7);
-                            } else {
+                            }else if (typeof writebutton.image_name !== "undefined" && writebutton.image_name.length > 1){
+                                return writebutton.image_name.substring(0, writebutton.image_name.length);
+                            }else {
                                 return "Error";
                             }
                         }
@@ -171,7 +173,7 @@ ApplicationWindow {
                         font.bold: true
                     }
                     Text {
-                        text: imageWriter.getValue("bootType") + "  " + imageWriter.getValue("mode")
+                        text: writebutton.bootType + "  " + imageWriter.getValue("mode")
                         font.bold: false
                         color: "grey"
                     }
@@ -183,7 +185,7 @@ ApplicationWindow {
                         font.bold: true
                     }
                     Text {
-                        text: imageWriter.getValue("camera")
+                        text: writebutton.camera
                         font.bold: false
                         color: "grey"
                     }
@@ -366,6 +368,7 @@ ApplicationWindow {
                         property var image_name
                         property var use_settings
                         property var bootType
+                        property string camera:""
 
                         text: qsTr("WRITE")
                         Layout.minimumHeight: 40
@@ -379,6 +382,7 @@ ApplicationWindow {
                             }
                             image_name=imageWriter.srcFileName();
                             bootType=imageWriter.getValue("bootType");
+                            camera=imageWriter.getValue("camera");
                             if(image_name.includes("configurable")){
                                 if(bootType!=="Air" && bootType!=="Ground" ){
                                     console.log("Cannot write yet, air or ground not set yet");
