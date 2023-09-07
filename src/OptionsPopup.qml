@@ -269,7 +269,7 @@ Popup {
                         }
                         TextField {
                             id: bndPhrase
-                            visible: false
+                            visible: bindPhrase_used
                             maximumLength:10
                             width:10
                             color: bndPhrase.text.length >= 4 ? "green" : "red"
@@ -357,7 +357,7 @@ Popup {
     function initialize() {
         var settings = imageWriter.getSavedCustomizationSettings()
 
-        // initialise custom settings
+        // initialise settings
         bootType = imageWriter.getValue("bootType")
         fileName = imageWriter.srcFileName();
         sbc = imageWriter.getValue("sbc")
@@ -367,30 +367,35 @@ Popup {
         hotSpot = imageWriter.getValue("hotSpot")
         beep = imageWriter.getBoolSetting("beep")
         eject = imageWriter.getBoolSetting("eject")
+        setAir.checked=false
+        setGround.checked=false
+        bndKey.checked=false
+        setDebug.checked=false
+        setWifiHotspot.checked=false
 
         //get SBC
         imageWriter.setSetting("fileName", fileName)
         if (fileName.includes("pi")) {
-            imageWriter.setSetting("SBC", "rpi");
+            imageWriter.setSetting("sbc", "rpi");
         }
         if (fileName.includes("rock5a")) {
-            imageWriter.setSetting("SBC", "rock-5a");
+            imageWriter.setSetting("sbc", "rock-5a");
         }
         if (fileName.includes("rock5b")) {
-            imageWriter.setSetting("SBC", "rock-5b");
+            imageWriter.setSetting("sbc", "rock-5b");
         }
 
         // reset all saved settings
         imageWriter.setSetting("bootType", "")
         imageWriter.setSetting("fileName", "")
-        imageWriter.setSetting("sbc", "")
         imageWriter.setSetting("camera", "")
         imageWriter.setSetting("bindPhrase" , "")
         imageWriter.setSetting("mode", "")
         imageWriter.setSetting("hotSpot" , "")
         imageWriter.setSetting("beep", "")
         imageWriter.setSetting("eject", "")
-        initialized = true
+
+        console.log(bootType+fileName+sbc+camera+bindPhrase+mode+hotSpot)
     }
 
     //Consti10
