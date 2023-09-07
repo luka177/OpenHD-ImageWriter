@@ -33,6 +33,8 @@ using namespace std;
 QByteArray DownloadThread::_proxy;
 int DownloadThread::_curlCount = 0;
 
+QSettings settings;
+
 DownloadThread::DownloadThread(const QByteArray &url, const QByteArray &localfilename, const QByteArray &expectedHash, QObject *parent) :
     QThread(parent), _startOffset(0), _lastDlTotal(0), _lastDlNow(0), _verifyTotal(0), _lastVerifyNow(0), _bytesWritten(0), _lastFailureOffset(0), _sectorsStart(-1), _url(url), _filename(localfilename), _expectedHash(expectedHash),
     _firstBlock(nullptr), _cancelled(false), _successful(false), _verifyEnabled(false), _cacheEnabled(false), _lastModified(0), _serverTime(0),  _lastFailureTime(0),
@@ -41,8 +43,6 @@ DownloadThread::DownloadThread(const QByteArray &url, const QByteArray &localfil
     if (!_curlCount)
         curl_global_init(CURL_GLOBAL_DEFAULT);
     _curlCount++;
-
-    QSettings settings;
     _ejectEnabled = settings.value("eject", true).toBool();
 }
 
@@ -731,10 +731,14 @@ void DownloadThread::_writeComplete()
     _filename.replace("/dev/rdisk", "/dev/disk");
 #endif
 
-    if (_ejectEnabled && _config.isEmpty() && _cmdline.isEmpty() && !_openHDGround.isEmpty() && _openHDAir.isEmpty())
+    //here the fun part begins
+    bool useSettings = settings.value("useSettings", true).toBool();
+    qDebug() << "useSettings value: " << useSettings;
+
+    if (_ejectEnabled && useSettings)
         eject_disk(_filename.constData());
 
-    if (!_config.isEmpty() || !_cmdline.isEmpty()|| !_openHDGround.isEmpty() || !_openHDAir.isEmpty())
+    if (!settings.value("eject", true).toBool())
     {
         if (!_customizeImage())
             return;
@@ -1085,9 +1089,8 @@ bool DownloadThread::_customizeImage()
 
     }
 
-    if (!_openHDGround.isEmpty() && _initFormat == "systemd")
+    if (settings.value("eject", true).toBool()=true)
     {
-        QSettings settings;
         QString cameraValue = settings.value("camera").toString();
         QString sbcValue = settings.value("SBC").toString();
         QString modeValue = settings.value("mode").toString();
