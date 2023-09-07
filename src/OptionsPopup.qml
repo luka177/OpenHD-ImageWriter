@@ -355,8 +355,6 @@ Popup {
     }
 
     function initialize() {
-        chkBeep.checked = imageWriter.getBoolSetting("beep")
-        chkEject.checked = false
         var settings = imageWriter.getSavedCustomizationSettings()
 
         // initialise custom settings
@@ -391,19 +389,6 @@ Popup {
         imageWriter.setSetting("hotSpot" , "")
         imageWriter.setSetting("beep", "")
         imageWriter.setSetting("eject", "")
-
-        if (Object.keys(settings).length) {
-            comboSaveSettings.currentIndex = 1
-            hasSavedSettings = true
-        }
-        var tz;
-        if (imageWriter.isEmbeddedMode()) {
-            /* For some reason there is no password mask character set by default on Embedded edition */
-            var bulletCharacter = String.fromCharCode(0x2022);
-            fieldUserPassword.passwordCharacter = bulletCharacter;
-            fieldWifiPassword.passwordCharacter = bulletCharacter;
-        }
-
         initialized = true
     }
 
