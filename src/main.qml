@@ -302,6 +302,7 @@ ApplicationWindow {
                         onClicked: {
                             ospopup.open()
                             osswipeview.currentItem.forceActiveFocus()
+                            customizebutton.visible=true
                         }
                         Accessible.ignored: ospopup.visible || dstpopup.visible
                         Accessible.description: qsTr("Select this button to change the operating system")
@@ -437,7 +438,7 @@ ApplicationWindow {
                         onClicked: {
                             optionspopup.openPopup()
                         }
-                        visible: true
+                        visible: false
                         Accessible.description: qsTr("Select this button to configure Settings")
                         contentItem: Image {
                             source: "icons/ic_cog_red.svg"
@@ -549,7 +550,7 @@ ApplicationWindow {
         width: parent.width-100
         height: parent.height-50
         padding: 0
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        closePolicy: Popup.NoAutoClose
         property string categorySelected : ""
 
         // background of title

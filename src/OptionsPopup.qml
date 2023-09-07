@@ -369,6 +369,7 @@ Popup {
         eject = imageWriter.getBoolSetting("eject")
 
         //get SBC
+        imageWriter.setSetting("fileName", fileName)
         if (fileName.includes("pi")) {
             imageWriter.setSetting("SBC", "rpi");
         }
