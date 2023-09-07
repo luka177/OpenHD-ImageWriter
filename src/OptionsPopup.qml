@@ -31,6 +31,20 @@ Popup {
     property string cloudinitrun
     property string cloudinitwrite
     property string cloudinitnetwork
+    // refactored settings
+    property string bootType
+    property string fileName
+    property string sbc
+    property string camera
+    property string bindPhrase
+    property string mode
+    property string hotSpot
+    property string beep
+    property string eject
+
+
+
+
 
     // background of title
     Rectangle {
@@ -93,25 +107,7 @@ Popup {
                             onCheckedChanged: {
                                 if (checked) {
                                     setGround.checked = false
-                                    bootAsAir();
-                                    imageWriter.setSetting("bootType", "Air");
-                                    var fileName = imageWriter.srcFileName();
-                                    imageWriter.setSetting("fileName", fileName);
-                                    if (fileName.includes("pi")) {
-                                        imageWriter.setSetting("SBC", "rpi");
-                                        cameraSettingsRpi.visible=true
-                                        cameraSettingsRock5.visible=false
-                                    }
-                                    if (fileName.includes("rock")) {
-                                        cameraSettingsRock5.visible=true
-                                        cameraSettingsRpi.visible=false
-                                    }
-                                    if (fileName.includes("rock5a")) {
-                                        imageWriter.setSetting("SBC", "rock-5a");
-                                    }
-                                    if (fileName.includes("rock5b")) {
-                                        imageWriter.setSetting("SBC", "rock-5b");
-                                    }
+                                    bootType="Air";
                                 }
                             }
                         }
@@ -348,7 +344,6 @@ Popup {
                 text: qsTr("SAVE")
                 onClicked: {
                     applySettings()
-                    saveSettings()
                     popup.close()
                 }
                 Material.foreground: activeFocus ? "#d1dcfb" : "#ffffff"
@@ -363,6 +358,39 @@ Popup {
         chkBeep.checked = imageWriter.getBoolSetting("beep")
         chkEject.checked = false
         var settings = imageWriter.getSavedCustomizationSettings()
+
+        // initialise custom settings
+        bootType = imageWriter.getValue("bootType")
+        fileName = imageWriter.srcFileName();
+        sbc = imageWriter.getValue("sbc")
+        camera= imageWriter.getValue("camera")
+        bindPhrase = imageWriter.getValue("bindPhrase")
+        mode = imageWriter.getValue("mode")
+        hotSpot = imageWriter.getValue("hotSpot")
+        beep = imageWriter.getBoolSetting("beep")
+        eject = imageWriter.getBoolSetting("eject")
+
+        //get SBC
+        if (fileName.includes("pi")) {
+            imageWriter.setSetting("SBC", "rpi");
+        }
+        if (fileName.includes("rock5a")) {
+            imageWriter.setSetting("SBC", "rock-5a");
+        }
+        if (fileName.includes("rock5b")) {
+            imageWriter.setSetting("SBC", "rock-5b");
+        }
+
+        // reset all saved settings
+        imageWriter.setSetting("bootType", "")
+        imageWriter.setSetting("fileName", "")
+        imageWriter.setSetting("sbc", "")
+        imageWriter.setSetting("camera", "")
+        imageWriter.setSetting("bindPhrase" , "")
+        imageWriter.setSetting("mode", "")
+        imageWriter.setSetting("hotSpot" , "")
+        imageWriter.setSetting("beep", "")
+        imageWriter.setSetting("eject", "")
 
         if (Object.keys(settings).length) {
             comboSaveSettings.currentIndex = 1
@@ -430,40 +458,15 @@ Popup {
     function applySettings()
     {
 
-        openHDGround = ""
-        openHDAir = ""
-        openHDIp = ""
+        imageWriter.setSetting("bootType", bootType)
+        imageWriter.setSetting("fileName", fileName)
+        imageWriter.setSetting("sbc", sbc)
+        imageWriter.setSetting("camera", camera)
+        imageWriter.setSetting("bindPhrase" , bindPhrase)
+        imageWriter.setSetting("mode", mode)
+        imageWriter.setSetting("hotSpot" , hotSpot)
+        imageWriter.setSetting("beep", beep)
+        imageWriter.setSetting("eject", eject)
 
-
-        if (setAir.checked) {
-            bootAsAir("air")
-        }
-        if (setGround.checked) {
-            bootAsAir("ground")
-        }
-
-        if (openHDGround.length) {
-            openHDGround = ""+openHDGround
-        }
-
-        if (openHDAir.length) {
-            openHDAir = ""+openHDAir
-        }
-
-        if (cloudinitwrite !== "") {
-            addCloudInit("write_files:\n"+cloudinitwrite+"\n")
-        }
-
-        if (cloudinitrun !== "") {
-            addCloudInit("runcmd:\n"+cloudinitrun+"\n")
-        }
-
-        imageWriter.setImageCustomization(config, cmdline, openHDAir, openHDGround, cloudinit, cloudinitnetwork)
-    }
-
-    function saveSettings()
-    {
-        imageWriter.setSetting("beep", chkBeep.checked)
-        imageWriter.setSetting("eject", chkEject.checked)
     }
 }
