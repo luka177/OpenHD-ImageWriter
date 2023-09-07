@@ -394,15 +394,6 @@ Popup {
         imageWriter.setSetting("hotSpot" , "")
         imageWriter.setSetting("beep", "")
         imageWriter.setSetting("eject", "")
-
-        console.log(bootType+fileName+sbc+camera+bindPhrase+mode+hotSpot)
-    }
-
-    //Consti10
-    function check_air_or_ground_set_by_user(){
-        console.log("check_air_or_ground_set_by_user,current: ground:"+openHDGround+" air:"+openHDAir);
-        //return openHDGround.length>=1;
-        return openHDAir.length>=1;
     }
 
     function openPopup() {
@@ -426,6 +417,7 @@ Popup {
         imageWriter.setSetting("hotSpot" , hotSpot)
         imageWriter.setSetting("beep", beep)
         imageWriter.setSetting("eject", eject)
+        imageWriter.setSetting("useSettings", "true")
 
     }
 }

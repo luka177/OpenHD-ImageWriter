@@ -303,6 +303,8 @@ ApplicationWindow {
                             ospopup.open()
                             osswipeview.currentItem.forceActiveFocus()
                             customizebutton.visible=true
+                            imageWriter.setSetting("bootType", "")
+
                         }
                         Accessible.ignored: ospopup.visible || dstpopup.visible
                         Accessible.description: qsTr("Select this button to change the operating system")
@@ -367,13 +369,19 @@ ApplicationWindow {
                                 return
                             }
                             image_name=imageWriter.srcFileName();
-                            console.log("Image name:"+image_name);
-                            //Consti10
+                            var bootType=imageWriter.getValue("bootType");
                             if(image_name.includes("configurable")){
-                                if(!optionspopup.check_air_or_ground_set_by_user()){
+                                console.log(bootType)
+                                if(bootType!=="Air" && bootType!=="Ground" ){
                                     console.log("Cannot write yet, air or ground not set yet");
                                     onError("Cannot write yet, air or ground not set yet - please open settings and select air or ground")
                                     return;
+                                }
+                                if(bootType==="Ground"){
+                                    console.log("Writing a Groundstation image");
+                                }
+                                if(bootType==="Air"){
+                                    console.log("Writing a Air image");
                                 }
                             }
 
@@ -1088,7 +1096,7 @@ ApplicationWindow {
 
         function askForConfirmation()
         {
-            text = qsTr("All existing data on '%1' will be erased.<br>Are you sure you want to continue?").arg(dstbutton.text)
+            text = qsTr("All existing data on '%1' will be erased.<br><br>This Image is configured for a Groundstation!<br><br>Are you sure you want to continue?").arg(dstbutton.text)
             openPopup()
         }
     }
