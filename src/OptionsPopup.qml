@@ -384,16 +384,6 @@ Popup {
         if (fileName.includes("rock5b")) {
             imageWriter.setSetting("sbc", "rock-5b");
         }
-
-        // reset all saved settings
-        imageWriter.setSetting("bootType", "")
-        imageWriter.setSetting("fileName", "")
-        imageWriter.setSetting("camera", "")
-        imageWriter.setSetting("bindPhrase" , "")
-        imageWriter.setSetting("mode", "")
-        imageWriter.setSetting("hotSpot" , "")
-        imageWriter.setSetting("beep", "")
-        imageWriter.setSetting("eject", "")
     }
 
     function openPopup() {

@@ -303,8 +303,14 @@ ApplicationWindow {
                             ospopup.open()
                             osswipeview.currentItem.forceActiveFocus()
                             customizebutton.visible=true
+                            // reset all saved settings but the bindPhrase
                             imageWriter.setSetting("bootType", "")
-
+                            imageWriter.setSetting("fileName", "")
+                            imageWriter.setSetting("camera", "")
+                            imageWriter.setSetting("mode", "")
+                            imageWriter.setSetting("hotSpot" , "")
+                            imageWriter.setSetting("beep", "")
+                            imageWriter.setSetting("eject", "")
                         }
                         Accessible.ignored: ospopup.visible || dstpopup.visible
                         Accessible.description: qsTr("Select this button to change the operating system")
@@ -371,17 +377,10 @@ ApplicationWindow {
                             image_name=imageWriter.srcFileName();
                             var bootType=imageWriter.getValue("bootType");
                             if(image_name.includes("configurable")){
-                                console.log(bootType)
                                 if(bootType!=="Air" && bootType!=="Ground" ){
                                     console.log("Cannot write yet, air or ground not set yet");
                                     onError("Cannot write yet, air or ground not set yet - please open settings and select air or ground")
                                     return;
-                                }
-                                if(bootType==="Ground"){
-                                    console.log("Writing a Groundstation image");
-                                }
-                                if(bootType==="Air"){
-                                    console.log("Writing a Air image");
                                 }
                             }
 
@@ -1096,8 +1095,19 @@ ApplicationWindow {
 
         function askForConfirmation()
         {
-            text = qsTr("All existing data on '%1' will be erased.<br><br>This Image is configured for a Groundstation!<br><br>Are you sure you want to continue?").arg(dstbutton.text)
+            var bootType=imageWriter.getValue("bootType");
+            if(bootType==="Ground"){
+            text = qsTr("All existing data on <b>%1</b> will be erased.<br><b>This Device will boot as Groundstation!</b><br>Are you sure you want to continue?").arg(dstbutton.text)
             openPopup()
+            }
+            else if(bootType==="Air"){
+            text = qsTr("All existing data on <b>%1</b> will be erased.<br><b>This Device will boot as Air!</b><br>Are you sure you want to continue?").arg(dstbutton.text)
+            openPopup()
+            }
+            else{
+            text = qsTr("All existing data on <b>%1</b> will be erased.<br><br>Are you sure you want to continue?").arg(dstbutton.text)
+            openPopup()
+            }
         }
     }
 
