@@ -257,8 +257,11 @@ Popup {
                             text: qsTr("Set binding phrase")
                             checkable: true
                             onCheckedChanged: {
+                                if (!checked) {
+                                    bindPhrase=""
+                                    bndPhrase.visible=false;
+                                }
                                 bndPhrase.visible=true;
-                                bindPhrase_used=true;
                             }
                         }
                         TextField {
