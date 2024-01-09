@@ -12,7 +12,7 @@ Package: openhdimagewriter
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, 
  qml-module-qtquick2, qml-module-qtquick-controls2, qml-module-qtquick-layouts, qml-module-qtquick-templates2, qml-module-qtquick-window2, qml-module-qtgraphicaleffects,
- dosfstools, fdisk 
+ dosfstools, fdisk, qml-module-qt-labs-settings
 Recommends: udisks2
 Description: OpenHD Image Writer
  Graphical user-interface to write disk images and format SD cards.

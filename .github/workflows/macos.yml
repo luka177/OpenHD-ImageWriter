@@ -2,7 +2,11 @@ name: Build MacOS
 
 on:
   push:
-
+   branches:
+      - "2.5-evo"
+      - "dev-release"
+      - "release"
+      
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
@@ -33,6 +37,7 @@ jobs:
     - name: Build
       # Build your program with the given configuration
       run: |
+        cmake --version
         cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
         cd ../build/
         ls -a

@@ -21,6 +21,7 @@ Popup {
     property alias title: msgpopupheader.text
     property alias text: msgpopupbody.text
     property bool continueButton: true
+    property bool detailsButton: false
     property bool quitButton: false
     property bool yesButton: false
     property bool noButton: false
@@ -93,6 +94,19 @@ Popup {
             Layout.alignment: Qt.AlignCenter | Qt.AlignBottom
             spacing: 20
 
+
+            ImButton {
+                visible: msgpopup.detailsButton
+                text: qsTr("Details")
+                onClicked:{
+                   onClicked: {
+                   detailsPopup.visible = !detailsPopup.visible;
+                   }
+                }
+                Material.foreground: activeFocus ? "#d1dcfb" : "#ffffff"
+                Material.background: "#2C3E50"
+                }
+
             ImButton {
                 text: qsTr("NO")
                 onClicked: {
@@ -124,7 +138,6 @@ Popup {
                 Material.foreground: activeFocus ? "#d1dcfb" : "#ffffff"
                 Material.background: "#2C3E50"
             }
-
             ImButton {
                 text: qsTr("QUIT")
                 onClicked: {
@@ -138,22 +151,6 @@ Popup {
 
             Text { text: " " }
         }
-        RowLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
-            Layout.leftMargin: 20
-            Layout.bottomMargin: 10
-            Text {
-                id: changelog
-                text: "<a href='https://openhdfpv.org/changelogs'>changelogs</a>&nbsp;&nbsp;&nbsp; FIRST BOOT MAY TAKE UP TO 5 MINUTES! "
-                font.family: roboto.name
-                font.pointSize: 10
-                visible: msgpopup.continueButton
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: Qt.openUrlExternally("https://openhdfpv.org/changelogs")
-                }
-            }
-        }
     }
 
     function openPopup() {
@@ -162,3 +159,4 @@ Popup {
         msgpopupbody.forceActiveFocus()
     }
 }
+
