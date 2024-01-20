@@ -43,7 +43,7 @@ DownloadThread::DownloadThread(const QByteArray &url, const QByteArray &localfil
     if (!_curlCount)
         curl_global_init(CURL_GLOBAL_DEFAULT);
     _curlCount++;
-    //_ejectEnabled = settings.value("eject", true).toBool();
+    _ejectEnabled = false;
 }
 
 DownloadThread::~DownloadThread()
