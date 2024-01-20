@@ -233,6 +233,7 @@ bool ImageWriter::readyToWrite()
 /* Start writing */
 void ImageWriter::startWrite()
 {
+    qDebug() << "Write function executed.";
     if (!readyToWrite())
         return;
 
@@ -248,6 +249,19 @@ void ImageWriter::startWrite()
     QByteArray urlstr = _src.toString(_src.FullyEncoded).toLatin1();
     QString lowercaseurl = urlstr.toLower();
     bool compressed = lowercaseurl.endsWith(".zip") || lowercaseurl.endsWith(".xz") || lowercaseurl.endsWith(".bz2") || lowercaseurl.endsWith(".gz") || lowercaseurl.endsWith(".7z") || lowercaseurl.endsWith(".zst") || lowercaseurl.endsWith(".cache");
+    qDebug() << "this is the lowercaseurl:" << lowercaseurl;
+
+
+    if (lowercaseurl.endsWith(".zip"))
+    {
+        if (lowercaseurl.contains("update")) {
+        qDebug() << "This is an OpenHD UpdateFile";
+        }
+        else {
+        emit error(tr("Please extract your Image before flashing"));
+        }
+    }
+
     if (!_extrLen && _src.isLocalFile())
     {
         if (!compressed)
