@@ -746,9 +746,9 @@ void DownloadThread::_writeComplete()
 
     useSettings = settings_.value("useSettings").toBool();
     justUpdate = settings_.value("justUpdate").toBool();
-    qDebug() << "This is the Debug Filename" << _filename;
-    qDebug() << "This is the Debug Settings" << useSettings;
-    qDebug() << "This is the Debug Update" << justUpdate;
+    // qDebug() << "This is the Debug Filename" << _filename;
+    // qDebug() << "This is the Debug Settings" << useSettings;
+    // qDebug() << "This is the Debug Update" << justUpdate;
 
     if (!useSettings)
         eject_disk(_filename.constData());
