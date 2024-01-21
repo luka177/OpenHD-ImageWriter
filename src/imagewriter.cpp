@@ -626,6 +626,10 @@ void ImageWriter::onFileSelected(QString filename)
             settings.setValue("lastpath", path);
             settings.sync();
         }
+        
+        qDebug() << "Selected filename: " << filename;
+        settings.setValue("justUpdate", filename);
+        settings.sync();
 
         emit fileSelected(QUrl::fromLocalFile(filename));
     }

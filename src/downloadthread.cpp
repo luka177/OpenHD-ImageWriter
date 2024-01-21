@@ -740,6 +740,7 @@ void DownloadThread::_writeComplete()
     _filename.replace("/dev/rdisk", "/dev/disk");
 #endif
     bool useSettings = settings.value("useSettings", true).toBool();
+    qDebug() << "This is the Debug Filename" << _filename;
 
     if (!useSettings)
         eject_disk(_filename.constData());
@@ -1075,6 +1076,10 @@ bool DownloadThread::_customizeImage()
 
     /* Here is the start of the OpenHD settings routine
          */
+    if (settings.value("justUpdate", true).toBool()) {
+        qDebug() << "Writing OpenHD-Update";
+    }
+    
     if (settings.value("useSettings", true).toBool()) {
         qDebug() << "Writing OpenHD-Settings";
         QSettings settings_;
