@@ -234,6 +234,7 @@ bool ImageWriter::readyToWrite()
 void ImageWriter::startWrite()
 {
     qDebug() << "Write function executed.";
+
     if (!readyToWrite())
         return;
 
@@ -246,21 +247,31 @@ void ImageWriter::startWrite()
         return;
     }
 
-    QByteArray urlstr = _src.toString(_src.FullyEncoded).toLatin1();
-    QString lowercaseurl = urlstr.toLower();
-    bool compressed = lowercaseurl.endsWith(".zip") || lowercaseurl.endsWith(".xz") || lowercaseurl.endsWith(".bz2") || lowercaseurl.endsWith(".gz") || lowercaseurl.endsWith(".7z") || lowercaseurl.endsWith(".zst") || lowercaseurl.endsWith(".cache");
-    qDebug() << "this is the lowercaseurl:" << lowercaseurl;
+   QByteArray urlstr = _src.toString(_src.FullyEncoded).toLatin1();
+   QString lowercaseurl = urlstr.toLower();
+   bool containsUpdate = lowercaseurl.contains("update");
+   bool compressed = lowercaseurl.endsWith(".zip") || lowercaseurl.endsWith(".xz") || lowercaseurl.endsWith(".bz2") || lowercaseurl.endsWith(".gz") || lowercaseurl.endsWith(".7z") || lowercaseurl.endsWith(".zst") || lowercaseurl.endsWith(".cache");
 
+    _settings.setValue("justUpdate", containsUpdate);
+    _settings.sync();
 
-    if (lowercaseurl.endsWith(".zip"))
+if (lowercaseurl.endsWith(".zip"))
+{
+    if (containsUpdate == true) 
     {
-        if (lowercaseurl.contains("update")) {
         qDebug() << "This is an OpenHD UpdateFile";
-        }
-        else {
-        emit error(tr("Please extract your Image before flashing"));
-        }
     }
+    else 
+    {
+        emit error(tr("Please extract your Image before flashing"));
+    }
+}
+
+    if (containsUpdate == true) 
+    {
+        qDebug() << "This is an OpenHD UpdateFile";
+    }
+
 
     if (!_extrLen && _src.isLocalFile())
     {
@@ -410,6 +421,7 @@ QString ImageWriter::fileNameFromUrl(const QUrl &url)
 {
     //return QFileInfo(url.toLocalFile()).fileName();
     return url.fileName();
+
 }
 
 QString ImageWriter::srcFileName()
@@ -626,11 +638,6 @@ void ImageWriter::onFileSelected(QString filename)
             settings.setValue("lastpath", path);
             settings.sync();
         }
-        
-        qDebug() << "Selected filename: " << filename;
-        settings.setValue("justUpdate", filename);
-        settings.sync();
-
         emit fileSelected(QUrl::fromLocalFile(filename));
     }
     else
