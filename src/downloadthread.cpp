@@ -116,6 +116,12 @@ bool DownloadThread::_openAndPrepareDevice()
 {
     QSettings settings_;
     std::cout << "_____________________________-DEBUG-_______________________________________" << std::endl;
+    
+    if (settings_.value("justUpdate").toBool())
+    {
+    std::cout << "running update procedure without modifying the image" << std::endl;
+    return true;
+    }
 
     emit preparationStatusUpdate(tr("opening drive"));
 
