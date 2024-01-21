@@ -30,6 +30,9 @@
 
 using namespace std;
 
+bool useSettings;
+bool justUpdate;
+
 QByteArray DownloadThread::_proxy;
 int DownloadThread::_curlCount = 0;
 
@@ -739,9 +742,13 @@ void DownloadThread::_writeComplete()
     QThread::sleep(1);
     _filename.replace("/dev/rdisk", "/dev/disk");
 #endif
-    bool useSettings = settings.value("useSettings", true).toBool();
-    bool justUpdate = settings.value("justUpdate", false).toBool();
+    QSettings settings_;
+
+    useSettings = settings_.value("useSettings").toBool();
+    justUpdate = settings_.value("justUpdate").toBool();
     qDebug() << "This is the Debug Filename" << _filename;
+    qDebug() << "This is the Debug Settings" << useSettings;
+    qDebug() << "This is the Debug Update" << justUpdate;
 
     if (!useSettings)
         eject_disk(_filename.constData());
@@ -1078,12 +1085,13 @@ bool DownloadThread::_customizeImage()
     /* Here is the start of the OpenHD settings routine
          */
 
-    if (settings.value("justUpdate", true).toBool()) {
+    if (justUpdate) {
         qDebug() << "Writing OpenHD-Update";
-        qDebug() << settings.value("justUpdate");
+        qDebug() << justUpdate;
     }
 
-    if (settings.value("useSettings", true).toBool()) {
+
+    if (useSettings) {
         qDebug() << "Writing OpenHD-Settings";
         QSettings settings_;
 

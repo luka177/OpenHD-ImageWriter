@@ -266,13 +266,6 @@ if (lowercaseurl.endsWith(".zip"))
         emit error(tr("Please extract your Image before flashing"));
     }
 }
-
-    if (containsUpdate == true) 
-    {
-        qDebug() << "This is an OpenHD UpdateFile";
-    }
-
-
     if (!_extrLen && _src.isLocalFile())
     {
         if (!compressed)

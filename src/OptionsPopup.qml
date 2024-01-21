@@ -424,6 +424,5 @@ Popup {
         imageWriter.setSetting("beep", beep)
         imageWriter.setSetting("eject", eject)
         imageWriter.setSetting("useSettings", useSettings)
-
     }
 }

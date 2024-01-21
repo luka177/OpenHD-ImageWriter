@@ -239,6 +239,7 @@ ApplicationWindow {
                     imageWriter.setSetting("hotSpot" , "")
                     imageWriter.setSetting("beep", "")
                     imageWriter.setSetting("eject", "")
+                    imageWriter.setSetting("justUpdate", "")
                 }
             implicitHeight: window.height/2
 
