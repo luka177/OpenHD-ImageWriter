@@ -204,7 +204,7 @@ Popup {
                             }
                         }
                         ComboBox {
-                            id: Advanced
+                            id: advanced
                             visible:false
                             textRole: "displayText"
                             model: ListModel {
