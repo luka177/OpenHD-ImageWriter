@@ -1142,24 +1142,15 @@ bool DownloadThread::_customizeImage()
             //Encode camera name to Cam-int
             if (cam.open(QIODevice::WriteOnly))
             {
-                if (sbcValue == "rpi"){
-                    if (cameraName == "OV5647"){
-                    cameraValue="30";
-                    }
-                    else if (cameraName == "IMX219"){
-                    cameraValue="31";
-                    }
-                    else if (cameraName == "IMX708"){
-                    cameraValue="32";
-                    }
-                    else if (cameraName == "IMX477"){
-                    cameraValue="33";
-                    }
-                    else if (cameraName == "HDMI"){
-                    cameraValue="30";
-                    }
-                    
-                    qDebug() << cameraValue;
+            if (sbcValue == "rpi") {
+                std::unordered_map<std::string, std::string> cameraValues = {
+                    {"OV5647", "30"},
+                    {"IMX219", "31"},
+                    {"IMX708", "32"},
+                    {"IMX477", "33"},
+                    {"HDMI", "20"}
+                };
+
                 }
                 else if (sbcValue == "zero3w"){
                     cameraValue="4";
@@ -1170,6 +1161,11 @@ bool DownloadThread::_customizeImage()
                     qDebug() << cameraValue;
                 }
 
+                auto it = cameraValues.find(cameraName);
+                if (it != cameraValues.end()) {
+                    cameraValue = it->second;
+                }
+                
                 QByteArray camBytes = cameraValue.toUtf8();
                 qint64 bytesWritten = cam.write(camBytes);
                 cam.close();
