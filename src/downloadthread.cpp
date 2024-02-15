@@ -1102,7 +1102,7 @@ bool DownloadThread::_customizeImage()
         QSettings settings_;
 
 
-        QString cameraValue = settings_.value("camera").toString();
+        QString cameraName = settings_.value("camera").toString();
         QString sbcValue = settings_.value("sbc").toString();
         QString modeValue = settings_.value("mode").toString();
         QString bindPhraseSaved = settings_.value("bindPhrase").toString();
@@ -1135,6 +1135,66 @@ bool DownloadThread::_customizeImage()
                 return false;
             }
         }
+        if (!cameraName.isEmpty()){
+            QString cameraValue;
+            qDebug() << "Camera found" << cameraName;
+            QFile cam(folder+"/openhd/camera1.txt");
+            //Encode camera name to Cam-int
+            if (cam.open(QIODevice::WriteOnly))
+            {
+                if (sbcValue == "rpi"){
+                    if (cameraName == "OV5647"){
+                    cameraValue="30";
+                    }
+                    else if (cameraName == "IMX219"){
+                    cameraValue="31";
+                    }
+                    else if (cameraName == "IMX708"){
+                    cameraValue="32";
+                    }
+                    else if (cameraName == "IMX477"){
+                    cameraValue="33";
+                    }
+                    else if (cameraName == "HDMI"){
+                    cameraValue="30";
+                    }
+                    
+                    qDebug() << cameraValue;
+                }
+                else if (sbcValue == "zero3w"){
+                    cameraValue="4";
+                    qDebug() << cameraValue;
+                }
+                else if ((sbcValue == "rock-5b") || (sbcValue == "rock-5a")) {
+                    cameraValue="5";
+                    qDebug() << cameraValue;
+                }
+
+                QByteArray camBytes = cameraValue.toUtf8();
+                qint64 bytesWritten = cam.write(camBytes);
+                cam.close();
+
+
+
+
+
+
+                if (bytesWritten == camBytes.length())
+                {
+                    // Successfully wrote the camera to the file
+                }
+                else
+                {
+                    emit error(tr("Error writing camera to camera1.txt on FAT partition"));
+                    return false;
+                }
+            }
+            else
+            {
+                emit error(tr("Error creating camera1.txt on FAT partition"));
+                return false;
+            }
+        }
         if (!sbcValue.isEmpty()){
             QFile sbc(folder + "/openhd" + "/" + sbcValue + ".txt");
             if (sbc.open(QIODevice::WriteOnly)) {
@@ -1145,16 +1205,16 @@ bool DownloadThread::_customizeImage()
                 return false;
             }
         }
-        if (!hotspot.isEmpty()){
-            QFile Hs(folder+"/openhd"+"/wifi_hotspot.txt");
-            if (Hs.open(QIODevice::WriteOnly)) {
-                QTextStream stream(&Hs);
-                Hs.close();
-            } else {
-                emit error(tr("Error creating hotspot.txt file on FAT partition"));
-                return false;
-            }
-        }
+        // if (!hotspot.isEmpty()){
+        //     QFile Hs(folder+"/openhd"+"/wifi_hotspot.txt");
+        //     if (Hs.open(QIODevice::WriteOnly)) {
+        //         QTextStream stream(&Hs);
+        //         Hs.close();
+        //     } else {
+        //         emit error(tr("Error creating hotspot.txt file on FAT partition"));
+        //         return false;
+        //     }
+        // }
         if (modeValue == "debug"){
             QFile Db(folder+"/openhd"+"/debug.txt");
             if (Db.open(QIODevice::WriteOnly)) {
@@ -1195,16 +1255,16 @@ bool DownloadThread::_customizeImage()
                 return false;
             }
         }
-        if (!cameraValue.isEmpty()) {
-            QFile cam(folder+"/openhd"+"/"+cameraValue+".txt");
-            if (cam.open(QIODevice::WriteOnly)) {
-                QTextStream stream(&cam);
-                cam.close();
-            } else {
-                emit error(tr("Error creating Camera file on FAT partition"));
-                return false;
-            }
-        }
+        // if (!cameraName.isEmpty()) {
+        //     QFile cam(folder+"/openhd"+"/+camera1+.txt");
+        //     if (cam.open(QIODevice::WriteOnly)) {
+        //         QTextStream stream(&cam);
+        //         cam.close();
+        //     } else {
+        //         emit error(tr("Error creating Camera file on FAT partition"));
+        //         return false;
+        //     }
+        // }
     }
 
     emit finalizing();
