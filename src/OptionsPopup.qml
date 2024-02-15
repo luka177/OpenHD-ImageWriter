@@ -33,7 +33,8 @@ Popup {
     property string hotSpot
     property string beep
     property string eject
-    property bool rock
+    property bool rock3
+    property bool rock5
     property bool rpi
     property bool useSettings:true
 
@@ -121,20 +122,47 @@ Popup {
                     title: qsTr("Camera Settings")
                     id: cameraSettingsRock5
                     Layout.fillWidth: true
-                    visible: rock && (bootType === "Air")
-
+                    visible: rock5 && (bootType === "Air")
 
                     ColumnLayout {
                         spacing: -10
                         // Add a ComboBox to select between cameras
                         ComboBox {
-                            id: cameraSelectorRock
+                            id: cameraSelectorRock5
                             textRole: "displayText"
                             model: ListModel {
                                 ListElement { displayText: "NONE" }
                                 ListElement { displayText: "IMX415" }
                                 ListElement { displayText: "IMX462" }
                                 ListElement { displayText: "HDMI" }
+                            }
+                            onCurrentIndexChanged: {
+                                var selectedCamera = model.get(currentIndex).displayText;
+                                if (selectedCamera !== "NONE") {
+                                    camera = selectedCamera;
+                                }
+                            }
+                        }
+                    }
+                }
+                GroupBox {
+                    title: qsTr("Camera Settings")
+                    id: cameraSettingsRock3
+                    Layout.fillWidth: true
+                    visible: rock3 && (bootType === "Air")
+
+
+                    ColumnLayout {
+                        spacing: -10
+                        ComboBox {
+                            id: cameraSelectorRock3
+                            textRole: "displayText"
+                            model: ListModel {
+                                ListElement { displayText: "NONE" }
+                                ListElement { displayText: "IMX219" }
+                                ListElement { displayText: "OV5647" }
+                                ListElement { displayText: "IMX708" }
+                                ListElement { displayText: "OHD-Jaguar" }
                             }
                             onCurrentIndexChanged: {
                                 var selectedCamera = model.get(currentIndex).displayText;
@@ -156,7 +184,7 @@ Popup {
                             id: cameraVendorSelectorRpi
                             textRole: "displayText"
                             model: ListModel {
-                                ListElement { displayText: "Original" }
+                                ListElement { displayText: "Raspberry" }
                                 ListElement { displayText: "Arducam" }
                                 ListElement { displayText: "Veye" }
                             }
@@ -176,6 +204,48 @@ Popup {
                             }
                         }
                         ComboBox {
+                            id: Advanced
+                            visible:false
+                            textRole: "displayText"
+                            model: ListModel {
+                                ListElement { displayText: "None" }
+                                ListElement { displayText: "FILESRC" }
+                                ListElement { displayText: "IP-Camera" }
+                                ListElement { displayText: "EXTERNAL" }
+                            }
+                            Layout.minimumWidth: 200
+                            Layout.maximumHeight: 40
+                            onCurrentIndexChanged: {
+                                var selectedCamera = model.get(currentIndex).displayText;
+                                if (selectedCamera !== "None") {
+                                    //TODO
+                                }
+                            }
+                        }
+                        ComboBox {
+
+                            id: cameraSelectorRpiOriginal
+                            visible:false
+                            textRole: "displayText"
+                            model: ListModel {
+                                ListElement { displayText: "None" }
+                                ListElement { displayText: "HDMI" }
+                                ListElement { displayText: "OV5647" }
+                                ListElement { displayText: "IMX219" }
+                                ListElement { displayText: "IMX477" }
+                                ListElement { displayText: "IMX708" }
+
+                            }
+                            Layout.minimumWidth: 200
+                            Layout.maximumHeight: 40
+                            onCurrentIndexChanged: {
+                                var selectedCamera = model.get(currentIndex).displayText;
+                                if (selectedCamera !== "None") {
+                                    console.debug(selectedCamera)
+                                }
+                            }
+                        }
+                        ComboBox {
 
                             id: cameraSelectorArducam
                             visible:false
@@ -183,33 +253,20 @@ Popup {
                             model: ListModel {
                                 ListElement { displayText: "None" }
                                 ListElement { displayText: "SkyMaster HDR 708" }
-                                ListElement { displayText: "IMX462 Mini" }
                                 ListElement { displayText: "SkyVision Pro 519" }
-                                ListElement { displayText: "IMX462" }
+                                ListElement { displayText: "IMX462 Mini" }
                                 ListElement { displayText: "IMX477" }
-                                ListElement { displayText: "IMX519" }
+                                ListElement { displayText: "IMX477m" }
+                                ListElement { displayText: "IMX462" }
                                 ListElement { displayText: "IMX327" }
                                 ListElement { displayText: "IMX290" }
-                                ListElement { displayText: "CUSTOM" }
                             }
                             Layout.minimumWidth: 200
                             Layout.maximumHeight: 40
                             onCurrentIndexChanged: {
                                 var selectedCamera = model.get(currentIndex).displayText;
                                 if (selectedCamera !== "None") {
-                                    // Check if it's one of the specified values
-                                    if (["SkyMaster HDR 708", "IMX462 Mini", "SkyVision Pro 519"].indexOf(selectedCamera) === -1) {
-                                        camera = selectedCamera;
-                                    } else {
-                                        // Handle the specified values differently
-                                        if (selectedCamera === "SkyMaster HDR 708") {
-                                            camera = "IMX708";
-                                        } else if (selectedCamera === "IMX462 Mini") {
-                                            camera = "ARDUCAM";
-                                        } else if (selectedCamera === "SkyVision Pro 519") {
-                                            camera = "IMX519";
-                                        }
-                                    }
+                                    console.debug(selectedCamera)                                   
                                 }
                             }
                         }
@@ -220,7 +277,7 @@ Popup {
                             textRole: "displayText"
                             model: ListModel {
                                 ListElement { displayText: "None" }
-                                ListElement { displayText: "CAM2M" }
+                                ListElement { displayText: "2MP Cameras" }
                                 ListElement { displayText: "CSIMX307" }
                                 ListElement { displayText: "CSSC137" }
                                 ListElement { displayText: "MVCAM" }
@@ -382,25 +439,26 @@ Popup {
         if (fileName.includes("pi")) {
             imageWriter.setSetting("sbc", "rpi");
             rpi=true;
-            rock=false;
+            rock5=false;
+            rock3=true
         }
         else if (fileName.includes("rock5a")) {
             imageWriter.setSetting("sbc", "rock-5a");
             rpi=false;
-            rock=true;
+            rock5=true;
+            rock3=false;
         }
         else if (fileName.includes("rock5b")) {
             imageWriter.setSetting("sbc", "rock-5b");
             rpi=false;
-            rock=true;
+            rock5=true;
+            rock3=false;
         }
         else if (fileName.includes("zero3w")) {
-            imageWriter.setSetting("sbc", "Radxa-Zero-3W");
+            imageWriter.setSetting("sbc", "zero3w");
             rpi=false;
-            rock=true;
-        }
-        else{
-           imageWriter.setSetting("sbc", "unknown"); 
+            rock5=false;
+            rock3=true;
         }
     }
 
@@ -424,5 +482,6 @@ Popup {
         imageWriter.setSetting("beep", beep)
         imageWriter.setSetting("eject", eject)
         imageWriter.setSetting("useSettings", useSettings)
+
     }
 }
