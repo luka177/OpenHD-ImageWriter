@@ -240,7 +240,7 @@ Popup {
                             onCurrentIndexChanged: {
                                 var selectedCamera = model.get(currentIndex).displayText;
                                 if (selectedCamera !== "None") {
-                                    console.debug(selectedCamera)
+                                    camera = selectedCamera;
                                 }
                             }
                         }
@@ -265,7 +265,7 @@ Popup {
                             onCurrentIndexChanged: {
                                 var selectedCamera = model.get(currentIndex).displayText;
                                 if (selectedCamera !== "None") {
-                                    console.debug(selectedCamera)                                   
+                                    camera = selectedCamera;                                  
                                 }
                             }
                         }
@@ -286,7 +286,7 @@ Popup {
                             onCurrentIndexChanged: {
                                 var selectedCamera = model.get(currentIndex).displayText;
                                 if (selectedCamera !== "None") {
-                                    console.debug(selectedCamera)
+                                    camera = selectedCamera;
                                 }
                             }
                         }
