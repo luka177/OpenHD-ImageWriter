@@ -200,13 +200,13 @@ Popup {
                                 if (selectedCameraVendor !== "Raspberry" && selectedCameraVendor !== "Veye" && selectedCameraVendor !== "Advanced") {
                                     cameraSelectorArducam.visible=true
                                     cameraSelectorVeye.visible=false
-                                    cameraSelectorAdvanced=false
+                                    cameraSelectorAdvanced.visible=false
                                     cameraSelectorRpiOriginal.visible=false
                                 }
                                 else if (selectedCameraVendor !== "Raspberry" && selectedCameraVendor !== "Arducam" && selectedCameraVendor !== "Advanced") {
                                     cameraSelectorVeye.visible=true
                                     cameraSelectorArducam.visible=false
-                                    cameraSelectorAdvanced=false
+                                    cameraSelectorAdvanced.visible=false
                                     cameraSelectorRpiOriginal.visible=false
                                 }
                                 else if (selectedCameraVendor !== "Raspberry" && selectedCameraVendor !== "Arducam"&& selectedCameraVendor !== "Veye") {
