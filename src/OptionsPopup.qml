@@ -201,16 +201,25 @@ Popup {
                                     cameraSelectorArducam.visible=true
                                     cameraSelectorVeye.visible=false
                                     cameraSelectorAdvanced=false
+                                    cameraSelectorRpiOriginal.visible=false
                                 }
                                 else if (selectedCameraVendor !== "Raspberry" && selectedCameraVendor !== "Arducam" && selectedCameraVendor !== "Advanced") {
                                     cameraSelectorVeye.visible=true
                                     cameraSelectorArducam.visible=false
                                     cameraSelectorAdvanced=false
+                                    cameraSelectorRpiOriginal.visible=false
                                 }
                                 else if (selectedCameraVendor !== "Raspberry" && selectedCameraVendor !== "Arducam"&& selectedCameraVendor !== "Veye") {
                                     cameraSelectorVeye.visible=false
                                     cameraSelectorArducam.visible=false
                                     cameraSelectorAdvanced.visible=true
+                                    cameraSelectorRpiOriginal.visible=false
+                                }
+                                else if (selectedCameraVendor !== "Advanced" && selectedCameraVendor !== "Arducam"&& selectedCameraVendor !== "Veye") {
+                                    cameraSelectorVeye.visible=false
+                                    cameraSelectorArducam.visible=false
+                                    cameraSelectorAdvanced.visible=false
+                                    cameraSelectorRpiOriginal.visible=true
                                 }
                             }
                         }
