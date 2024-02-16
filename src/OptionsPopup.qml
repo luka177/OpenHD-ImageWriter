@@ -217,7 +217,7 @@ Popup {
                             model: ListModel {
                                 ListElement { displayText: "None" }
                                 ListElement { displayText: "FILESRC" }
-                                ListElement { displayText: "IP-Camera" }
+                                ListElement { displayText: "IP-CAMERA" }
                                 ListElement { displayText: "EXTERNAL" }
                             }
                             Layout.minimumWidth: 200
@@ -225,6 +225,7 @@ Popup {
                             onCurrentIndexChanged: {
                                 var selectedCamera = model.get(currentIndex).displayText;
                                 if (selectedCamera !== "None") {
+                                camera = selectedCamera;
                                 }
                             }
                         }
