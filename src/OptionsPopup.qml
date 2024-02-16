@@ -177,7 +177,7 @@ Popup {
                     title: qsTr("Camera Settings")
                     id: cameraSettingsRpi
                     Layout.fillWidth: true
-                    visible:  rpi && (bootType === "Air")
+                    visible: rpi && (bootType === "Air")
                     ColumnLayout {
                         // Add a ComboBox to select between cameras
                         ComboBox {
@@ -218,7 +218,6 @@ Popup {
                             onCurrentIndexChanged: {
                                 var selectedCamera = model.get(currentIndex).displayText;
                                 if (selectedCamera !== "None") {
-                                    //TODO
                                 }
                             }
                         }
@@ -252,9 +251,9 @@ Popup {
                             textRole: "displayText"
                             model: ListModel {
                                 ListElement { displayText: "None" }
-                                ListElement { displayText: "SkyMaster HDR 708" }
-                                ListElement { displayText: "SkyVision Pro 519" }
-                                ListElement { displayText: "IMX462 Mini" }
+                                ListElement { displayText: "SkyMasterHDR708" }
+                                ListElement { displayText: "SkyVisionPro519" }
+                                ListElement { displayText: "IMX462Mini" }
                                 ListElement { displayText: "IMX477" }
                                 ListElement { displayText: "IMX477m" }
                                 ListElement { displayText: "IMX462" }
@@ -277,7 +276,7 @@ Popup {
                             textRole: "displayText"
                             model: ListModel {
                                 ListElement { displayText: "None" }
-                                ListElement { displayText: "2MP Cameras" }
+                                ListElement { displayText: "2MpCameras" }
                                 ListElement { displayText: "CSIMX307" }
                                 ListElement { displayText: "CSSC137" }
                                 ListElement { displayText: "MVCAM" }
@@ -440,7 +439,7 @@ Popup {
             imageWriter.setSetting("sbc", "rpi");
             rpi=true;
             rock5=false;
-            rock3=true
+            rock3=false;
         }
         else if (fileName.includes("rock5a")) {
             imageWriter.setSetting("sbc", "rock-5a");
@@ -459,6 +458,12 @@ Popup {
             rpi=false;
             rock5=false;
             rock3=true;
+        }
+        else{
+           imageWriter.setSetting("sbc", "unknown"); 
+           rpi=false;
+           rock5=false;
+           rock3=false;
         }
     }
 

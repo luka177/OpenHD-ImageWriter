@@ -1143,6 +1143,7 @@ bool DownloadThread::_customizeImage()
             if (cam.open(QIODevice::WriteOnly))
             {
                 if (sbcValue == "rpi"){
+                    //Original Pi
                     if (cameraName == "OV5647"){
                     cameraValue="30";
                     }
@@ -1156,10 +1157,33 @@ bool DownloadThread::_customizeImage()
                     cameraValue="33";
                     }
                     else if (cameraName == "HDMI"){
-                    cameraValue="30";
+                    cameraValue="20";
                     }
-
-                    qDebug() << cameraValue;
+                    //Arducam Pi
+                    else if (cameraName == "IMX708"){
+                    cameraValue="40";
+                    }
+                    else if (cameraName == "IMX519"){
+                    cameraValue="41";
+                    }
+                    else if (cameraName == "IMX477"){
+                    cameraValue="42";
+                    }
+                    else if (cameraName == "IMX462"){
+                    cameraValue="43";
+                    }
+                    else if (cameraName == "IMX327"){
+                    cameraValue="44";
+                    }
+                    else if (cameraName == "IMX290"){
+                    cameraValue="45";
+                    }
+                    else if (cameraName == "IMX462MINI"){
+                    cameraValue="46";
+                    }
+                    else{
+                    cameraValue="00";
+                    }
                 }
                 else if (sbcValue == "zero3w"){
                     cameraValue="4";
