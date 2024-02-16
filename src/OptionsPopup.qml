@@ -187,24 +187,28 @@ Popup {
                                 ListElement { displayText: "Raspberry" }
                                 ListElement { displayText: "Arducam" }
                                 ListElement { displayText: "Veye" }
+                                ListElement { displayText: "Advanced" }
                             }
                             Layout.minimumWidth: 200
                             Layout.maximumHeight: 40
                             onCurrentIndexChanged: {
                                 var selectedCameraVendor = model.get(currentIndex).displayText;
-                                if (selectedCameraVendor !== "Original" && selectedCameraVendor !== "Veye") {
+                                if (selectedCameraVendor !== "Raspberry" && selectedCameraVendor !== "Veye" && selectedCameraVendor !== "Advanced") {
                                     cameraSelectorArducam.visible=true
                                     cameraSelectorVeye.visible=false
                                 }
-                                else if (selectedCameraVendor !== "Original" && selectedCameraVendor !== "Arducam") {
+                                else if (selectedCameraVendor !== "Raspberry" && selectedCameraVendor !== "Arducam" && selectedCameraVendor !== "Advanced") {
                                     cameraSelectorVeye.visible=true
                                     cameraSelectorArducam.visible=false
                                 }
-
+                                else if (selectedCameraVendor !== "Raspberry" && selectedCameraVendor !== "Arducam"&& selectedCameraVendor !== "Veye") {
+                                    cameraSelectorVeye.visible=true
+                                    cameraSelectorArducam.visible=false
+                                }
                             }
                         }
                         ComboBox {
-                            id: advanced
+                            id: cameraSelectorRpiAdvanced
                             visible:false
                             textRole: "displayText"
                             model: ListModel {
@@ -253,7 +257,7 @@ Popup {
                                 ListElement { displayText: "None" }
                                 ListElement { displayText: "SkyMasterHDR708" }
                                 ListElement { displayText: "SkyVisionPro519" }
-                                ListElement { displayText: "IMX462Mini" }
+                                ListElement { displayText: "IMX462MINI" }
                                 ListElement { displayText: "IMX477" }
                                 ListElement { displayText: "IMX477m" }
                                 ListElement { displayText: "IMX462" }
@@ -276,7 +280,7 @@ Popup {
                             textRole: "displayText"
                             model: ListModel {
                                 ListElement { displayText: "None" }
-                                ListElement { displayText: "2MpCameras" }
+                                ListElement { displayText: "2MPCAMERAS" }
                                 ListElement { displayText: "CSIMX307" }
                                 ListElement { displayText: "CSSC137" }
                                 ListElement { displayText: "MVCAM" }

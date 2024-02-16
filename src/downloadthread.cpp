@@ -1160,13 +1160,13 @@ bool DownloadThread::_customizeImage()
                     cameraValue="20";
                     }
                     //Arducam Pi
-                    else if (cameraName == "IMX708"){
+                    else if (cameraName == "SkyMasterHDR708"){
                     cameraValue="40";
                     }
-                    else if (cameraName == "IMX519"){
+                    else if (cameraName == "SkyVisionPro519"){
                     cameraValue="41";
                     }
-                    else if (cameraName == "IMX477"){
+                    else if (cameraName == "IMX477m"){
                     cameraValue="42";
                     }
                     else if (cameraName == "IMX462"){
@@ -1182,7 +1182,7 @@ bool DownloadThread::_customizeImage()
                     cameraValue="46";
                     }
                     else{
-                    cameraValue="00";
+                    cameraValue="0";
                     }
                 }
                 else if (sbcValue == "zero3w"){
