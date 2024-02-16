@@ -1143,7 +1143,7 @@ bool DownloadThread::_customizeImage()
             if (cam.open(QIODevice::WriteOnly))
             {
                 if (sbcValue == "rpi"){
-                    //Original Pi
+                    //RaspberryPi
                     if (cameraName == "OV5647"){
                     cameraValue="30";
                     }
@@ -1159,7 +1159,7 @@ bool DownloadThread::_customizeImage()
                     else if (cameraName == "HDMI"){
                     cameraValue="20";
                     }
-                    //Arducam Pi
+                    //Arducam
                     else if (cameraName == "SkyMasterHDR708"){
                     cameraValue="40";
                     }
@@ -1181,26 +1181,80 @@ bool DownloadThread::_customizeImage()
                     else if (cameraName == "IMX462MINI"){
                     cameraValue="46";
                     }
-                    else{
-                    cameraValue="0";
+                    //Veye
+                    else if (cameraName == "2MPCAMERAS"){
+                    cameraValue="60";
                     }
+                    else if (cameraName == "CSIMX307"){
+                    cameraValue="61";
+                    }
+                    else if (cameraName == "CSSC137"){
+                    cameraValue="62";
+                    }
+                    else if (cameraName == "MVCAM"){
+                    cameraValue="63";
+                    }               
                 }
                 else if (sbcValue == "zero3w"){
-                    cameraValue="4";
-                    qDebug() << cameraValue;
+                    if (cameraName == "HDMI"){
+                    cameraValue="90";
+                    }
+                    if (cameraName == "IMX219"){
+                    cameraValue="92";
+                    }
+                    else if (cameraName == "OV5647"){
+                    cameraValue="91";
+                    }
+                    else if (cameraName == "IMX708"){
+                    cameraValue="93";
+                    }
+                    else if (cameraName == "OHD-JAGUAR"){
+                    cameraValue="94";
+                    }               
                 }
                 else if ((sbcValue == "rock-5b") || (sbcValue == "rock-5a")) {
-                    cameraValue="5";
-                    qDebug() << cameraValue;
+                    if (cameraName == "HDMI"){
+                    cameraValue="80";
+                    }
+                    if (cameraName == "IMX219"){
+                    cameraValue="82";
+                    }
+                    else if (cameraName == "OV5647"){
+                    cameraValue="81";
+                    }
+                    else if (cameraName == "IMX708"){
+                    cameraValue="83";
+                    }
+                    else if (cameraName == "IMX462"){
+                    cameraValue="84";
+                    }
+                    else if (cameraName == "IMX415"){
+                    cameraValue="85";
+                    }
+                    else if (cameraName == "OHD-JAGUAR"){
+                    cameraValue="86";
+                    }               
                 }
 
+                if (cameraName == "FILESRC"){
+                    cameraValue="4";
+                }
+                else if (cameraName == "IP-CAMERA"){
+                    cameraValue="3";
+                }
+                else if (cameraName == "EXTERNAL"){
+                    cameraValue="2";
+                }
+                else if (cameraName == "USB"){
+                    cameraValue="1";
+                }
+                else if (cameraName == "TESTPATTERN"){
+                    cameraValue="0";
+                }
+                
                 QByteArray camBytes = cameraValue.toUtf8();
                 qint64 bytesWritten = cam.write(camBytes);
                 cam.close();
-
-
-
-
 
 
                 if (bytesWritten == camBytes.length())

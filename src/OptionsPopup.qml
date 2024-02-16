@@ -132,9 +132,13 @@ Popup {
                             textRole: "displayText"
                             model: ListModel {
                                 ListElement { displayText: "NONE" }
+                                ListElement { displayText: "HDMI" }
+                                ListElement { displayText: "OV5647" }
+                                ListElement { displayText: "IMX219" }
                                 ListElement { displayText: "IMX415" }
                                 ListElement { displayText: "IMX462" }
-                                ListElement { displayText: "HDMI" }
+                                ListElement { displayText: "IMX708" }
+                               // ListElement { displayText: "OHD-JAGUAR" }
                             }
                             onCurrentIndexChanged: {
                                 var selectedCamera = model.get(currentIndex).displayText;
@@ -162,7 +166,7 @@ Popup {
                                 ListElement { displayText: "IMX219" }
                                 ListElement { displayText: "OV5647" }
                                 ListElement { displayText: "IMX708" }
-                                ListElement { displayText: "OHD-Jaguar" }
+                                // ListElement { displayText: "OHD-JAGUAR" }
                             }
                             onCurrentIndexChanged: {
                                 var selectedCamera = model.get(currentIndex).displayText;
@@ -196,29 +200,31 @@ Popup {
                                 if (selectedCameraVendor !== "Raspberry" && selectedCameraVendor !== "Veye" && selectedCameraVendor !== "Advanced") {
                                     cameraSelectorArducam.visible=true
                                     cameraSelectorVeye.visible=false
-                                    cameraSelectorRpiAdvanced=false
+                                    cameraSelectorAdvanced=false
                                 }
                                 else if (selectedCameraVendor !== "Raspberry" && selectedCameraVendor !== "Arducam" && selectedCameraVendor !== "Advanced") {
                                     cameraSelectorVeye.visible=true
                                     cameraSelectorArducam.visible=false
-                                    cameraSelectorRpiAdvanced=false
+                                    cameraSelectorAdvanced=false
                                 }
                                 else if (selectedCameraVendor !== "Raspberry" && selectedCameraVendor !== "Arducam"&& selectedCameraVendor !== "Veye") {
                                     cameraSelectorVeye.visible=false
                                     cameraSelectorArducam.visible=false
-                                    cameraSelectorRpiAdvanced.visible=true
+                                    cameraSelectorAdvanced.visible=true
                                 }
                             }
                         }
                         ComboBox {
-                            id: cameraSelectorRpiAdvanced
+                            id: cameraSelectorAdvanced
                             visible:false
                             textRole: "displayText"
                             model: ListModel {
                                 ListElement { displayText: "None" }
+                                ListElement { displayText: "USB" }
                                 ListElement { displayText: "FILESRC" }
                                 ListElement { displayText: "IP-CAMERA" }
                                 ListElement { displayText: "EXTERNAL" }
+                                ListElement { displayText: "TESTPATTERN" }
                             }
                             Layout.minimumWidth: 200
                             Layout.maximumHeight: 40
