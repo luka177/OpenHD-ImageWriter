@@ -153,19 +153,19 @@ ApplicationWindow {
                 }
 
 
-                RowLayout {
-                    Text {
-                        text: "sbc:"
-                        font.bold: true
-                    }
+                // RowLayout {
+                //     Text {
+                //         text: "sbc:"
+                //         font.bold: true
+                //     }
 
-                    Text {
-                        text: optionspopup.sbc
-                        font.bold: false
-                        color: "grey"
+                //     Text {
+                //         text: optionspopup.sbc
+                //         font.bold: false
+                //         color: "grey"
 
-                    }
-                }
+                //     }
+                // }
 
                 RowLayout {
                     Text {
