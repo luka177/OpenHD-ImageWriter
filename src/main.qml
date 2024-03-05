@@ -153,19 +153,17 @@ ApplicationWindow {
                 }
 
 
-                RowLayout {
-                    Text {
-                        text: "sbc:"
-                        font.bold: true
-                    }
-
-                    Text {
-                        text: optionspopup.sbc
-                        font.bold: false
-                        color: "grey"
-
-                    }
-                }
+                // RowLayout {
+                //     Text {
+                //         text: "sbc:"
+                //         font.bold: true
+                //     }
+                //     Text {
+                //         text: optionspopup.sbc
+                //         font.bold: false
+                //         color: "grey"
+                //     }
+                // }
 
                 RowLayout {
                     Text {
@@ -239,6 +237,7 @@ ApplicationWindow {
                     imageWriter.setSetting("hotSpot" , "")
                     imageWriter.setSetting("beep", "")
                     imageWriter.setSetting("eject", "")
+                    imageWriter.setSetting("justUpdate", "")
                 }
             implicitHeight: window.height/2
 
