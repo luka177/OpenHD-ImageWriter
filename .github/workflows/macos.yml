@@ -7,7 +7,7 @@ on:
       - "dev-release"
       - "release"
       - "macosx"
-    paths-ignore:
+   paths-ignore:
       - '**.md'
       - '**.asciidoc'
       - '**.adoc'
