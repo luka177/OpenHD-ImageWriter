@@ -6,13 +6,13 @@ on:
       - "2.5-evo"
       - "dev-release"
       - "release"
-      - "macosx"
    paths-ignore:
       - '**.md'
       - '**.asciidoc'
       - '**.adoc'
       - '.gitignore'
-      - 'LICENSE'   
+      - 'LICENSE'
+      
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
