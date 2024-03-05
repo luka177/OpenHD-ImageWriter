@@ -25,7 +25,7 @@ ApplicationWindow {
     minimumHeight: imageWriter.isEmbeddedMode() ? -1 : 420
     //maximumHeight: imageWriter.isEmbeddedMode() ? -1 : 420
 
-    title: qsTr("OpenHD ImageWriter beta v%1").arg(imageWriter.constantVersion())
+    title: qsTr("OpenHD ImageWriter v%1").arg(imageWriter.constantVersion())
 
     FontLoader {id: roboto;      source: "fonts/Roboto-Regular.ttf"}
     FontLoader {id: robotoLight; source: "fonts/Roboto-Light.ttf"}
@@ -139,10 +139,10 @@ ApplicationWindow {
 
                     Text {
                         text: {
-                            if (typeof writebutton.image_name !== "undefined" && writebutton.image_name.length > 45) {
-                                return writebutton.image_name.substring(0, writebutton.image_name.length - 7);
-                            }else if (typeof writebutton.image_name !== "undefined" && writebutton.image_name.length > 1){
-                                return writebutton.image_name.substring(0, writebutton.image_name.length);
+                            if (typeof optionspopup.fileName !== "undefined" && optionspopup.fileName.length > 45) {
+                                return optionspopup.fileName.substring(0, optionspopup.fileName.length - 7);
+                            }else if (typeof optionspopup.fileName !== "undefined" && optionspopup.fileName.length > 1){
+                                return optionspopup.fileName.substring(0, optionspopup.fileName.length);
                             }else {
                                 return "Error";
                             }
@@ -153,19 +153,19 @@ ApplicationWindow {
                 }
 
 
-                RowLayout {
-                    Text {
-                        text: "sbc:"
-                        font.bold: true
-                    }
+                // RowLayout {
+                //     Text {
+                //         text: "sbc:"
+                //         font.bold: true
+                //     }
 
-                    Text {
-                        text: imageWriter.getValue("sbc")
-                        font.bold: false
-                        color: "grey"
+                //     Text {
+                //         text: optionspopup.sbc
+                //         font.bold: false
+                //         color: "grey"
 
-                    }
-                }
+                //     }
+                // }
 
                 RowLayout {
                     Text {
@@ -173,7 +173,7 @@ ApplicationWindow {
                         font.bold: true
                     }
                     Text {
-                        text: writebutton.bootType + "  " + imageWriter.getValue("mode")
+                        text: optionspopup.bootType + "  " + optionspopup.mode
                         font.bold: false
                         color: "grey"
                     }
@@ -185,7 +185,7 @@ ApplicationWindow {
                         font.bold: true
                     }
                     Text {
-                        text: writebutton.camera
+                        text: optionspopup.camera
                         font.bold: false
                         color: "grey"
                     }
@@ -197,7 +197,7 @@ ApplicationWindow {
                         font.bold: true
                     }
                     Text {
-                        text: imageWriter.getValue("bindPhrase")
+                        text: optionspopup.bindPhrase
                         font.bold: false
                         color: "grey"
                     }
@@ -208,10 +208,10 @@ ApplicationWindow {
                         font.bold: true
                     }
                     Text {
-                        text: "<a href='https://openhdfpv.org/changelogs'>changelogs</a>"
+                        text: "<a href='https://openhdfpv.org/2.5-evo.html'>changelogs</a>"
                         MouseArea {
                             anchors.fill: parent
-                            onClicked: Qt.openUrlExternally("https://openhdfpv.org/changelogs")
+                            onClicked: Qt.openUrlExternally("https://openhdfpv.org/2.5-evo.html")
                         }
                         font.bold:false
                         color: "grey"
@@ -229,6 +229,18 @@ ApplicationWindow {
 
 
         Rectangle {
+            Component.onCompleted: {
+                    // Reset all saved settings but the bindPhrase
+                    imageWriter.setSetting("sbc", "")
+                    imageWriter.setSetting("bootType", "")
+                    imageWriter.setSetting("fileName", "")
+                    imageWriter.setSetting("camera", "")
+                    imageWriter.setSetting("mode", "")
+                    imageWriter.setSetting("hotSpot" , "")
+                    imageWriter.setSetting("beep", "")
+                    imageWriter.setSetting("eject", "")
+                    imageWriter.setSetting("justUpdate", "")
+                }
             implicitHeight: window.height/2
 
             ImButton {
@@ -306,6 +318,7 @@ ApplicationWindow {
                             osswipeview.currentItem.forceActiveFocus()
                             customizebutton.visible=true
                             // reset all saved settings but the bindPhrase
+                            imageWriter.setSetting("sbc", "")
                             imageWriter.setSetting("bootType", "")
                             imageWriter.setSetting("fileName", "")
                             imageWriter.setSetting("camera", "")

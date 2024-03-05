@@ -30,6 +30,9 @@
 
 using namespace std;
 
+bool useSettings;
+bool justUpdate;
+
 QByteArray DownloadThread::_proxy;
 int DownloadThread::_curlCount = 0;
 
@@ -43,7 +46,7 @@ DownloadThread::DownloadThread(const QByteArray &url, const QByteArray &localfil
     if (!_curlCount)
         curl_global_init(CURL_GLOBAL_DEFAULT);
     _curlCount++;
-    //_ejectEnabled = settings.value("eject", true).toBool();
+    _ejectEnabled = false;
 }
 
 DownloadThread::~DownloadThread()
@@ -113,6 +116,12 @@ bool DownloadThread::_openAndPrepareDevice()
 {
     QSettings settings_;
     std::cout << "_____________________________-DEBUG-_______________________________________" << std::endl;
+
+    if (settings_.value("justUpdate").toBool())
+    {
+    std::cout << "running update procedure without modifying the image" << std::endl;
+    return true;
+    }
 
     emit preparationStatusUpdate(tr("opening drive"));
 
@@ -739,7 +748,13 @@ void DownloadThread::_writeComplete()
     QThread::sleep(1);
     _filename.replace("/dev/rdisk", "/dev/disk");
 #endif
-    bool useSettings = settings.value("useSettings", true).toBool();
+    QSettings settings_;
+
+    useSettings = settings_.value("useSettings").toBool();
+    justUpdate = settings_.value("justUpdate").toBool();
+    // qDebug() << "This is the Debug Filename" << _filename;
+    // qDebug() << "This is the Debug Settings" << useSettings;
+    // qDebug() << "This is the Debug Update" << justUpdate;
 
     if (!useSettings)
         eject_disk(_filename.constData());
@@ -1075,12 +1090,19 @@ bool DownloadThread::_customizeImage()
 
     /* Here is the start of the OpenHD settings routine
          */
-    if (settings.value("useSettings", true).toBool()) {
+
+    if (justUpdate) {
+        qDebug() << "Writing OpenHD-Update";
+        qDebug() << justUpdate;
+    }
+
+
+    if (useSettings) {
         qDebug() << "Writing OpenHD-Settings";
         QSettings settings_;
 
 
-        QString cameraValue = settings_.value("camera").toString();
+        QString cameraName = settings_.value("camera").toString();
         QString sbcValue = settings_.value("sbc").toString();
         QString modeValue = settings_.value("mode").toString();
         QString bindPhraseSaved = settings_.value("bindPhrase").toString();
@@ -1113,6 +1135,144 @@ bool DownloadThread::_customizeImage()
                 return false;
             }
         }
+        if (!cameraName.isEmpty()){
+            QString cameraValue;
+            qDebug() << "Camera found" << cameraName;
+            QFile cam(folder+"/openhd/camera1.txt");
+            //Encode camera name to Cam-int
+            if (cam.open(QIODevice::WriteOnly))
+            {
+                if (sbcValue == "rpi"){
+                    //RaspberryPi
+                    if (cameraName == "OV5647"){
+                    cameraValue="30";
+                    }
+                    else if (cameraName == "IMX219"){
+                    cameraValue="31";
+                    }
+                    else if (cameraName == "IMX708"){
+                    cameraValue="32";
+                    }
+                    else if (cameraName == "IMX477"){
+                    cameraValue="33";
+                    }
+                    else if (cameraName == "HDMI"){
+                    cameraValue="20";
+                    }
+                    //Arducam
+                    else if (cameraName == "SkyMasterHDR708"){
+                    cameraValue="40";
+                    }
+                    else if (cameraName == "SkyVisionPro519"){
+                    cameraValue="41";
+                    }
+                    else if (cameraName == "IMX477m"){
+                    cameraValue="42";
+                    }
+                    else if (cameraName == "IMX462"){
+                    cameraValue="43";
+                    }
+                    else if (cameraName == "IMX327"){
+                    cameraValue="44";
+                    }
+                    else if (cameraName == "IMX290"){
+                    cameraValue="45";
+                    }
+                    else if (cameraName == "IMX462MINI"){
+                    cameraValue="46";
+                    }
+                    //Veye
+                    else if (cameraName == "2MPCAMERAS"){
+                    cameraValue="60";
+                    }
+                    else if (cameraName == "CSIMX307"){
+                    cameraValue="61";
+                    }
+                    else if (cameraName == "CSSC137"){
+                    cameraValue="62";
+                    }
+                    else if (cameraName == "MVCAM"){
+                    cameraValue="63";
+                    }               
+                }
+                else if (sbcValue == "zero3w"){
+                    if (cameraName == "HDMI"){
+                    cameraValue="90";
+                    }
+                    if (cameraName == "IMX219"){
+                    cameraValue="92";
+                    }
+                    else if (cameraName == "OV5647"){
+                    cameraValue="91";
+                    }
+                    else if (cameraName == "IMX708"){
+                    cameraValue="93";
+                    }
+                    else if (cameraName == "OHD-JAGUAR"){
+                    cameraValue="94";
+                    }               
+                }
+                else if ((sbcValue == "rock-5b") || (sbcValue == "rock-5a")) {
+                    if (cameraName == "HDMI"){
+                    cameraValue="80";
+                    }
+                    if (cameraName == "IMX219"){
+                    cameraValue="82";
+                    }
+                    else if (cameraName == "OV5647"){
+                    cameraValue="81";
+                    }
+                    else if (cameraName == "IMX708"){
+                    cameraValue="83";
+                    }
+                    else if (cameraName == "IMX462"){
+                    cameraValue="84";
+                    }
+                    else if (cameraName == "IMX415"){
+                    cameraValue="85";
+                    }
+                    else if (cameraName == "OHD-JAGUAR"){
+                    cameraValue="86";
+                    }               
+                }
+
+                if (cameraName == "FILESRC"){
+                    cameraValue="4";
+                }
+                else if (cameraName == "IP-CAMERA"){
+                    cameraValue="3";
+                }
+                else if (cameraName == "EXTERNAL"){
+                    cameraValue="2";
+                }
+                else if (cameraName == "USB"){
+                    cameraValue="1";
+                }
+                else if (cameraName == "TESTPATTERN"){
+                    cameraValue="0";
+                }
+                
+                QByteArray camBytes = cameraValue.toUtf8();
+                qint64 bytesWritten = cam.write(camBytes);
+                cam.close();
+
+
+                if (bytesWritten == camBytes.length())
+                {
+                    // Successfully wrote the camera to the file
+                }
+                else
+                {
+                    emit error(tr("Error writing camera to camera1.txt on FAT partition"));
+                    return false;
+                }
+            }
+            else
+            {
+                emit error(tr("Error creating camera1.txt on FAT partition"));
+                return false;
+            }
+        }
         if (!sbcValue.isEmpty()){
             QFile sbc(folder + "/openhd" + "/" + sbcValue + ".txt");
             if (sbc.open(QIODevice::WriteOnly)) {
@@ -1123,16 +1283,16 @@ bool DownloadThread::_customizeImage()
                 return false;
             }
         }
-        if (!hotspot.isEmpty()){
-            QFile Hs(folder+"/openhd"+"/wifi_hotspot.txt");
-            if (Hs.open(QIODevice::WriteOnly)) {
-                QTextStream stream(&Hs);
-                Hs.close();
-            } else {
-                emit error(tr("Error creating hotspot.txt file on FAT partition"));
-                return false;
-            }
-        }
+        // if (!hotspot.isEmpty()){
+        //     QFile Hs(folder+"/openhd"+"/wifi_hotspot.txt");
+        //     if (Hs.open(QIODevice::WriteOnly)) {
+        //         QTextStream stream(&Hs);
+        //         Hs.close();
+        //     } else {
+        //         emit error(tr("Error creating hotspot.txt file on FAT partition"));
+        //         return false;
+        //     }
+        // }
         if (modeValue == "debug"){
             QFile Db(folder+"/openhd"+"/debug.txt");
             if (Db.open(QIODevice::WriteOnly)) {
@@ -1173,16 +1333,16 @@ bool DownloadThread::_customizeImage()
                 return false;
             }
         }
-        if (!cameraValue.isEmpty()) {
-            QFile cam(folder+"/openhd"+"/"+cameraValue+".txt");
-            if (cam.open(QIODevice::WriteOnly)) {
-                QTextStream stream(&cam);
-                cam.close();
-            } else {
-                emit error(tr("Error creating Camera file on FAT partition"));
-                return false;
-            }
-        }
+        // if (!cameraName.isEmpty()) {
+        //     QFile cam(folder+"/openhd"+"/+camera1+.txt");
+        //     if (cam.open(QIODevice::WriteOnly)) {
+        //         QTextStream stream(&cam);
+        //         cam.close();
+        //     } else {
+        //         emit error(tr("Error creating Camera file on FAT partition"));
+        //         return false;
+        //     }
+        // }
     }
 
     emit finalizing();
