@@ -46,7 +46,7 @@ jobs:
 
     - name: Configure CMake
       run: |
-        dir C:\Qt\${{env.QT_VERSION}}\${{env.QT_VERSION}}\mingw32\
+        dir C:\Qt\
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -G "Unix Makefiles" -DOPENSSL_ROOT_DIR="C:\files" -DCMAKE_TOOLCHAIN_FILE="C:\Qt\${{env.QT_VERSION}}\${{env.QT_VERSION}}\mingw32\isystem.cmake"
 
     - name: Build
