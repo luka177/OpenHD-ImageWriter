@@ -8,7 +8,8 @@ on:
       - "2.5-evo"
       - "dev-release"
       - "release"
-      - "2.0"
+      - "master"
+      
    paths-ignore:
       - '**.md'
       - '**.asciidoc'
