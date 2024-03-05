@@ -47,7 +47,7 @@ jobs:
     - name: Configure CMake
       run: |
         dir D:\a\OpenHD-ImageWriter\Qt\5.15.2\mingw81_32\
-        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -G "Unix Makefiles" -DOPENSSL_ROOT_DIR="C:\files" -DCMAKE_TOOLCHAIN_FILE="D:\a\OpenHD-ImageWriter\Qt\5.15.2\mingw81_32\isystem.cmake"
+        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -G "Unix Makefiles" -DOPENSSL_ROOT_DIR="C:\files"
 
     - name: Build
       run: |
