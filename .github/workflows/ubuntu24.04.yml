@@ -6,7 +6,7 @@ name: OpenHD Image Writer noble
 on:
   push:
    branches:
-      - "2.5-evo"
+      - "debug"
       - "dev-release"
       - "release"
 
