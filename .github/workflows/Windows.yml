@@ -55,8 +55,10 @@ jobs:
         mkdir -p build
         cd build
         cmake ../
-        make
-        makensis openhdimagewriter.nsi
+        dir
+        cmake --build ../
+        cmake --install ../
+        #makensis openhdimagewriter.nsi
 
     - name: Upload to Github  
       uses: actions/upload-artifact@v4
