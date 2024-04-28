@@ -56,8 +56,10 @@ jobs:
         cd build
         cmake ../
         dir
-        cmake --build ../
-        cmake --install ../
+        make ../
+        make
+        cd build
+        dir
         #makensis openhdimagewriter.nsi
 
     - name: Upload to Github  
