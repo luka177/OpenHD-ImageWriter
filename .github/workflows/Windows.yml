@@ -54,6 +54,7 @@ jobs:
       run: |
         mkdir -p build
         cd build
+        dir 
         cmake ../src
         make
         makensis openhdimagewriter.nsi
