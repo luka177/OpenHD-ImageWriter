@@ -20,7 +20,6 @@
 #include <nan.h>
 #include <string>
 #include <vector>
-#include <cstdint>
 
 namespace Drivelist {
 
