@@ -2,13 +2,12 @@ name: OpenHD Image Writer Windows
 
 on:
   push:
-   branches:
+    branches:
       - "2.5-evo"
       - "dev-release"
       - "release"
       - "master"
-
-   paths-ignore:
+    paths-ignore:
       - '**.md'
       - '**.asciidoc'
       - '**.adoc'
@@ -30,16 +29,16 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Install Qt
-            uses: jurplel/install-qt-action@v3
-            with:
-              version: ${{ env.QT_VERSION }}
-              aqtversion: ==3.1.*
-              host: windows
-              target: desktop
-              arch: win32_mingw81
-              modules: qtcharts qtlocation qtpositioning qtspeech qt5compat qtmultimedia qtserialport qtimageformats qtshadertools qtconnectivity qtquick3d
-              setup-python: true
-              tools: 'tools_cmake'
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: ${{ env.QT_VERSION }}
+        aqtversion: "==3.1.*"
+        host: windows
+        target: desktop
+        arch: win32_mingw81
+        modules: qtcharts qtlocation qtpositioning qtspeech qt5compat qtmultimedia qtserialport qtimageformats qtshadertools qtconnectivity qtquick3d
+        setup-python: true
+        tools: 'tools_cmake'
 
     - name: Install dependencies
       run: |
@@ -60,9 +59,8 @@ jobs:
         makensis openhdimagewriter.nsi
 
     - name: Upload to Github  
-      uses: 'actions/upload-artifact@v3'
+      uses: actions/upload-artifact@v4
       with:
         name: "OpenHD Image Writer"
-        path: |
-          *.exe
+        path: '*.exe'
         if-no-files-found: error
