@@ -55,12 +55,8 @@ jobs:
         mkdir -p build
         cd build
         cmake ../
-        dir
-        make win32/Makefile.gcc
+        cmake --build .
         cmake --install .
-        cd deploy
-        dir
-        #makensis openhdimagewriter.nsi
 
     - name: Upload to Github  
       uses: actions/upload-artifact@v4
