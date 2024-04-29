@@ -56,7 +56,6 @@ jobs:
         cd build
         cmake ../
         dir
-        rm D:/a/OpenHD-ImageWriter/OpenHD-ImageWriter/src/build/dependencies/zlib-1.2.11/Release/zlibstatic.lib
         cmake --install .
         cd deploy
         dir
