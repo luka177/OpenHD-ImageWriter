@@ -56,7 +56,7 @@ jobs:
         cd build
         cmake ../
         dir
-        make
+        cmake --install .
         cd deploy
         dir
         #makensis openhdimagewriter.nsi
