@@ -28,6 +28,8 @@ public:
     explicit ImageWriter(QObject *parent = nullptr);
     virtual ~ImageWriter();
     void setEngine(QQmlApplicationEngine *engine);
+    Q_INVOKABLE void makeDeveloper();
+
 
     /* Set URL to download from, and if known download length and uncompressed length */
     Q_INVOKABLE void setSrc(const QUrl &url, quint64 downloadLen = 0, quint64 extrLen = 0, QByteArray expectedHash = "", bool multifilesinzip = false, QString parentcategory = "", QString osname = "", QByteArray initFormat = "");

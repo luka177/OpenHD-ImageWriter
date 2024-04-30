@@ -38,9 +38,6 @@ Popup {
     property bool rpi
     property bool useSettings:true
 
-
-
-
     // background of title
     Rectangle {
         color: "#f5f5f5"
@@ -378,6 +375,22 @@ Popup {
                             }
                         }
                     }
+
+                    TextField {
+                            id: textField
+                            onTextChanged: {
+                                saveButton.visible = text === "Kugelrund";
+                            }
+                        }
+
+                        Button {
+                            id: saveButton
+                            text: "Use Dev Mode"
+                            visible: false
+                            onClicked: {
+                                imageWriter.makeDeveloper();
+                            }
+                        }
 
                         ImCheckBox {
                             id: setWifiHotspot
