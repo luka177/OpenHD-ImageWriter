@@ -72,9 +72,22 @@ ImageWriter::ImageWriter(QObject *parent)
     connect(&_polltimer, SIGNAL(timeout()), SLOT(pollProgress()));
 
     QString platform;
+    QString relativeFilePath;
     if (qobject_cast<QGuiApplication*>(QCoreApplication::instance()) )
     {
         platform = QGuiApplication::platformName();
+        relativeFilePath = "developer.txt";
+        
+            QFile f(relativeFilePath);
+             if (f.exists() && f.open(QIODevice::ReadOnly)) {
+                qDebug() << "You are a Developer!";
+                _repo="https://github.com/OpenHD/OpenHD-ImageWriter/releases/download/Json/OpenHD-dev-download-index.json";
+                f.close();
+            } else {
+                qDebug() << "You are no Developer!";
+                _repo="https://github.com/OpenHD/OpenHD-ImageWriter/releases/download/Json/OpenHD-download-index.json";
+            }
+
     }
     else
     {
