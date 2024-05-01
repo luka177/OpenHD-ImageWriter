@@ -87,11 +87,11 @@ namespace Drivelist
             }
             if (bdev["size"].isString())
             {
-                d.size       = bdev["sizeof"].toString().toULongLong();
+                d.sizeof      = bdev["size"].toString().toULongLong();
             }
             else
             {
-                d.size       = bdev["sizeof"].toDouble();
+                d.sizeof      = bdev["size"].toDouble();
             }
             d.isSystem   = !d.isRemovable && !d.isVirtual;
             d.isUSB      = subsystems.contains("usb");
