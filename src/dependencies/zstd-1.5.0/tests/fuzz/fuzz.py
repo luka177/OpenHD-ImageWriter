@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # ################################################################
-# Copyright (c) Facebook, Inc.
+# Copyright (c) Meta Platforms, Inc. and affiliates.
 # All rights reserved.
 #
 # This source code is licensed under both the BSD-style license (found in the
@@ -63,6 +63,8 @@ TARGET_INFO = {
     'fse_read_ncount': TargetInfo(InputType.RAW_DATA),
     'sequence_compression_api': TargetInfo(InputType.RAW_DATA),
     'seekable_roundtrip': TargetInfo(InputType.RAW_DATA),
+    'huf_round_trip': TargetInfo(InputType.RAW_DATA),
+    'huf_decompress': TargetInfo(InputType.RAW_DATA),
 }
 TARGETS = list(TARGET_INFO.keys())
 ALL_TARGETS = TARGETS + ['all']
@@ -634,7 +636,7 @@ def regression(args):
     try:
         description = """
         Runs one or more regression tests.
-        The fuzzer should have been built with with
+        The fuzzer should have been built with
         LIB_FUZZING_ENGINE='libregression.a'.
         Takes input from CORPORA.
         """
