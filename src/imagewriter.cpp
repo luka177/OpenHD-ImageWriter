@@ -63,7 +63,6 @@
 #include <iostream>
 #include <filesystem>
 
-
 ImageWriter::ImageWriter(QObject *parent)
     : QObject(parent), _repo(QUrl(QString(OSLIST_URL))), _dlnow(0), _verifynow(0),
       _engine(nullptr), _thread(nullptr), _verifyEnabled(false), _cachingEnabled(false),
@@ -72,9 +71,23 @@ ImageWriter::ImageWriter(QObject *parent)
     connect(&_polltimer, SIGNAL(timeout()), SLOT(pollProgress()));
 
     QString platform;
+    QString appDataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QString devFilePath;
     if (qobject_cast<QGuiApplication*>(QCoreApplication::instance()) )
     {
         platform = QGuiApplication::platformName();
+        devFilePath = "developer.txt";
+        
+            QFile f(devFilePath);
+             if (f.exists() && f.open(QIODevice::ReadOnly)) {
+                qDebug() << "You are a Developer!";
+                _repo="https://github.com/OpenHD/OpenHD-ImageWriter/releases/download/Json/OpenHD-dev-download-index.json";
+                f.close();
+            } else {
+                qDebug() << "You are no Developer!" << devFilePath;
+                _repo="https://github.com/OpenHD/OpenHD-ImageWriter/releases/download/Json/OpenHD-download-index.json";
+            }
+
     }
     else
     {
@@ -192,6 +205,46 @@ ImageWriter::~ImageWriter()
 void ImageWriter::setEngine(QQmlApplicationEngine *engine)
 {
     _engine = engine;
+}
+
+void ImageWriter::makeDeveloper()
+{
+    QString appDataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QString devFilePath;
+    devFilePath = "developer.txt";
+    QFile f(devFilePath);
+    if (!f.exists()) {
+        if (f.open(QIODevice::WriteOnly)) {
+            qDebug() << "You are now a Developer!" << f;
+            f.close();
+            QCoreApplication::exit(-1);
+            QProcess::startDetached(qApp->arguments()[0]);
+        } else {
+            qDebug() << "Failed to create developer file!" << devFilePath ;
+            return;
+        }
+    } else {
+        qDebug() << "You are already a Developer!";
+    }
+}
+
+void ImageWriter::makeUser()
+{
+    QString appDataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QString devFilePath;
+    devFilePath = "developer.txt";
+    QFile f(devFilePath);
+    if (f.exists()) {
+        if (f.remove()) {
+            qDebug() << "Developer file removed successfully!";
+            QCoreApplication::exit(-1);
+            QProcess::startDetached(qApp->arguments()[0]);
+        } else {
+            qDebug() << "Failed to remove developer file!";
+        }
+    } else {
+        qDebug() << "Developer file doesn't exist!";
+    }
 }
 
 /* Set URL to download from */

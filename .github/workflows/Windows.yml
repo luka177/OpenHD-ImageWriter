@@ -2,13 +2,12 @@ name: OpenHD Image Writer Windows
 
 on:
   push:
-   branches:
+    branches:
       - "2.5-evo"
       - "dev-release"
       - "release"
-      - "master"
-
-   paths-ignore:
+      - "debug"
+    paths-ignore:
       - '**.md'
       - '**.asciidoc'
       - '**.adoc'
@@ -32,11 +31,13 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
-        aqtversion: '==3.1.*'
         version: '5.15.2'
-        host: 'windows'
-        target: 'desktop'
-        arch: 'win32_mingw81'
+        aqtversion: ==3.1.*
+        host: windows
+        target: desktop
+        arch: win32_mingw81
+        setup-python: true
+        tools: 'tools_cmake'
 
     - name: Install dependencies
       run: |
@@ -45,21 +46,21 @@ jobs:
         xcopy "C:\Program Files\OpenSSL" C:\files /E /I /Q
         dir "C:\files"
 
-    - name: Configure CMake
-      run: |
-        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -G "Unix Makefiles" -DOPENSSL_ROOT_DIR="C:\files" -DCMAKE_TOOLCHAIN_FILE="C:\Qt\${{env.QT_VERSION}}\${{env.QT_VERSION}}\mingw32\isystem.cmake"
+    # - name: Configure CMake
+    #   run: |
+    #     cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -G "Unix Makefiles" -DOPENSSL_ROOT_DIR="C:\files" -DCMAKE_TOOLCHAIN_FILE="C:\Qt\${{env.QT_VERSION}}\${{env.QT_VERSION}}\mingw32\isystem.cmake"
 
     - name: Build
       run: |
-        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-        cd ../build/
-        dir
-        makensis openhdimagewriter.nsi
+        mkdir -p build
+        cd build
+        cmake ../
+        cmake --build .
+        cmake --install .
 
     - name: Upload to Github  
-      uses: 'actions/upload-artifact@v3'
+      uses: actions/upload-artifact@v4
       with:
         name: "OpenHD Image Writer"
-        path: |
-          *.exe
+        path: '*.exe'
         if-no-files-found: error

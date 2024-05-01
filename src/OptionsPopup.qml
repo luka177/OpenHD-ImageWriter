@@ -38,9 +38,6 @@ Popup {
     property bool rpi
     property bool useSettings:true
 
-
-
-
     // background of title
     Rectangle {
         color: "#f5f5f5"
@@ -378,6 +375,34 @@ Popup {
                             }
                         }
                     }
+
+                    TextField {
+                            id: textField
+                            visible: imageWriter.getValue("developer") !== "Kugelrund"
+                            onTextChanged: {
+                                saveButton.visible = text === "Kugelrund";
+                            }
+                        }
+
+                        Button {
+                            id: saveButton
+                            text: "Use Dev Images"
+                            visible: false
+                            onClicked: {
+                                imageWriter.setSetting("developer","Kugelrund");
+                                imageWriter.makeDeveloper();
+                            }
+                        }
+
+                        Button {
+                            id: userButton
+                            text: "Use Normal Images"
+                            visible: imageWriter.getValue("developer") == "Kugelrund"
+                            onClicked: {
+                                imageWriter.setSetting("developer","");
+                                imageWriter.makeUser();
+                            }
+                        }
 
                         ImCheckBox {
                             id: setWifiHotspot
