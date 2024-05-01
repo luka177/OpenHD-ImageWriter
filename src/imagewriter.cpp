@@ -228,6 +228,25 @@ void ImageWriter::makeDeveloper()
     }
 }
 
+void ImageWriter::makeUser()
+{
+    QString appDataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QString devFilePath;
+    devFilePath = "developer.txt";
+    QFile f(devFilePath);
+    if (f.exists()) {
+        if (f.remove()) {
+            qDebug() << "Developer file removed successfully!";
+            QCoreApplication::exit(-1);
+            QProcess::startDetached(qApp->arguments()[0]);
+        } else {
+            qDebug() << "Failed to remove developer file!";
+        }
+    } else {
+        qDebug() << "Developer file doesn't exist!";
+    }
+}
+
 /* Set URL to download from */
 void ImageWriter::setSrc(const QUrl &url, quint64 downloadLen, quint64 extrLen, QByteArray expectedHash, bool multifilesinzip, QString parentcategory, QString osname, QByteArray initFormat)
 {

@@ -1,3 +1,7 @@
+openhdimagewriter (2.0.3) stable; urgency=high
+
+ * add developer mode
+
 openhdimagewriter (2.0.2) stable; urgency=high
 
  * add camera selection for about all boards

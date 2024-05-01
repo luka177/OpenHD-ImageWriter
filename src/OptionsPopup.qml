@@ -378,6 +378,7 @@ Popup {
 
                     TextField {
                             id: textField
+                            visible: imageWriter.getValue("developer") !== "Kugelrund"
                             onTextChanged: {
                                 saveButton.visible = text === "Kugelrund";
                             }
@@ -385,10 +386,21 @@ Popup {
 
                         Button {
                             id: saveButton
-                            text: "Use Dev Mode"
+                            text: "Use Dev Images"
                             visible: false
                             onClicked: {
+                                imageWriter.setSetting("developer","Kugelrund");
                                 imageWriter.makeDeveloper();
+                            }
+                        }
+
+                        Button {
+                            id: userButton
+                            text: "Use Normal Images"
+                            visible: imageWriter.getValue("developer") == "Kugelrund"
+                            onClicked: {
+                                imageWriter.setSetting("developer","");
+                                imageWriter.makeUser();
                             }
                         }
 

@@ -249,10 +249,23 @@ ApplicationWindow {
                 onClicked: {
                     Qt.openUrlExternally("https://opencollective.com/openhd");
                 }
-                visible: true
+                visible: imageWriter.getValue("developer") !== "Kugelrund"
                 Accessible.description: qsTr("Donate")
                 contentItem: Image {
                     source: "icons/donate.svg"
+                    fillMode: Image.PreserveAspectFit
+                }
+            }
+            ImButton {
+                padding: 5
+                id: developerButton
+                onClicked: {
+                    Qt.openUrlExternally("https://openhdfpv.org");
+                }
+                visible: imageWriter.getValue("developer") == "Kugelrund"
+                Accessible.description: qsTr("DEV")
+                contentItem: Image {
+                    source: "icons/dev.svg"
                     fillMode: Image.PreserveAspectFit
                 }
             }

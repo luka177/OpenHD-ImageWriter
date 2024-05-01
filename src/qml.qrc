@@ -38,5 +38,6 @@
         <file>icons/OpenHD-advanced.webp</file>
         <file>icons/OpenHD-old.webp</file>
         <file>icons/donate.svg</file>
+        <file>icons/dev.svg</file>
     </qresource>
 </RCC>
