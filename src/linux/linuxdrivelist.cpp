@@ -60,8 +60,8 @@ namespace Drivelist
         }
 
         QJsonDocument d = QJsonDocument::fromJson(output);
-        QJsonArray a = d.object()["blockdevices"].toArray();
-        for (auto i : a)
+        const QJsonArray a = d.object()["blockdevices"].toArray();
+        for (const auto &i : a)
         {
             DeviceDescriptor d;
             QJsonObject bdev = i.toObject();
@@ -74,6 +74,14 @@ namespace Drivelist
             d.device     = name.toStdString();
             d.raw        = true;
             d.isVirtual  = subsystems == "block";
+
+            // Hot fix for newer lsblk version on Arch based linux distributions.
+            // See issue #610
+            // Only tested with laptop's internal sd card reader.
+            if (!d.isVirtual && (subsystems.contains("mmc") || subsystems.contains("scsi:usb")) ) {
+                d.isVirtual = subsystems.contains("block"); //< lsblk will output something like "block:mmc:mmc_host:pci" for key "subsystems".
+            }
+
             if (bdev["ro"].isBool())
             {
                 /* With some lsblk versions it is a bool in others a "0" or "1" string */
@@ -87,11 +95,11 @@ namespace Drivelist
             }
             if (bdev["size"].isString())
             {
-                d.sizeof      = bdev["size"].toString().toULongLong();
+                d.size       = bdev["size"].toString().toULongLong();
             }
             else
             {
-                d.sizeof      = bdev["size"].toDouble();
+                d.size       = bdev["size"].toDouble();
             }
             d.isSystem   = !d.isRemovable && !d.isVirtual;
             d.isUSB      = subsystems.contains("usb");
@@ -132,7 +140,7 @@ namespace Drivelist
             if (d.isSystem && subsystems.contains("nvme"))
             {
                 bool isMounted = false;
-                for (std::string mp : d.mountpoints)
+                for (const std::string& mp : d.mountpoints)
                 {
                     if (!QByteArray::fromStdString(mp).startsWith("/media/")) {
                         isMounted = true;
