@@ -81,7 +81,7 @@ ImageWriter::ImageWriter(QObject *parent)
             QFile f(devFilePath);
              if (f.exists() && f.open(QIODevice::ReadOnly)) {
                 qDebug() << "You are a Developer!";
-                _repo="https://github.com/OpenHD/OpenHD-ImageWriter/releases/download/Json/OpenHD-dev-download-index.json";
+                _repo="https://github.com/OpenHD/OpenHD-ImageWriter/releases/download/Json/OpenHD-development-releases.json";
                 f.close();
             } else {
                 qDebug() << "You are no Developer!" << devFilePath;
