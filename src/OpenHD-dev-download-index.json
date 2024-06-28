@@ -85,6 +85,50 @@
             "icon": "https://forum.radxa.com/uploads/default/original/1X/afb83a5d13f03ccc5f26a0c5800a02e320b06468.png",
             "subitems": [
                 {
+                    "name": "OpenHD-2.5.2-beta",
+                    "description": "Radxa Zero 3W EMMC",
+                    "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/OpenHD-advanced.png",
+                    "url": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/2.5/OpenHD-EMMC-radxa-zero3w--release.img.xz",
+                    "extract_size": 9500000256,
+                    "extract_sha256": "1e6b37af103ee90868bcbd8e4cb0dab92c26a9768d092b9b42d3eb57e46a9efa",
+                    "image_download_size": 3579883260,
+                    "release_date": "2023-12-12",
+                    "init_format": "systemd"
+                },
+                {
+                    "name": "OpenHD-2.5.2-beta",
+                    "description": "Radxa CM3",
+                    "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/OpenHD-advanced.png",
+                    "url": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/2.5/OpenHD-image-radxa-cm3--release-2023-12-12_1737.img.xz",
+                    "extract_size": 5999997952,
+                    "extract_sha256": "436585538dd0a0095f682c7f7e1d5e141349b2b16ad0ffdb182e9ffb96cc4052",
+                    "image_download_size": 1458197624,
+                    "release_date": "2023-12-12",
+                    "init_format": "systemd"
+                },
+                {
+                    "name": "OpenHD-2.5.2-beta",
+                    "description": "Radxa Rock5 A",
+                    "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/OpenHD-advanced.png",
+                    "url": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/2.5/OpenHD-image-rock5a--release-2023-12-12_1736.img.xz",
+                    "extract_size": 6800000000,
+                    "extract_sha256": "1add63e53aa418bffa2dbe3ae1d84cdbb6fa7a1747002b54d99ffa370532232d",
+                    "image_download_size": 1525008004,
+                    "release_date": "2023-12-12",
+                    "init_format": "systemd"
+                },
+                {
+                    "name": "OpenHD-2.5.2-beta",
+                    "description": "Radxa Rock5 B",
+                    "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/OpenHD-advanced.png",
+                    "url": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/2.5/OpenHD-image-rock5b--release-2023-12-12_1736.img.xz",
+                    "extract_size": 6800000000,
+                    "extract_sha256": "c43ad90e6bc6dfade597849b8e9f37174c90de99fcc376372af38f907f513aa4",
+                    "image_download_size": 1621560708,
+                    "release_date": "2023-12-12",
+                    "init_format": "systemd"
+                },
+                {
                     "name": "OpenHD-2.4.1-evo Rock5B",
                     "description": "Added custom kernel and 8812bu support, only Ground",
                     "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/OpenHD-advanced.png",

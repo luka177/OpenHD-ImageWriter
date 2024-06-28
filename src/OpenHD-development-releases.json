@@ -1,6 +1,6 @@
 {
     "imager": {
-        "latest_version": "2.0.1-OpenHD",
+        "latest_version": "2.0.3-OpenHD",
         "url": "https://openhdfpv.org/#downloads"
     },
     "os_list": [
@@ -9,6 +9,17 @@
             "description": "Images for Raspberry-Pi SBC's",
             "icon": "https://upload.wikimedia.org/wikipedia/de/thumb/c/cb/Raspberry_Pi_Logo.svg/570px-Raspberry_Pi_Logo.svg.png",
             "subitems": [
+                {
+                    "name": "OpenHD-2.6.0-evo",
+                    "description": "adding new platforms and improving a lot",
+                    "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/ImageWriter/rpi-ohd.png",
+                    "url": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/2.6/OpenHD-image-pi-bullseye-configurable-release-06-26-2024-00-28-57.img.xz",
+                    "extract_size": 2885533696,
+                    "extract_sha256": "257e5338055f630e019904c5849e0c634b9679fe57a0618bd9f829ff7b67b390",
+                    "image_download_size": 782520320,
+                    "release_date": "2024-06-26",
+                    "init_format": "systemd"
+                },
                 {
                     "name": "OpenHD-2.5.3-evo",
                     "description": "Improved OS, frequencies,...",
@@ -85,10 +96,54 @@
             "icon": "https://forum.radxa.com/uploads/default/original/1X/afb83a5d13f03ccc5f26a0c5800a02e320b06468.png",
             "subitems": [
                 {
+                    "name": "OpenHD-2.6.0-evo",
+                    "description": "Radxa Zero3W GND ONLY",
+                    "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/ImageWriter/rpi-ohd.png",
+                    "url": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/2.6/OpenHD-image-radxa-zero3w--release-06-26-2024-00-28-55.img.xz",
+                    "extract_size": 5632000000,
+                    "extract_sha256": "d95d767653b5effc462e014bf9fdc4272ce442cfba910081c052f490b9925127",
+                    "image_download_size": 1311490048,
+                    "release_date": "2024-06-26",
+                    "init_format": "systemd"
+                },
+                {
+                    "name": "OpenHD-2.6.0-evo",
+                    "description": "Radxa CM3 (RPI-IO) GND ONLY",
+                    "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/ImageWriter/rpi-ohd.png",
+                    "url": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/2.6/OpenHD-image-radxa-cm3--release-06-26-2024-00-29-10.img.xz",
+                    "extract_size": 5632000000,
+                    "extract_sha256": "c930d98fef1b063b208b840ade9f6c41edf853e2a6367871d82ed28026974bfd",
+                    "image_download_size": 1364258816,
+                    "release_date": "2024-06-26",
+                    "init_format": "systemd"
+                },
+                {
+                    "name": "OpenHD-2.6.0-evo",
+                    "description": "Radxa Rock5B GND ONLY",
+                    "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/ImageWriter/rpi-ohd.png",
+                    "url": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/2.6/OpenHD-image-pi-bullseye-configurable-release-06-26-2024-00-28-57.img.xz",
+                    "extract_size": 6800003072,
+                    "extract_sha256": "add0910145e0d7d2ab1c564b1165cb2c8923829e6cb538aa78fd1c1aa7256798",
+                    "image_download_size": 1822949376,
+                    "release_date": "2024-06-26",
+                    "init_format": "systemd"
+                },
+                {
+                    "name": "OpenHD-2.6.0-evo",
+                    "description": "Radxa Rock5A GND ONLY",
+                    "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/ImageWriter/rpi-ohd.png",
+                    "url": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/2.6/OpenHD-image-rock5a--release-06-26-2024-00-29-36.img.xz",
+                    "extract_size": 6800003072,
+                    "extract_sha256": "c7f61a6903099b3509ad5f59536ab52d3410a69f8d404c718a164846cb9b90bc",
+                    "image_download_size": 1537564672,
+                    "release_date": "2024-06-26",
+                    "init_format": "systemd"
+                },
+                {
                     "name": "OpenHD-2.4.1-evo Rock5B",
                     "description": "Added custom kernel and 8812bu support, only Ground",
                     "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/OpenHD-advanced.png",
-                    "url": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/OpenHD-image-rock5b--2.4-evo-2023-06-30_2230.img.xz",
+                    "url": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/OpenHD-image-rock5b--release-06-26-2024-00-28-57.img.xz",
                     "extract_size": 14500000256,
                     "extract_sha256": "399ba04a68a7f0872a9239f096fc0da8c2aacb56b5d0d028fe3e8822f971fa2d",
                     "image_download_size": 1698576940,
@@ -135,6 +190,28 @@
             "description": "Images for normal Computers",
             "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/ImageWriter/x86.png",
             "subitems": [
+                {
+                    "name": "OpenHD-2.6.0-evo",
+                    "description": "X86 lite (noble) GND ONLY",
+                    "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/ImageWriter/rpi-ohd.png",
+                    "url": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/2.6/OpenHD-image-x86-minimal--release-06-26-2024-00-28-56.img.xz",
+                    "extract_size": 5632000000,
+                    "extract_sha256": "98d59abd4739c2dd1e34de077a65d81e31540e0b30384aa158b2aad29f7e73e3",
+                    "image_download_size": 2076000256,
+                    "release_date": "2024-06-26",
+                    "init_format": "systemd"
+                },
+                {
+                    "name": "OpenHD-2.6.0-evo",
+                    "description": "X86 Ubuntu Luna",
+                    "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/ImageWriter/rpi-ohd.png",
+                    "url": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/2.6/OpenHD-image-x86-lunar--release-06-26-2024-00-29-52.img.xz",
+                    "extract_size": 15790768128,
+                    "extract_sha256": "ef6b35065f8aff8873ac5968ac1abd9cae8d2621c8583881d84023f6b647f508",
+                    "image_download_size": 5011939328,
+                    "release_date": "2024-06-26",
+                    "init_format": "systemd"
+                },
                 {
                     "name": "OpenHD-2.4.1-evo",
                     "description": "updated to latest OpenHD/QOpenHD",
@@ -190,57 +267,19 @@
                         ]
         },
         {
-            "name": "OpenHD 2.0",
-            "description": "OpenHD 2.0 Images",
-            "icon": "https://openhd-images.fra1.cdn.digitaloceanspaces.com/Downloader/OpenHD-old.png",
+            "name": "OpenHD X20",
+            "description": "Images for our OpenHD Custom Hardware",
+            "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/OpenHD-advanced.png",
             "subitems": [
                 {
-                    "name": "OpenHD 2.0.12 Raspberry Pi",
-                    "description": "Raspberry Pi Buster",
-                    "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/ImageWriter/rpi-ohd.png",
-                    "url": "https://openhd-images.fra1.cdn.digitaloceanspaces.com/Downloader/Open.HD-2.0.12b-buster.zip",
-                    "extract_size": 4001370112,
-                    "extract_sha256": "3d0e3cea1972ad99cc5aa33c549ec0c7a3f1747e65eb8c853fb12a880f00c511",
-                    "image_download_size": 1596698624,
-                    "release_date": "2021-23-09"
-                },
-                {
-                    "name": "OpenHD 2.0.8 B",
-                    "description": "Raspberry Pi Buster",
-                    "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/ImageWriter/rpi-ohd.png",
-                    "url": "https://openhd-images.fra1.cdn.digitaloceanspaces.com/Downloader/Open.HD-2.0.8-buster.img.gz",
-                    "extract_size": 4001370112,
-                    "extract_sha256": "3fc94dc9871a3fda65900c40dfc7a3fbaabf25204023be8b6da07cb47fbb8151",
-                    "image_download_size": 1569824768,
-                    "release_date": "2020-17-12"
-                },
-                {
-                    "name": "OpenHD 2.0.8 S",
-                    "description": "Raspberry Pi Stretch",
-                    "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/ImageWriter/rpi-ohd.png",
-                    "url": "https://openhd-images.fra1.cdn.digitaloceanspaces.com/Downloader/Open.HD-2.0.8-stretch.img.gz",
-                    "extract_size": 4013953024,
-                    "extract_sha256": "7b59470ef660d10ae2928ad3b86a08eb69f978ddeeab6d66ef79cb5b9ce645ef",
-                    "image_download_size": 1351294976,
-                    "release_date": "2020-17-12"
-                }
-                        ]
-        },
-        {
-            
-            "name": "Mirrors in case of Downtime",
-            "description": "Emergency backups of the latest Images",
-            "icon": "https://www.nicepng.com/png/detail/58-589511_emergency-alert-icon.png",
-            "subitems": [
-                {
-                    "name": "OpenHD-2.4.1-evo",
-                    "description": "OpenHD Evo for Raspberry",
-                    "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/ImageWriter/rpi-ohd.png",
-                    "url": "https://github.com/OpenHD/OpenHD-ImageBuilder/releases/download/2.4.1/OpenHD-image-pi-bullseye-configurable-2.4-evo-2023-06-30_2230.img.xz",
-                    "extract_size": 3473338880,
-                    "extract_sha256": "7c24543a3b075e773ae51fcb53c768efea4a740d1c6e3eef30463e9140c1d247",
-                    "image_download_size": 908356600,
-                    "release_date": "2023-06-04",
+                    "name": "OpenHD-2.6.0-evo",
+                    "description": "X20 AIR ONLY",
+                    "icon": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/ImageWriter/OpenHD-advanced.png",
+                    "url": "https://fra1.digitaloceanspaces.com/openhd-images/Downloader/release/2.6/OpenHD-image-x20-hotfix-release-06-26-2024-00-28-59.img.xz",
+                    "extract_size": 3707764736,
+                    "extract_sha256": "879d8858dd7f4dc2b0e34a4fb22cde4eb7ca70e7d473d209d3a925a8ce01709d",
+                    "image_download_size": 1317019648,
+                    "release_date": "2024-06-26",
                     "init_format": "systemd"
                 }
                         ]
