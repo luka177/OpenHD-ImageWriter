@@ -1231,8 +1231,14 @@ bool DownloadThread::_customizeImage()
                     else if (cameraName == "IMX415"){
                     cameraValue="85";
                     }
-                    else if (cameraName == "OHD-JAGUAR"){
+                    else if (cameraName == "IMX477"){
                     cameraValue="86";
+                    }
+                    else if (cameraName == "IMX519"){
+                    cameraValue="87";
+                    }
+                    else if (cameraName == "OHD-JAGUAR"){
+                    cameraValue="88";
                     }               
                 }
 
