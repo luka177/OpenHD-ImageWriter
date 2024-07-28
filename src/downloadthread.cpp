@@ -1205,7 +1205,7 @@ bool DownloadThread::_customizeImage()
                     else if (cameraName == "OV5647"){
                     cameraValue="91";
                     }
-                    else if (cameraName == "IMX708"){
+                    else if (cameraName == "DEV"){
                     cameraValue="93";
                     }
                     else if (cameraName == "OHD-JAGUAR"){
