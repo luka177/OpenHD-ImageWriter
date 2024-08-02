@@ -975,7 +975,7 @@ bool DownloadThread::_customizeImage()
         }
         //
 
-        emit error(tr("Operating system did not mount FAT32 partition"));
+        emit error(tr("This Image doesn't support OpenHD settings, proceed with caution!"));
         return false;
     }
 

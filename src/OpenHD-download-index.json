@@ -1,6 +1,6 @@
 {
     "imager": {
-        "latest_version": "2.0.1-OpenHD",
+        "latest_version": "2.0.4-OpenHD",
         "url": "https://openhdfpv.org/#downloads"
     },
     "os_list": [
