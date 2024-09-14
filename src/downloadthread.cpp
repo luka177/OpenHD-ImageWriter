@@ -1199,17 +1199,26 @@ bool DownloadThread::_customizeImage()
                     if (cameraName == "HDMI"){
                     cameraValue="90";
                     }
+                    if (cameraName == "IMX462"){
+                    cameraValue="94";
+                    }
+                    if (cameraName == "IMX519"){
+                    cameraValue="95";
+                    }
                     if (cameraName == "IMX219"){
                     cameraValue="92";
                     }
                     else if (cameraName == "OV5647"){
                     cameraValue="91";
                     }
-                    else if (cameraName == "DEV"){
+                    else if (cameraName == "IMX708"){
                     cameraValue="93";
                     }
+                    else if (cameraName == "VEYE"){
+                    cameraValue="97";
+                    }
                     else if (cameraName == "OHD-JAGUAR"){
-                    cameraValue="94";
+                    cameraValue="96";
                     }               
                 }
                 else if ((sbcValue == "rock-5b") || (sbcValue == "rock-5a")) {

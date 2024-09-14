@@ -160,11 +160,13 @@ Popup {
                             textRole: "displayText"
                             model: ListModel {
                                 ListElement { displayText: "NONE" }
+                                ListElement { displayText: "IMX462" }
+                                //ListElement { displayText: "IMX519" }
                                 ListElement { displayText: "HDMI" }
                                 ListElement { displayText: "IMX219" }
                                 ListElement { displayText: "VEYE" }
                                 ListElement { displayText: "OV5647" }
-                                ListElement { displayText: "DEV" }
+                                //ListElement { displayText: "IMX708" }
                                 // ListElement { displayText: "OHD-JAGUAR" }
                             }
                             onCurrentIndexChanged: {
