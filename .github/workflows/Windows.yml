@@ -17,6 +17,7 @@ on:
 
 env:
   BUILD_TYPE: Release
+  QT_VERSION: '5.15.2'
 
 jobs:
   build:
@@ -24,55 +25,67 @@ jobs:
 
     defaults:
       run:
+        shell: cmd
         working-directory: src
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: '5.15.2'
-          aqtversion: '3.1.*'
+          version: ${{ env.QT_VERSION }}
+          aqtversion: '>=3.1.0'
           host: windows
           target: desktop
-          arch: win32_mingw81
+          arch: win64_mingw81
+          modules: qtbase qtsvg qtquickcontrols2 qttools
+          setup-python: false
 
       - name: Install dependencies
         run: |
-          choco install -y nsis openssl.light --version 1.1.1.2102
-          mkdir C:\OpenSSL
-          xcopy "C:\Program Files\OpenSSL" C:\OpenSSL /E /I /Q
+          choco install -y nsis openssl
+          echo "Qt_DIR=$QT_PATH" >> $GITHUB_ENV
+          echo "OPENSSL_ROOT_DIR=C:/Program Files/OpenSSL-Win64" >> $GITHUB_ENV
 
       - name: Configure CMake
         run: |
-          cmake -B build \
-            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-            -G "MinGW Makefiles" \
-            -DOPENSSL_ROOT_DIR="C:/OpenSSL" \
-            -DCMAKE_PREFIX_PATH="C:/Qt/5.15.2/mingw81_32" \
-            -DCURL_INCLUDE_DIR="${{github.workspace}}/src/dependencies/cmcurl/include" \
-            -DLibArchive_INCLUDE_DIR="${{github.workspace}}/src/dependencies/libarchive-3.5.2/libarchive"
+          cmake -B build -G "MinGW Makefiles" ^
+            -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} ^
+            -DCMAKE_PREFIX_PATH="${{ env.QT_DIR }}/${{ env.QT_VERSION }}/mingw81_64" ^
+            -DOPENSSL_ROOT_DIR="${{ env.OPENSSL_ROOT_DIR }}" ^
+            -DCMAKE_C_COMPILER=mingw32-gcc.exe ^
+            -DCMAKE_CXX_COMPILER=mingw32-g++.exe
 
-      - name: Build
+      - name: Build project
         run: |
-          cmake --build build --config ${{env.BUILD_TYPE}} --target OpenHDImageWriter
+          cmake --build build --config ${{ env.BUILD_TYPE }} --target all -- -j4
 
-      - name: Deploy dependencies
+      - name: Run windeployqt
         run: |
           cd build
-          cmake --install . --prefix deploy
-          cp ../windows/*.dll deploy/
-          cp ../dependencies/fat32format/fat32format.exe deploy/
+          "${{ env.QT_DIR }}/${{ env.QT_VERSION }}/mingw81_64/bin/windeployqt.exe" OpenHDImageWriter.exe ^
+            --no-translations ^
+            --qmldir "$GITHUB_WORKSPACE/src" ^
+            --compiler-runtime
 
       - name: Create NSIS installer
         run: |
-          makensis build/openhdimagewriter.nsi
+          cd build
+          makensis -DCMAKE_BINARY_DIR="$GITHUB_WORKSPACE/src/build" ^
+            -DPROJECT_NAME="OpenHDImageWriter" ^
+            -DIMAGER_VERSION_STR="${{ env.IMAGER_VERSION_STR }}" ^
+            openhdimagewriter.nsi
 
-      - name: Upload Artifacts
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: OpenHD-Image-Writer
+          name: OpenHD-Image-Writer-Windows
           path: |
-            src/build/deploy/OpenHDImageWriter.exe
-            src/build/OpenHD-Image-Writer-Installer.exe
+            src/build/OpenHDImageWriter.exe
+            src/build/*.exe
+            src/build/*.nsis
+          if-no-files-found: error
