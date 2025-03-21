@@ -1,0 +1,90 @@
+name: Build and Deploy OpenHD Image Writer
+
+on:
+  push:
+    branches:
+      - "2.5-evo"
+      - "dev-release"
+      - "release"
+      - "master"
+      - "debug"
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    continue-on-error: ${{ failure() }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - distro: focal
+            container: none
+            runner: ubuntu-20.04
+          - distro: jammy
+            container: none
+            runner: ubuntu-22.04
+          - distro: lunar
+            container: docker://ubuntu:lunar
+          - distro: noble
+            container: docker://ubuntu:noble
+
+    container: ${{ matrix.container }}
+    env:
+      CLOUDSMITH_RELEASE: ${{ matrix.distro }}
+
+    steps:
+      - name: Setup environment
+        if: matrix.container != 'none'
+        run: |
+          apt-get update || true
+          apt-get install -y git sudo || true
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        continue-on-error: true
+        run: |
+          sudo apt-get update || true
+          sudo apt-get upgrade -y || true
+          sudo apt-get install -y --no-install-recommends \
+            libgnutls28-dev build-essential devscripts debhelper cmake git \
+            libarchive-dev libcurl4-openssl-dev qtbase5-dev qtbase5-dev-tools \
+            qtdeclarative5-dev libqt5svg5-dev qttools5-dev libssl-dev \
+            qml-module-qtquick2 qml-module-qtquick-controls2 \
+            qml-module-qtquick-layouts qml-module-qtquick-templates2 \
+            qml-module-qtquick-window2 qml-module-qtgraphicaleffects || true
+
+          if [ "${{ matrix.distro }}" = "noble" ]; then
+            sudo apt-get install -y python3-pip || true
+            pip install cloudsmith-api cloudsmith-cli || true
+          fi
+
+      - name: Build package
+        continue-on-error: true
+        run: |
+          mkdir build || true
+          mv $(ls -A | grep -v "build") build/ || true
+          cd build
+          debuild -uc -us || true
+
+      - name: Upload artifact
+        if: success() || failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: OpenHD-Writer-${{ matrix.distro }}
+          path: "*.deb"
+          if-no-files-found: warn
+
+      - name: Push to Cloudsmith
+        if: (contains(github.ref, 'release') || contains(github.ref, 'master')) && success()
+        uses: cloudsmith-io/action@v2
+        with:
+          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          command: push
+          format: deb
+          owner: openhd
+          repo: ${{ github.event.repository.name }}
+          distro: ubuntu/${{ matrix.distro }}
+          file: "*.deb"
+          republish: true
