@@ -60,7 +60,7 @@ jobs:
 
       - name: Push to Cloudsmith
         if: (contains(github.ref, 'release') || contains(github.ref, 'master')) && success()
-        uses: cloudsmith-io/action@v2
+        uses: cloudsmith-io/action@master
         with:
           api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
           command: push
@@ -70,6 +70,7 @@ jobs:
           distro: ubuntu/${{ matrix.distro }}
           file: "*.deb"
           republish: true
+
 
   build-container:
     strategy:
@@ -128,7 +129,7 @@ jobs:
 
       - name: Push to Cloudsmith
         if: (contains(github.ref, 'release') || contains(github.ref, 'master')) && success()
-        uses: cloudsmith-io/action@v2
+        uses: cloudsmith-io/action@master
         with:
           api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
           command: push
@@ -138,3 +139,4 @@ jobs:
           distro: ubuntu/${{ matrix.distro }}
           file: "*.deb"
           republish: true
+
