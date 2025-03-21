@@ -41,8 +41,9 @@ jobs:
           aqtversion: '>=3.1.0'
           host: windows
           target: desktop
-          arch: win64_mingw81
-          modules: qtbase qtsvg qtquickcontrols2 qttools
+          arch: win64_msvc2019_64
+          modules: qtbase qtquickcontrols2 qtsvg qttools
+          tools: qttools
           setup-python: true
 
       - name: Install dependencies
