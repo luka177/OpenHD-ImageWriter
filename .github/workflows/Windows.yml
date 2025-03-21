@@ -45,17 +45,13 @@ jobs:
 
       - name: Install dependencies
         run: |
-          # Install mingw with specific version
           choco install -y mingw --version 8.1.0
 
-          # Install other packages without version constraints
           choco install -y nsis 
           choco install -y openssl --params='/x64'  # Correct parameter syntax
 
-          # Add mingw to PATH
           echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> $env:GITHUB_PATH
 
-          # Set environment variables
           echo "Qt_DIR=$QT_PATH" >> $GITHUB_ENV
           echo "OPENSSL_ROOT_DIR=C:/Program Files/OpenSSL-Win64" >> $GITHUB_ENV
 
