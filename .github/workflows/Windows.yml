@@ -7,6 +7,7 @@ on:
       - "dev-release"
       - "release"
       - "debug"
+      - "master"
     paths-ignore:
       - '**.md'
       - '**.asciidoc'
@@ -26,41 +27,54 @@ jobs:
         working-directory: src
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v4
-      with:
-        version: '5.15.2'
-        aqtversion: ==3.1.*
-        host: windows
-        target: desktop
-        arch: win32_mingw81
-        setup-python: true
-        tools: 'tools_cmake'
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '5.15.2'
+          aqtversion: '3.1.*'
+          host: windows
+          target: desktop
+          arch: win32_mingw81
+          setup-python: true
+          tools: 'tools_cmake'
 
-    - name: Install dependencies
-      run: |
-        choco install -y nsis openssl.light
-        mkdir C:\files
-        xcopy "C:\Program Files\OpenSSL" C:\files /E /I /Q
-        dir "C:\files"
+      - name: Install dependencies
+        run: |
+          choco install -y nsis openssl.light --version 1.1.1.2102
+          mkdir C:\OpenSSL
+          xcopy "C:\Program Files\OpenSSL" C:\OpenSSL /E /I /Q
 
-    # - name: Configure CMake
-    #   run: |
-    #     cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -G "Unix Makefiles" -DOPENSSL_ROOT_DIR="C:\files" -DCMAKE_TOOLCHAIN_FILE="C:\Qt\${{env.QT_VERSION}}\${{env.QT_VERSION}}\mingw32\isystem.cmake"
+      - name: Configure CMake
+        run: |
+          cmake -B build \
+            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+            -G "MinGW Makefiles" \
+            -DOPENSSL_ROOT_DIR="C:/OpenSSL" \
+            -DCMAKE_PREFIX_PATH="C:/Qt/5.15.2/mingw81_32" \
+            -DCURL_INCLUDE_DIR="${{github.workspace}}/src/dependencies/cmcurl/include" \
+            -DLibArchive_INCLUDE_DIR="${{github.workspace}}/src/dependencies/libarchive-3.5.2/libarchive"
 
-    - name: Build
-      run: |
-        mkdir -p build
-        cd build
-        cmake ../
-        cmake --build .
-        cmake --install .
+      - name: Build
+        run: |
+          cmake --build build --config ${{env.BUILD_TYPE}} --target OpenHDImageWriter
 
-    - name: Upload to Github  
-      uses: actions/upload-artifact@v4
-      with:
-        name: "OpenHD Image Writer"
-        path: '*.exe'
-        if-no-files-found: error
+      - name: Deploy dependencies
+        run: |
+          cd build
+          cmake --install . --prefix deploy
+          cp ../windows/*.dll deploy/
+          cp ../dependencies/fat32format/fat32format.exe deploy/
+
+      - name: Create NSIS installer
+        run: |
+          makensis build/openhdimagewriter.nsi
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: OpenHD-Image-Writer
+          path: |
+            src/build/deploy/OpenHDImageWriter.exe
+            src/build/OpenHD-Image-Writer-Installer.exe
