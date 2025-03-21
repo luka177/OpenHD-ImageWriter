@@ -48,7 +48,7 @@ jobs:
           choco install -y mingw --version 8.1.0
 
           choco install -y nsis 
-          choco install -y openssl --params='/x64'  # Correct parameter syntax
+          choco install -y openssl --params='/x64'
 
           echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> $env:GITHUB_PATH
 
