@@ -46,10 +46,11 @@ jobs:
       - name: Install dependencies
         run: |
           choco install -y mingw --version 8.1.0
-          choco install -y nsis openssl
+          choco install -y nsis
+          choco install -y openssl --params='"/x64"'  # Installs 64-bit OpenSSL
           echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> $env:GITHUB_PATH
           echo "Qt_DIR=$QT_PATH" >> $GITHUB_ENV
-          echo "OPENSSL_ROOT_DIR=C:/Program Files/OpenSSL" >> $GITHUB_ENV
+          echo "OPENSSL_ROOT_DIR=C:/Program Files/OpenSSL-Win64" >> $GITHUB_ENV
 
       - name: Configure CMake
         run: |
