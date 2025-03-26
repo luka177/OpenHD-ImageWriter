@@ -46,15 +46,20 @@ jobs:
       - name: Install dependencies
         run: |
           choco install -y mingw --version 8.1.0
-
           choco install -y nsis 
-          choco install -y openssl --params='/x64'
-
-          echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> $env:GITHUB_PATH
-
-          echo "Qt_DIR=$QT_PATH" >> $GITHUB_ENV
-          echo "OPENSSL_ROOT_DIR=C:/Program Files/OpenSSL-Win64" >> $GITHUB_ENV
-
+      
+          # Install MSYS2 and MinGW OpenSSL
+          curl -L https://github.com/msys2/msys2-installer/releases/download/2024-03-13/msys2-x86_64-latest.sfx.exe -o msys2.exe
+          msys2.exe -y -oC:\
+          C:\msys64\usr\bin\bash -lc "pacman -Sy --noconfirm"
+          C:\msys64\usr\bin\bash -lc "pacman -S --noconfirm mingw-w64-x86_64-openssl"
+      
+          # Set environment variables
+          echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> %GITHUB_PATH%
+          echo "C:\msys64\mingw64\bin" >> %GITHUB_PATH%
+          echo "Qt_DIR=%QT_PATH%" >> %GITHUB_ENV%
+          echo "OPENSSL_ROOT_DIR=C:/msys64/mingw64" >> %GITHUB_ENV%
+      
       - name: Configure CMake
         run: |
           cmake -B build -G "MinGW Makefiles" ^
