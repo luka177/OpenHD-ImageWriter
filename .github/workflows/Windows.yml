@@ -18,11 +18,11 @@ on:
 env:
   BUILD_TYPE: Release
   QT_VERSION: '5.15.2'
-  VCPKG_DIR: D:/a/vcpkg  # Temporärer Pfad für vcpkg im Runner
+  VCPKG_DIR: D:/a/vcpkg
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2019  # Use windows-2019 to ensure VS2019 is available
 
     defaults:
       run:
@@ -41,7 +41,7 @@ jobs:
           version: ${{ env.QT_VERSION }}
           host: windows
           target: desktop
-          arch: win64_msvc2019_64  # Qt für MSVC verwenden
+          arch: win64_msvc2019_64
           setup-python: true
 
       - name: Install vcpkg und OpenSSL
@@ -55,16 +55,15 @@ jobs:
       - name: Install dependencies
         run: |
           choco install -y nsis 
-          echo "Qt_DIR=%QT_PATH%" >> %GITHUB_ENV%
+          echo "Qt_DIR=%QT_PATH%" >> %GITHUB_ENV%  # QT_PATH is set by install-qt-action
 
       - name: Configure CMake mit MSVC und vcpkg
         run: |
-          cmake -B build -G "Visual Studio 17 2022" ^
+          cmake -B build -G "Visual Studio 16 2019" ^
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} ^
-            -DCMAKE_PREFIX_PATH="${{ env.QT_DIR }}/${{ env.QT_VERSION }}/msvc2019_64" ^
+            -DCMAKE_PREFIX_PATH="${{ env.QT_DIR }}" ^  # Use QT_DIR directly
             -DCMAKE_TOOLCHAIN_FILE="${{ env.CMAKE_TOOLCHAIN_FILE }}" ^
             -DVCPKG_TARGET_TRIPLET=x64-windows
-
 
       - name: Build project
         run: |
@@ -73,7 +72,7 @@ jobs:
       - name: Run windeployqt
         run: |
           cd build/${{ env.BUILD_TYPE }}
-          "${{ env.QT_DIR }}/${{ env.QT_VERSION }}/msvc2019_64/bin/windeployqt.exe" OpenHDImageWriter.exe ^
+          "${{ env.QT_DIR }}/bin/windeployqt.exe" OpenHDImageWriter.exe ^  # Corrected path
             --no-translations ^
             --qmldir "$GITHUB_WORKSPACE/src" ^
             --compiler-runtime
