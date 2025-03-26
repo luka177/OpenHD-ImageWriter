@@ -18,6 +18,7 @@ on:
 env:
   BUILD_TYPE: Release
   QT_VERSION: '5.15.2'
+  VCPKG_DIR: D:/a/vcpkg  # Temporärer Pfad für vcpkg im Runner
 
 jobs:
   build:
@@ -34,49 +35,44 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install Qt
+      - name: Install Qt (MSVC 2019)
         uses: jurplel/install-qt-action@v4
         with:
           version: ${{ env.QT_VERSION }}
           host: windows
           target: desktop
-          arch: win64_msvc2019_64
+          arch: win64_msvc2019_64  # Qt für MSVC verwenden
           setup-python: true
+
+      - name: Install vcpkg und OpenSSL
+        run: |
+          git clone https://github.com/microsoft/vcpkg
+          .\vcpkg\bootstrap-vcpkg.bat -disableMetrics
+          .\vcpkg\vcpkg install openssl:x64-windows
+          echo "VCPKG_ROOT=%cd%\vcpkg" >> %GITHUB_ENV%
+          echo "CMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake" >> %GITHUB_ENV%
 
       - name: Install dependencies
         run: |
-          choco install -y mingw --version 8.1.0
           choco install -y nsis 
-      
-          # Install MSYS2 and MinGW OpenSSL
-          curl -L https://github.com/msys2/msys2-installer/releases/download/2024-03-13/msys2-x86_64-latest.sfx.exe -o msys2.exe
-          msys2.exe -y -oC:\
-          C:\msys64\usr\bin\bash -lc "pacman -Sy --noconfirm"
-          C:\msys64\usr\bin\bash -lc "pacman -S --noconfirm mingw-w64-x86_64-openssl"
-      
-          # Set environment variables
-          echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> %GITHUB_PATH%
-          echo "C:\msys64\mingw64\bin" >> %GITHUB_PATH%
           echo "Qt_DIR=%QT_PATH%" >> %GITHUB_ENV%
-          echo "OPENSSL_ROOT_DIR=C:/msys64/mingw64" >> %GITHUB_ENV%
-      
-      - name: Configure CMake
+
+      - name: Configure CMake mit MSVC und vcpkg
         run: |
-          cmake -B build -G "MinGW Makefiles" ^
+          cmake -B build -G "Visual Studio 16 2019" ^
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} ^
-            -DCMAKE_PREFIX_PATH="${{ env.QT_DIR }}/${{ env.QT_VERSION }}/mingw81_64" ^
-            -DOPENSSL_ROOT_DIR="${{ env.OPENSSL_ROOT_DIR }}" ^
-            -DCMAKE_C_COMPILER=C:/ProgramData/chocolatey/lib/mingw/tools/install/mingw64/bin/gcc.exe ^
-            -DCMAKE_CXX_COMPILER=C:/ProgramData/chocolatey/lib/mingw/tools/install/mingw64/bin/g++.exe
+            -DCMAKE_PREFIX_PATH="${{ env.QT_DIR }}/${{ env.QT_VERSION }}/msvc2019_64" ^
+            -DCMAKE_TOOLCHAIN_FILE="${{ env.CMAKE_TOOLCHAIN_FILE }}" ^
+            -DVCPKG_TARGET_TRIPLET=x64-windows
 
       - name: Build project
         run: |
-          cmake --build build --config ${{ env.BUILD_TYPE }} --target all -- -j4
+          cmake --build build --config ${{ env.BUILD_TYPE }} --target ALL_BUILD -j 4
 
       - name: Run windeployqt
         run: |
-          cd build
-          "${{ env.QT_DIR }}/${{ env.QT_VERSION }}/mingw81_64/bin/windeployqt.exe" OpenHDImageWriter.exe ^
+          cd build/${{ env.BUILD_TYPE }}
+          "${{ env.QT_DIR }}/${{ env.QT_VERSION }}/msvc2019_64/bin/windeployqt.exe" OpenHDImageWriter.exe ^
             --no-translations ^
             --qmldir "$GITHUB_WORKSPACE/src" ^
             --compiler-runtime
@@ -84,7 +80,7 @@ jobs:
       - name: Create NSIS installer
         run: |
           cd build
-          makensis -DCMAKE_BINARY_DIR="$GITHUB_WORKSPACE/src/build" ^
+          makensis -DCMAKE_BINARY_DIR="$GITHUB_WORKSPACE/src/build/${{ env.BUILD_TYPE }}" ^
             -DPROJECT_NAME="OpenHDImageWriter" ^
             -DIMAGER_VERSION_STR="${{ env.IMAGER_VERSION_STR }}" ^
             openhdimagewriter.nsi
@@ -94,7 +90,7 @@ jobs:
         with:
           name: OpenHD-Image-Writer-Windows
           path: |
-            src/build/OpenHDImageWriter.exe
+            src/build/${{ env.BUILD_TYPE }}/OpenHDImageWriter.exe
             src/build/*.exe
             src/build/*.nsis
           if-no-files-found: error
