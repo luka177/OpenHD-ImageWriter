@@ -49,14 +49,14 @@ jobs:
           git clone https://github.com/microsoft/vcpkg
           .\vcpkg\bootstrap-vcpkg.bat -disableMetrics
           .\vcpkg\vcpkg install openssl:x64-windows zlib
-          echo "VCPKG_ROOT=%cd%\vcpkg" >> %GITHUB_ENV%
-          echo "CMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake" >> %GITHUB_ENV%
+          echo "VCPKG_ROOT=${{ github.workspace }}\src\vcpkg" >> $env:GITHUB_ENV
+          echo "CMAKE_TOOLCHAIN_FILE=${{ github.workspace }}\src\vcpkg\scripts\buildsystems\vcpkg.cmake" >> $env:GITHUB_ENV
 
       - name: Configure CMake mit MSVC und vcpkg
         run: |
           cmake -B build -G "Visual Studio 16 2019" ^
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} ^
-            -DCMAKE_PREFIX_PATH="${{ env.QT_DIR }}" ^  # Use QT_DIR directly
+            -DCMAKE_PREFIX_PATH="${{ env.QT_DIR }}\${{ env.QT_VERSION }}\msvc2019_64" ^
             -DCMAKE_TOOLCHAIN_FILE="${{ env.CMAKE_TOOLCHAIN_FILE }}" ^
             -DVCPKG_TARGET_TRIPLET=x64-windows
 
