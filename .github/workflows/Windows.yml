@@ -48,7 +48,7 @@ jobs:
         run: |
           git clone https://github.com/microsoft/vcpkg
           .\vcpkg\bootstrap-vcpkg.bat -disableMetrics
-          .\vcpkg\vcpkg install openssl:x64-windows
+          .\vcpkg\vcpkg install openssl:x64-windows zlib
           echo "VCPKG_ROOT=%cd%\vcpkg" >> %GITHUB_ENV%
           echo "CMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake" >> %GITHUB_ENV%
 
