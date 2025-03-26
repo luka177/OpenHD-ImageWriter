@@ -59,11 +59,12 @@ jobs:
 
       - name: Configure CMake mit MSVC und vcpkg
         run: |
-          cmake -B build -G "Visual Studio 16 2019" ^
+          cmake -B build -G "Visual Studio 17 2022" ^
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} ^
             -DCMAKE_PREFIX_PATH="${{ env.QT_DIR }}/${{ env.QT_VERSION }}/msvc2019_64" ^
             -DCMAKE_TOOLCHAIN_FILE="${{ env.CMAKE_TOOLCHAIN_FILE }}" ^
             -DVCPKG_TARGET_TRIPLET=x64-windows
+
 
       - name: Build project
         run: |
