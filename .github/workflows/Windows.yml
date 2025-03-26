@@ -52,11 +52,6 @@ jobs:
           echo "VCPKG_ROOT=%cd%\vcpkg" >> %GITHUB_ENV%
           echo "CMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake" >> %GITHUB_ENV%
 
-      - name: Install dependencies
-        run: |
-          choco install -y nsis 
-          echo "Qt_DIR=%QT_PATH%" >> %GITHUB_ENV%  # QT_PATH is set by install-qt-action
-
       - name: Configure CMake mit MSVC und vcpkg
         run: |
           cmake -B build -G "Visual Studio 16 2019" ^
