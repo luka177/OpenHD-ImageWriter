@@ -8,6 +8,7 @@ endif()
 
 OPTION (ENABLE_CHECK_VERSION "Check for version updates" ON)
 OPTION (ENABLE_TELEMETRY "Enable sending telemetry" ON)
+cmake_policy(SET CMP0079 NEW)
 
 project(OpenHDImageWriter LANGUAGES CXX C)
 set(IMAGER_VERSION_MAJOR 2)
