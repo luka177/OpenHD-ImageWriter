@@ -146,7 +146,7 @@ if (WIN32)
         "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/zlib-1.2.11"
         "${CMAKE_BINARY_DIR}/dependencies/zlib-1.2.11")
     # Set ZLIB_ROOT to ensure find_package uses the bundled zlib
-    set(ZLIB_ROOT "${CMAKE_BINARY_DIR}/dependencies/zlib-1.2.11"))
+    set(ZLIB_ROOT "${CMAKE_BINARY_DIR}/dependencies/zlib-1.2.11")
 
     # Bundled libcurl
     set(CMAKE_CURL_INCLUDES)
