@@ -141,7 +141,12 @@ if (WIN32)
     # Bundled zlib
     add_subdirectory(dependencies/zlib-1.2.11)
     set(ZLIB_LIBRARY zlibstatic)
-    set(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/zlib-1.2.11)
+    # Set include directories to both source and build directories
+    set(ZLIB_INCLUDE_DIR 
+        "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/zlib-1.2.11"
+        "${CMAKE_BINARY_DIR}/dependencies/zlib-1.2.11")
+    # Set ZLIB_ROOT to ensure find_package uses the bundled zlib
+    set(ZLIB_ROOT "${CMAKE_BINARY_DIR}/dependencies/zlib-1.2.11"))
 
     # Bundled libcurl
     set(CMAKE_CURL_INCLUDES)
@@ -165,13 +170,13 @@ if (WIN32)
     set(ZSTD_LIBRARY libzstd_static)
 
     # Bundled libarchive
-    set(ENABLE_TEST OFF CACHE BOOL "")
-    set(ENABLE_TAR OFF CACHE BOOL "")
-    set(ENABLE_CPIO OFF CACHE BOOL "")
-    set(ENABLE_CAT OFF CACHE BOOL "")
+    # Force LibArchive to use the bundled zlib
+    set(ENABLE_ZLIB ON CACHE BOOL "Enable zlib support" FORCE)
+    set(ZLIB_LIBRARY ${ZLIB_LIBRARY} CACHE FILEPATH "Path to zlib library" FORCE)
+    set(ZLIB_INCLUDE_DIR ${ZLIB_INCLUDE_DIR} CACHE PATH "Path to zlib includes" FORCE)
     add_subdirectory(dependencies/libarchive-3.5.2)
-    set(LibArchive_LIBRARIES archive_static)
-    set(LibArchive_INCLUDE_DIR dependencies/libarchive-3.5.2/libarchive)
+    # Explicitly link archive_static with the bundled zlib
+    target_link_libraries(archive_static PRIVATE ${ZLIB_LIBRARY})
 
     # Bundled fat32format
     add_subdirectory(dependencies/fat32format)
