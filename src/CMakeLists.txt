@@ -177,8 +177,7 @@ if (WIN32)
     set(ZLIB_INCLUDE_DIR ${ZLIB_INCLUDE_DIR} CACHE PATH "Path to zlib includes" FORCE)
     add_subdirectory(dependencies/libarchive-3.5.2)
     target_link_libraries(archive_static ${ZLIB_LIBRARY})
-    target_link_libraries(archive_static PRIVATE cmliblzma)
-
+    target_link_libraries(archive_static cmliblzma)
 
     # Bundled fat32format
     add_subdirectory(dependencies/fat32format)
