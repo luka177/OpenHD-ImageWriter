@@ -171,14 +171,18 @@ if (WIN32)
     set(ZSTD_LIBRARY libzstd_static)
 
     # Bundled libarchive
-    # Force LibArchive to use the bundled zlib
+    # Force LibArchive to use the bundled zlib    
     set(ENABLE_ZLIB ON CACHE BOOL "Enable zlib support" FORCE)
     set(ZLIB_LIBRARY ${ZLIB_LIBRARY} CACHE FILEPATH "Path to zlib library" FORCE)
     set(ZLIB_INCLUDE_DIR ${ZLIB_INCLUDE_DIR} CACHE PATH "Path to zlib includes" FORCE)
     add_subdirectory(dependencies/libarchive-3.5.2)
-    target_link_libraries(archive_static ${ZLIB_LIBRARY})
-    target_link_libraries(archive_static cmliblzma)
-
+    target_link_libraries(archive_static ${ZLIB_LIBRARY} cmliblzma)
+    
+    # Make sure, test target is correctly linked
+    if(TARGET libarchive_test)
+      target_link_libraries(libarchive_test cmliblzma)
+    endif()
+    
     # Bundled fat32format
     add_subdirectory(dependencies/fat32format)
     add_dependencies(${PROJECT_NAME} fat32format)
