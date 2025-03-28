@@ -8,6 +8,7 @@ on:
       - "release"
       - "debug"
       - "master"
+      - "fix_workflows"
     paths-ignore:
       - '**.md'
       - '**.asciidoc'
