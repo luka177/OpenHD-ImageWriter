@@ -26,6 +26,9 @@ jobs:
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
+      with:
+       target: desktop
+       host: mac
 
     - name: Install create-dmg
       run: brew install create-dmg
