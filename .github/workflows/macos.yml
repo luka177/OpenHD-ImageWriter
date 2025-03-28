@@ -28,9 +28,6 @@ jobs:
       uses: jurplel/install-qt-action@v4
       with:
         version: '6.2.3'
-        host: 'mac'
-        target: 'desktop'
-        tools: 'tools_cmake'
         cache: 'true'
 
     - name: Install create-dmg
