@@ -275,20 +275,21 @@ elseif(APPLE)
     set(LibArchive_LIBRARIES archive_static)
     set(LibArchive_INCLUDE_DIR dependencies/libarchive-3.5.2/libarchive)
 
-    if (APPLE)
+    # macOS-specific frameworks
     find_library(Cocoa Cocoa)
     find_library(CoreFoundation CoreFoundation)
     find_library(DiskArbitration DiskArbitration)
     find_library(Security Security)
-    find_library(CoreServices CoreServices)  # Neu hinzugefügt
+    find_library(CoreServices CoreServices)
     set(EXTRALIBS ${EXTRALIBS} 
         ${CoreFoundation} 
         ${DiskArbitration} 
         ${Security} 
         ${Cocoa}
-        ${CoreServices})  # Neu hinzugefügt
+        ${CoreServices})
     set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE YES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/mac/Info.plist.in)
 
+    # Deploy Qt dependencies
     find_program(MACDEPLOYQT "macdeployqt" PATHS "${Qt5_DIR}/../../../bin")
     if (NOT MACDEPLOYQT)
         message(FATAL_ERROR "Unable to locate macdeployqt")
@@ -298,7 +299,7 @@ elseif(APPLE)
         POST_BUILD
         COMMAND "${MACDEPLOYQT}" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.app" -qmldir="${CMAKE_CURRENT_SOURCE_DIR}")
 
-else()
+else()  # Linux
     find_package(CURL 7.32.0 REQUIRED)
     find_package(LibArchive 3.2.0 REQUIRED)
 
