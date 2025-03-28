@@ -161,6 +161,7 @@ if (WIN32)
 
     # Bundled liblzma
     add_subdirectory(dependencies/cmliblzma)
+    target_compile_definitions(cmliblzma PRIVATE LIBLZMA_STATIC)
     set(LIBLZMA_HAS_AUTO_DECODER 1)
     set(LIBLZMA_HAS_EASY_ENCODER 1)
     set(LIBLZMA_HAS_LZMA_PRESET 1)
