@@ -275,11 +275,18 @@ elseif(APPLE)
     set(LibArchive_LIBRARIES archive_static)
     set(LibArchive_INCLUDE_DIR dependencies/libarchive-3.5.2/libarchive)
 
+    if (APPLE)
     find_library(Cocoa Cocoa)
     find_library(CoreFoundation CoreFoundation)
     find_library(DiskArbitration DiskArbitration)
     find_library(Security Security)
-    set(EXTRALIBS ${EXTRALIBS} ${CoreFoundation} ${DiskArbitration} ${Security} ${Cocoa})
+    find_library(CoreServices CoreServices)  # Neu hinzugefügt
+    set(EXTRALIBS ${EXTRALIBS} 
+        ${CoreFoundation} 
+        ${DiskArbitration} 
+        ${Security} 
+        ${Cocoa}
+        ${CoreServices})  # Neu hinzugefügt
     set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE YES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/mac/Info.plist.in)
 
     find_program(MACDEPLOYQT "macdeployqt" PATHS "${Qt5_DIR}/../../../bin")
@@ -331,3 +338,7 @@ endif()
 
 include_directories(${CURL_INCLUDE_DIR} ${LibArchive_INCLUDE_DIR} ${OPENSSL_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Quick Qt5::Svg ${CURL_LIBRARIES} ${LibArchive_LIBRARIES} ${OPENSSL_LIBRARIES} ${ATOMIC_LIBRARY} ${EXTRALIBS})
+
+if(ZLIB_FOUND)
+    target_link_libraries(${PROJECT_NAME} PRIVATE ZLIB::ZLIB)
+endif()
