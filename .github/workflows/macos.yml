@@ -25,10 +25,15 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v4
+      uses: jurplel/install-qt-action@v3
       with:
-       target: desktop
-       host: mac
+        aqtversion: '==3.1.*'
+        version: '5.15.2'
+        host: 'mac'
+        target: 'desktop'
+        arch: 'clang_64'
+        modules: 'debug_info qtcharts qtdatavis3d qtlottie qtnetworkauth qtpurchasing qtquick3d qtquicktimeline qtscript qtvirtualkeyboard qtwebengine qtwebglplugin'
+        tools: 'tools_cmake'
 
     - name: Install create-dmg
       run: brew install create-dmg
