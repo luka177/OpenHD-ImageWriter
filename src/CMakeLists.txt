@@ -161,7 +161,10 @@ if (WIN32)
 
     # Bundled liblzma
     add_subdirectory(dependencies/cmliblzma)
-    target_compile_definitions(cmliblzma PRIVATE LIBLZMA_STATIC LZMA_API_STATIC)
+    target_compile_definitions(cmliblzma PRIVATE 
+        LIBLZMA_STATIC 
+        LZMA_API_STATIC
+    )
     set(LIBLZMA_HAS_AUTO_DECODER 1)
     set(LIBLZMA_HAS_EASY_ENCODER 1)
     set(LIBLZMA_HAS_LZMA_PRESET 1)
@@ -180,6 +183,7 @@ if (WIN32)
     set(ENABLE_ZLIB ON CACHE BOOL "Enable zlib support" FORCE)
     set(ZLIB_LIBRARY ${ZLIB_LIBRARY} CACHE FILEPATH "Path to zlib library" FORCE)
     set(ZLIB_INCLUDE_DIR ${ZLIB_INCLUDE_DIR} CACHE PATH "Path to zlib includes" FORCE)
+    set(ENABLE_TEST OFF CACHE BOOL "Disable libarchive tests" FORCE)
     add_subdirectory(dependencies/libarchive-3.5.2)
     target_compile_definitions(archive_static PRIVATE LIBARCHIVE_STATIC LIBLZMA_STATIC)
     target_link_libraries(archive_static ${ZLIB_LIBRARY} cmliblzma)
