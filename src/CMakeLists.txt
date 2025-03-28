@@ -8,6 +8,7 @@ if (APPLE)
   set(CMAKE_OSX_ARCHITECTURES "arm64" CACHE STRING "Build architectures" FORCE)
 endif()
 
+add_definitions(-DLIBARCHIVE_STATIC -DLIBLZMA_STATIC)
 
 OPTION (ENABLE_CHECK_VERSION "Check for version updates" ON)
 OPTION (ENABLE_TELEMETRY "Enable sending telemetry" ON)
