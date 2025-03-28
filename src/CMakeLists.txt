@@ -2,9 +2,12 @@
 # Copyright (C) 2020 Raspberry Pi Ltd
 
 cmake_minimum_required(VERSION 3.9.4)
+
 if (APPLE)
-set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13" CACHE STRING "" FORCE)
+  set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13" CACHE STRING "" FORCE)
+  set(CMAKE_OSX_ARCHITECTURES "arm64" CACHE STRING "Build architectures" FORCE)
 endif()
+
 
 OPTION (ENABLE_CHECK_VERSION "Check for version updates" ON)
 OPTION (ENABLE_TELEMETRY "Enable sending telemetry" ON)
@@ -94,7 +97,7 @@ set(SOURCES "main.cpp" "imagewriter.cpp" "networkaccessmanagerfactory.cpp"
 
 find_package(Qt5 COMPONENTS Core Quick LinguistTools Svg OPTIONAL_COMPONENTS Widgets)
 if (Qt5Widgets_FOUND)
-    set(EXTRALIBS ${EXTRALIBS} Qt5::Widgets)
+  set(EXTRALIBS ${EXTRALIBS} Qt5::Widgets)
 endif()
 
 #qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} i18n/rpi-imager_en.ts i18n/rpi-imager_nl.ts i18n/rpi-imager_zh.ts i18n/rpi-imager_tr.ts i18n/rpi-imager_fr.ts i18n/rpi-imager_de.ts i18n/rpi-imager_sk.ts i18n/rpi-imager_it.ts i18n/rpi-imager_ca.ts i18n/rpi-imager_sl.ts i18n/rpi-imager_ko.ts i18n/rpi-imager_ja.ts)
