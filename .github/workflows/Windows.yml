@@ -6,7 +6,7 @@ on:
       - "2.5-evo"
       - "dev-release"
       - "release"
-      - "debug"
+      - "debug_older2"
     paths-ignore:
       - '**.md'
       - '**.asciidoc'
@@ -29,38 +29,121 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v3
+      id: qt-install
+      uses: jurplel/install-qt-action@v4
       with:
         version: '5.15.2'
-        aqtversion: ==3.1.*
+        aqtversion: '==3.1.*'
         host: windows
         target: desktop
         arch: win32_mingw81
-        setup-python: true
-        tools: 'tools_cmake'
+        setup-python: false
+        tools: tools_cmake tools_mingw81,qt.tools.win32_mingw810
 
-    - name: Install dependencies
+    - name: Download and Extract OpenSSL
+      shell: pwsh
+      working-directory: ${{ github.workspace }}
       run: |
-        choco install -y nsis openssl.light
-        mkdir C:\files
-        xcopy "C:\Program Files\OpenSSL" C:\files /E /I /Q
-        dir "C:\files"
+        Invoke-WebRequest `
+          -Uri "https://download.firedaemon.com/FireDaemon-OpenSSL/openssl-1.1.1w.zip" `
+          -OutFile openssl-1.1.1w.zip
+        Expand-Archive openssl-1.1.1w.zip -DestinationPath openssl111
+      
+    - name: Copy OpenSSL to Qt MinGW path
+      shell: pwsh
+      working-directory: ${{ github.workspace }}
+      run: |
+          dir ${{ github.workspace }}\..\Qt\
+          dir ${{ github.workspace }}\..\Qt\Tools\
+          dir ${{ github.workspace }}\..\Qt\Tools\mingw810_32\
+      
+          $openssl = (Get-ChildItem -Directory -Path "${{ github.workspace }}\openssl111" | Where-Object { $_.Name -like "openssl-*" } | Select-Object -First 1).FullName + "\x86"
+          $mingwRoot = "${{ github.workspace }}\..\Qt\Tools\mingw810_32"
+      
+          Write-Host "Resolved OpenSSL path: $openssl"
+          if (Test-Path $openssl) {
+            Get-ChildItem -Recurse "$openssl" | ForEach-Object { Write-Host $_.FullName }
+          } else {
+            Write-Error "OpenSSL path not found: $openssl"
+          }
+      
+          Copy-Item "$openssl\bin\libcrypto-1_1.dll" "$mingwRoot\bin\" -Force
+          Copy-Item "$openssl\bin\libssl-1_1.dll"    "$mingwRoot\bin\" -Force
+          Copy-Item "$openssl\lib\libcrypto.lib"     "$mingwRoot\lib\" -Force
+          Copy-Item "$openssl\lib\libssl.lib"        "$mingwRoot\lib\" -Force
+          New-Item -ItemType Directory -Force -Path "$mingwRoot\include\openssl"
+          Write-Host "Copying OpenSSL headers from: $openssl\include\openssl\."
+          Copy-Item "$openssl\include\openssl\." "$mingwRoot\include\" -Recurse -Force -Verbose
+          dir "$mingwRoot\include\openssl\"
 
-    # - name: Configure CMake
-    #   run: |
-    #     cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -G "Unix Makefiles" -DOPENSSL_ROOT_DIR="C:\files" -DCMAKE_TOOLCHAIN_FILE="C:\Qt\${{env.QT_VERSION}}\${{env.QT_VERSION}}\mingw32\isystem.cmake"
+    - name: Install NSIS
+      run: choco install nsis --x86 --force -y
+
+    - name: Show Qt & CMake Info
+      run: |
+        where gcc
+        where g++
+        cmake --version
+
+    - name: Debug OpenSSL include headers
+      shell: pwsh
+      working-directory: ${{ github.workspace }}
+      run: |
+        $opensslInclude = "$Env:GITHUB_WORKSPACE\..\Qt\Tools\mingw810_32\include\openssl"
+        $openssl = (Get-ChildItem -Directory -Path "${{ github.workspace }}\openssl111" | Where-Object { $_.Name -like "openssl-*" } | Select-Object -First 1).FullName + "\x86"
+
+        Write-Host "Looking in: $opensslInclude"
+        if (Test-Path $opensslInclude) {
+          Get-ChildItem $opensslInclude | Select-Object -First 20
+        } else {
+          Write-Error "OpenSSL include directory not found!"
+        }
+        
+        dir "$openssl\include\openssl\"
+        
+
+    - name: Configure CMake
+      shell: cmd
+      working-directory: src
+      run: |
+        dir "%GITHUB_WORKSPACE%\openssl111\openssl-1.1\x86\include"
+        mkdir build
+        cd build
+        cmake .. -G "MinGW Makefiles" ^
+        -DCMAKE_BUILD_TYPE=Release ^
+        -DCMAKE_C_COMPILER="%GITHUB_WORKSPACE%\..\Qt\Tools\mingw810_32\bin\gcc.exe" ^
+        -DCMAKE_CXX_COMPILER="%GITHUB_WORKSPACE%\..\Qt\Tools\mingw810_32\bin\g++.exe" ^
+        -DOPENSSL_INCLUDE_DIR="%GITHUB_WORKSPACE%\openssl111\openssl-1.1\x86\include" ^
+        -DOPENSSL_LIBRARIES="%GITHUB_WORKSPACE%\openssl111\openssl-1.1\x86\lib"
+
+
+    - name: Check CMake Cache
+      run: |
+        dir build
+        type build\CMakeCache.txt || echo "Cache missing"
 
     - name: Build
+      shell: pwsh
       run: |
-        mkdir -p build
+        $env:PATH = "$Env:GITHUB_WORKSPACE\..\Qt\5.15.2\mingw81_32\bin;$Env:GITHUB_WORKSPACE\..\Qt\Tools\mingw810_32\bin;$env:PATH"
         cd build
-        cmake ../
-        cmake --build .
-        cmake --install .
+        cmake --build . --verbose
 
-    - name: Upload to Github  
+    - name: Copy OpenSSL DLLs to build folder
+      shell: pwsh
+      run: |
+        Copy-Item "$Env:GITHUB_WORKSPACE\..\Qt\Tools\mingw810_32\bin\libssl-1_1.dll" -Destination "$Env:GITHUB_WORKSPACE\src\build\"
+        Copy-Item "$Env:GITHUB_WORKSPACE\..\Qt\Tools\mingw810_32\bin\libcrypto-1_1.dll" -Destination "$Env:GITHUB_WORKSPACE\src\build\"
+
+    - name: Build NSIS Installer
+      shell: pwsh
+      working-directory: src\build
+      run: |
+        & "${Env:ProgramFiles(x86)}\NSIS\makensis.exe" "openhdimagewriter.nsi"
+
+    - name: Upload Installer
       uses: actions/upload-artifact@v4
       with:
-        name: "OpenHD Image Writer"
-        path: '*.exe'
+        name: OpenHDImageWriter-Build-Full
+        path: src/build/OpenHD-ImageWriter-*
         if-no-files-found: error
