@@ -4,3 +4,4 @@ CMakeCache.txt
 *.tlog
 *.qml_hack
 /src/build
+/openssl111
